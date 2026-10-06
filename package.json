@@ -1,0 +1,10 @@
+{
+  "name": "see-also",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --live-reload --port 8788"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}
