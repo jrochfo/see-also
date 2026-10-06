@@ -18,8 +18,8 @@
 <meta property="og:image:alt" content="A sailing stone on a dry lakebed, captioned “Tracks are sometimes non-linear.”, beside a Wikipedia-style See also list">
 <meta name="twitter:card" content="summary_large_image">
 <script>
-  // saved choice wins; otherwise follow the device
-  try { var t = localStorage.getItem('theme'); } catch (e) {}
+  // follow the device; a flip of the switch lasts only for this tab
+  try { localStorage.removeItem('theme'); var t = sessionStorage.getItem('theme'); } catch (e) {}
   document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 </script>
 <style>
@@ -822,10 +822,13 @@ const root = document.documentElement, themeBtn = document.getElementById('theme
 const dark = matchMedia('(prefers-color-scheme: dark)');
 function setTheme(t, save) {
   root.dataset.theme = t; themeBtn.setAttribute('aria-checked', t === 'dark');
-  if (save) try { localStorage.setItem('theme', t); } catch (e) {}
+  if (save) try { sessionStorage.setItem('theme', t); } catch (e) {}
 }
 setTheme(root.dataset.theme);
-dark.addEventListener('change', e => { try { if (localStorage.getItem('theme')) return; } catch (x) {} setTheme(e.matches ? 'dark' : 'light'); });
+dark.addEventListener('change', e => {   // the device changed (e.g. sunset): follow it, and drop this tab's override
+  try { sessionStorage.removeItem('theme'); } catch (x) {}
+  setTheme(e.matches ? 'dark' : 'light');
+});
 
 const seeBtn = document.getElementById('seeBtn'), seePanel = document.getElementById('seealso'), seeList = document.getElementById('seeList');
 const ALL_LABEL = { everything: '🌍 Everything', art: '🖼️ All art', poetry: '🪶 All poems' };
