@@ -42,28 +42,37 @@
     --bg: #24211d; --dim: #9a9285;
     background: linear-gradient(#2a2622 0 78%, #1a1815 78% 78.4%, #151310 78.4%);
   }
-  body[data-mode="albums"] {   /* a jewel case on a pale shelf */
-    --bg: #ecebe8; --dim: #6f7175;
-    --case-fill: rgba(255,255,255,.45); --case-edge: rgba(0,0,0,.16); --case-drop: rgba(40,40,45,.45);
-  }
-  :root[data-theme="dark"] body[data-mode="albums"] {
-    --bg: #17181a; --ink: #e9e9e6; --dim: #8b8d91; --link: #9db7ee;
-    --case-fill: rgba(255,255,255,.07); --case-edge: rgba(255,255,255,.22); --case-drop: #000;
-  }
-  body[data-mode="movies"] { --bg: #ece5dd; --dim: #75685f; }   /* the cinema lobby */
-  :root[data-theme="dark"] body[data-mode="movies"] { --bg: #170e0f; --ink: #ece6e1; --dim: #998b86; --link: #9db7ee; }
 
   a { color: var(--link); text-decoration: none; }
   a:hover { text-decoration: underline; }
   button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 
   /* chrome */
-  nav, .about-btn, .hint { position: fixed; font-size: 13px; color: var(--dim); z-index: 2; }
+  nav, .corner, .hint { position: fixed; font-size: 13px; color: var(--dim); z-index: 2; }
   nav { top: 16px; left: 16px; display: flex; gap: 14px; }
   nav button[aria-pressed="true"] { color: var(--ink); }
   nav button[aria-pressed="true"] span { border-bottom: 1px solid currentColor; }
-  nav button:hover, .about-btn:hover { color: var(--ink); }
-  .about-btn { bottom: 16px; right: 16px; }
+  nav button:hover, .corner button:hover, .see-btn.on { color: var(--ink); }
+  .corner { bottom: 16px; right: 16px; display: flex; gap: 14px; }
+  @media (max-width: 560px) { .see-btn .name { display: none; } }   /* just the emoji, next to the hint */
+
+  /* topics, as a Wikipedia "See also" section */
+  .seealso {
+    position: fixed; right: 16px; bottom: 44px; z-index: 3; width: min(420px, calc(100vw - 32px));
+    padding: 12px 18px 8px; background: var(--panel); color: var(--panel-ink); border: 1px solid var(--line);
+    box-shadow: 0 8px 24px rgba(0,0,0,.12); cursor: auto;
+  }
+  .see-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 8px; padding-bottom: 2px; border-bottom: 1px solid var(--rule);
+  }
+  .seealso h2 { font-family: var(--serif); font-weight: 400; font-size: 22px; margin: 0; }
+  .see-head button { font-size: 13px; color: var(--panel-link); }   /* sits where Wikipedia puts [edit] */
+  .see-head button:hover { text-decoration: underline; }
+  .seealso ul { columns: 2; column-gap: 24px; margin: 0 0 6px; padding-left: 1.3em; font-size: 14px; line-height: 1.75; }
+  .seealso li { break-inside: avoid; }
+  .seealso a { color: var(--panel-link); }
+  .seealso a[aria-current] { color: var(--panel-ink); font-weight: 700; text-decoration: none; cursor: default; }   /* a self-link, Wikipedia-style */
   .hint { bottom: 16px; left: 16px; transition: opacity 1.2s; pointer-events: none; }
   .hint.gone { opacity: 0; }
   .theme {
@@ -124,41 +133,6 @@
   .placard b { display: block; font-family: var(--serif); font-size: 16px; font-weight: 400; font-style: italic; }
   .placard a { display: inline-block; margin-top: 6px; color: #3366cc; }   /* the card stays lit in both themes */
 
-  /* —— albums: a jewel case —— */
-  .shelf { display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; }
-  .case {
-    position: relative; display: flex; width: min(78vw, 56vh, 460px); aspect-ratio: 1.13 / 1;
-    border-radius: 4px; background: var(--case-fill);
-    box-shadow: 0 0 0 1px var(--case-edge), 0 30px 50px -20px var(--case-drop);
-    padding: 1.6%; overflow: hidden;   /* hold the case shape even for tall covers */
-  }
-  .case .spine {
-    flex: 0 0 10.5%; margin-right: 1.2%; border-radius: 2px;
-    background:
-      repeating-linear-gradient(0deg, rgba(255,255,255,.10) 0 2px, transparent 2px 7px),
-      linear-gradient(90deg, #0b0b0c, #26272a 60%, #101011);
-  }
-  .case img { flex: 1; min-width: 0; height: 100%; object-fit: cover; border-radius: 1px; background: #222; }
-  .case::after { /* plastic glare */
-    content: ""; position: absolute; inset: 0; border-radius: 4px; pointer-events: none;
-    background: linear-gradient(115deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.04) 22%, transparent 40%, transparent 78%, rgba(255,255,255,.07) 100%);
-  }
-  /* —— movies: a one-sheet in a marquee poster case —— */
-  .marquee {
-    width: min(72vw, 42vh, 360px); aspect-ratio: 27 / 40; padding: 14px;
-    background:
-      radial-gradient(circle, #fff7dc 0 2.4px, rgba(255,205,120,.55) 3.4px, transparent 5.5px) 0 0 / 14px 14px space,
-      linear-gradient(#2a201b, #15100d);
-    border-radius: 3px; box-shadow: 0 0 0 1px rgba(0,0,0,.4), 0 26px 44px -18px rgba(20,10,5,.7);
-  }
-  .marquee img {
-    width: 100%; height: 100%; object-fit: cover; background: #111;
-    box-shadow: 0 0 0 2px #0c0907, 0 0 18px rgba(255,210,140,.25);
-  }
-
-  .shelf figcaption { font-size: 14px; line-height: 1.5; color: var(--dim); cursor: auto; max-width: min(86vw, 460px); }
-  .shelf figcaption b { display: block; color: var(--ink); font-size: 17px; font-weight: 500; }
-
   .status { font-size: 13px; color: var(--dim); }
 
   dialog {
@@ -177,21 +151,25 @@
 <nav aria-label="Mode">
   <button data-mode="everything">🌍 <span>everything</span></button>
   <button data-mode="art">🖼️ <span>art</span></button>
-  <button data-mode="albums">💿 <span>albums</span></button>
-  <button data-mode="movies">🎬 <span>movies</span></button>
 </nav>
 
 <main><figure id="stage" aria-live="polite"></figure></main>
 
 <div class="hint" id="hint">👆 click anywhere for another</div>
-<button class="about-btn" id="aboutBtn">ℹ️ about</button>
+<div class="corner">
+  <button class="see-btn" id="seeBtn" aria-expanded="false" aria-controls="seealso"><span id="seeIcon">👁️</span> see also<span id="seeNow"></span></button>
+</div>
+<section class="seealso" id="seealso" aria-label="See also" hidden>
+  <div class="see-head"><h2>See also</h2><button id="aboutBtn">ℹ️ about</button></div>
+  <ul id="seeList"></ul>
+</section>
 <button class="theme" id="themeBtn" role="switch" aria-label="Dark mode"></button>
 
 <dialog id="about">
   <h1>See also</h1>
   <p>A picture from Wikipedia, with the caption somebody wrote for it. Click anywhere for another. Follow the link to read the article it came from.</p>
   <p>Inspired by the wikipoetics and Earth-loading-screen corners of TikTok.</p>
-  <p>All images and text come live from <a href="https://en.wikipedia.org" target="_blank" rel="noopener">Wikipedia</a> and its volunteer contributors, mostly under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA</a>; each image's own page lists its author and license. Album covers belong to their rights holders. Not affiliated with the Wikimedia Foundation.</p>
+  <p>All images and text come live from <a href="https://en.wikipedia.org" target="_blank" rel="noopener">Wikipedia</a> and its volunteer contributors, mostly under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA</a>; each image's own page lists its author and license. Not affiliated with the Wikimedia Foundation.</p>
   <form method="dialog"><button>close</button></form>
 </dialog>
 
@@ -208,18 +186,54 @@ const SEEDS = [
   "Daydream", "Walking", "Smile", "Gift", "Home", "Waiting room", "Sunday", "Puddle"
 ];
 const SEED_RATE = 0.25;            // share of "everything" drawn from SEEDS
+
+// Topics for "everything". Each fetch picks one of `search` (a Wikipedia search) or
+// `titles` (hand-picked articles). Small searches get picked as often as big ones, on purpose.
+// `lead: true` shows the article's first captioned picture (animal pages save diagrams for later).
+const sp = c => `hastemplate:"Speciesbox" deepcat:"${c}"`;   // species pages under a taxon
+const TOPICS = {
+  dinosaurs:  { label: '🦕 Dinosaurs', lead: true, search: ['deepcat:"Dinosaur genera"'],   // "Dinosaurs" includes birds
+                titles: ['Tyrannosaurus', 'Triceratops', 'Stegosaurus', 'Brachiosaurus', 'Velociraptor', 'Ankylosaurus',
+                  'Parasaurolophus', 'Diplodocus', 'Spinosaurus', 'Iguanodon', 'Pachycephalosaurus', 'Apatosaurus',
+                  'Allosaurus', 'Brontosaurus', 'Archaeopteryx', 'Protoceratops', 'Styracosaurus', 'Maiasaura',
+                  'Therizinosaurus', 'Dilophosaurus', 'Compsognathus', 'Oviraptor', 'Edmontosaurus', 'Argentinosaurus'] },
+  birds:      { label: '🐦 Birds', lead: true, search: [sp('Birds'), sp('Passeriformes')] },
+  bugs:       { label: '🐞 Bugs', lead: true, search: ['Nymphalidae', 'Lycaenidae', 'Saturniidae', 'Sphingidae', 'Apidae',
+                  'Lampyridae', 'Phasmatodea', 'Coccinellidae', 'Odonata'].map(sp) },
+  sea:        { label: '🐙 Sea creatures', lead: true, search: ['Cephalopods', 'Nudibranchs', 'Scyphozoa', 'Starfish', 'Cetaceans',
+                  'Seahorses', 'Pomacentridae', 'Sea turtles'].map(sp) },
+  baked:      { label: '🥐 Baked goods', search: ['hastemplate:"Infobox food" deepcat:"Baked goods"'] },
+  produce:    { label: '🥕 Fruits & vegetables', search: ['incategory:"Leaf vegetables|Root vegetables|Edible fruits|Squashes and pumpkins"'] },
+  trains:     { label: '🚂 Trains', search: ['hastemplate:"Infobox locomotive"'] },
+  space:      { label: '🪐 Space', search: ['hastemplate:"Infobox nebula|Infobox galaxy"',
+                  'hastemplate:"Infobox planet" incategory:"Planets of the Solar System|Moons of Jupiter|Moons of Saturn"'] },
+  mushrooms:  { label: '🍄 Mushrooms', search: ['hastemplate:"Mycomorphbox"'] },
+  instruments:{ label: '🎻 Musical instruments', search: ['hastemplate:"Infobox instrument"'] },
+  towers:     { label: '🗼 Towers', search: ['hastemplate:"Infobox lighthouse"', 'deepcat:"Observation towers"',
+                  'deepcat:"Bell towers"', 'deepcat:"Round towers"', 'deepcat:"Pagodas"'],
+                titles: ['Eiffel Tower', 'Leaning Tower of Pisa', 'Big Ben', 'CN Tower', 'Burj Khalifa', 'Empire State Building',
+                  'Chrysler Building', 'Flatiron Building', 'Tokyo Tower', 'Tokyo Skytree', 'Space Needle', 'Taipei 101',
+                  'Petronas Towers', 'Shanghai Tower', 'Oriental Pearl Tower', 'Fernsehturm Berlin', 'Ostankino Tower',
+                  'The Shard', '30 St Mary Axe', 'Willis Tower', 'Galata Tower', 'Belém Tower', 'Giralda', 'Qutb Minar',
+                  "Giotto's Campanile", "St Mark's Campanile", 'Torre del Mangia', 'Belfry of Bruges', 'Tower of Hercules',
+                  'Bell Rock Lighthouse', 'Eddystone Lighthouse', 'Cape Hatteras Lighthouse', 'Portland Head Light',
+                  'Lighthouse of Alexandria', 'Porcelain Tower of Nanjing', 'Watts Towers', 'Tower of Babel',
+                  'Shwedagon Pagoda', 'Minaret of Jam', 'Tower Bridge'] },
+  waterfalls: { label: '💧 Waterfalls', search: ['hastemplate:"Infobox waterfall"'] },
+  weather:    { label: '🌦️ Weather', search: ['incategory:"Clouds"'], titles: [
+                  'Cloud', 'Cumulus cloud', 'Cirrus cloud', 'Cumulonimbus cloud', 'Lenticular cloud', 'Mammatus cloud',
+                  'Noctilucent cloud', 'Rainbow', 'Moonbow', 'Fogbow', 'Sun dog', 'Halo (optical phenomenon)',
+                  'Glory (optical phenomenon)', 'Crepuscular rays', 'Light pillar', 'Aurora', 'Lightning', 'Thunderstorm',
+                  'Rain', 'Snow', 'Snowflake', 'Hail', 'Frost', 'Hoarfrost', 'Dew', 'Fog', 'Mist', 'Diamond dust',
+                  'Ice storm', 'Waterspout', 'Dust devil', 'Wind', 'Monsoon', 'Sunset', 'Twilight', 'Weather'] }
+};
+// In topics, skip captions like these (animal articles can hold grim or technical pictures)
+const TOPIC_SKIP = /\b(hunt\w*|kill\w*|dead|carcass\w*|slaughter\w*|butcher\w*|roadkill|disease\w*|infect\w*|parasit\w*|distribution|range|cladogram|phylogen\w*|diagram|comparison|anatomy|tuning|notation|score)\b/i;
 const SKIP_FILE = /\.svg|map|logo|flag|coat[_ ]of|locator|icon|signature|seal[_ ]of|chart|graph|diagram|\.gif|\.pdf|\.ogv|\.webm/i;
 const CAPTION_MIN = 14, CAPTION_MAX = 170;
 
 const SEARCH = {
-  art:    'hastemplate:"Infobox artwork" painting',
-  albums: 'hastemplate:"Infobox album"',
-  movies: 'hastemplate:"Infobox film"'
-};
-// Results must also have a description like this (album infoboxes turn up on film pages too)
-const KEEP = {
-  albums: /album|\bEP\b|mixtape|soundtrack|compilation/i,
-  movies: /^(?!.*(television|\bTV\b|series|episode)).*\b(film|movie)\b/i   // films, never TV
+  art: 'hastemplate:"Infobox artwork" painting'
 };
 
 /* ————————————————— wikipedia ————————————————— */
@@ -271,21 +285,36 @@ async function fetchEverything() {
   return sets.filter(s => s.length).map(pick);
 }
 
+async function fetchTopic(key) {
+  const t = TOPICS[key];
+  let titles;
+  if (t.titles && (!t.search || Math.random() < 0.6)) {
+    titles = [...t.titles].sort(() => Math.random() - 0.5).slice(0, 3);
+  } else {
+    const d = await getJSON(API + 'action=query&generator=search&gsrnamespace=0&gsrlimit=20&gsrsort=random'
+      + '&gsrsearch=' + encodeURIComponent(pick(t.search)) + '&prop=pageimages&piprop=name');
+    titles = ((d.query && d.query.pages) || []).filter(p => p.pageimage).map(p => p.title)
+      .sort(() => Math.random() - 0.5).slice(0, 4);
+  }
+  const sets = await Promise.all(titles.map(x => captionsIn(x).catch(() => [])));
+  return sets.map(s => s.filter(c => !TOPIC_SKIP.test(c.caption))).filter(s => s.length).map(s => t.lead ? s[0] : pick(s));
+}
+
 async function fetchSearch(mode) {
   const d = await getJSON(API + 'action=query&generator=search&gsrnamespace=0&gsrlimit=20&gsrsort=random'
     + '&gsrsearch=' + encodeURIComponent(SEARCH[mode])
     + '&prop=pageimages|description|info&piprop=thumbnail&pithumbsize=960&pilicense=any&inprop=url');
-  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail && (!KEEP[mode] || KEEP[mode].test(p.description || ''))).map(p => ({
-    img: p.thumbnail.source, title: p.title.replace(/ \((album|painting|film|[^)]*(album|painting|EP|film)[^)]*)\)$/, ''),
+  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail).map(p => ({
+    img: p.thumbnail.source, title: p.title.replace(/ \((painting|[^)]*painting[^)]*)\)$/, ''),
     caption: p.description || '', url: p.fullurl || wikiUrl(p.title)
   }));
 }
 
 /* ————————————————— queue ————————————————— */
 
-const queue = { everything: [], art: [], albums: [], movies: [] };
-const filling = {}, seen = new Set();
-const trail = []; let cursor = -1; let mode = 'everything'; let token = 0;
+const queue = {}, filling = {}, seen = new Set();   // keyed by feed: "art", "everything", "everything/birds"…
+const trail = []; let cursor = -1; let mode = 'everything', topic = ''; let token = 0;
+const feed = () => mode === 'everything' && topic ? 'everything/' + topic : mode;
 
 function loadImage(src) {
   return new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(src); i.onerror = no; i.src = src; });
@@ -297,18 +326,19 @@ async function ready(item) {          // make sure the picture is in cache befor
   await loadImage(item.img); return item;
 }
 
-function fill(m) {
-  if (filling[m]) return filling[m];
-  filling[m] = (async () => {
-    for (let tries = 0; tries < 6 && queue[m].length < 3; tries++) {
+function fill(f) {
+  if (filling[f]) return filling[f];
+  const [m, t] = f.split('/'), q = queue[f] = queue[f] || [];
+  filling[f] = (async () => {
+    for (let tries = 0; tries < 6 && q.length < 3; tries++) {
       let items = [];
-      try { items = await (m === 'everything' ? fetchEverything() : fetchSearch(m)); } catch (e) {}
+      try { items = await (t ? fetchTopic(t) : m === 'everything' ? fetchEverything() : fetchSearch(m)); } catch (e) {}
       items = items.filter(i => !seen.has(i.img)).map(i => (seen.add(i.img), { ...i, mode: m }));
       const loaded = await Promise.all(items.map(i => ready(i).catch(() => null)));
-      queue[m].push(...loaded.filter(Boolean));
+      q.push(...loaded.filter(Boolean));
     }
-  })().finally(() => { filling[m] = null; });
-  return filling[m];
+  })().finally(() => { filling[f] = null; });
+  return filling[f];
 }
 
 /* ————————————————— render ————————————————— */
@@ -324,12 +354,6 @@ const TEMPLATE = {
     <a class="more" href="${esc(i.url)}" target="_blank" rel="noopener">from “${esc(i.title)}” →</a>`,
   art: i => `<div class="wall"><div class="frame"><img src="${esc(i.img)}" alt="${esc(i.title)}"></div>
     <figcaption class="placard"><b>${esc(i.title)}</b>${esc(i.caption)}<br>
-    <a href="${esc(i.url)}" target="_blank" rel="noopener">Read on Wikipedia →</a></figcaption></div>`,
-  albums: i => `<div class="shelf"><div class="case"><div class="spine"></div><img src="${esc(i.img)}" alt="${esc(i.title)}"></div>
-    <figcaption><b>${esc(i.title)}</b>${esc(i.caption)}<br>
-    <a href="${esc(i.url)}" target="_blank" rel="noopener">Read on Wikipedia →</a></figcaption></div>`,
-  movies: i => `<div class="shelf"><div class="marquee"><img src="${esc(i.img)}" alt="${esc(i.title)}"></div>
-    <figcaption><b>${esc(i.title)}</b>${esc(i.caption)}<br>
     <a href="${esc(i.url)}" target="_blank" rel="noopener">Read on Wikipedia →</a></figcaption></div>`
 };
 
@@ -344,21 +368,24 @@ function say(text) { stage.innerHTML = `<p class="status">${text}</p>`; stage.cl
 
 async function next() {
   if (cursor < trail.length - 1) return paint(trail[++cursor]);   // walking forward after going back
-  const mine = ++token, m = mode;
-  if (!queue[m].length) { if (!stage.innerHTML) say('looking…'); await fill(m); }
+  const mine = ++token, f = feed();
+  if (!(queue[f] || []).length) { if (!stage.innerHTML) say('looking…'); await fill(f); }
   if (mine !== token) return;
-  const item = queue[m].shift();
+  const item = queue[f].shift();
   if (!item) return say('Wikipedia didn’t answer. Click to try again.');
   trail.push(item); cursor = trail.length - 1;
-  paint(item); fill(m);
+  paint(item); fill(f);
 }
 function back() { if (cursor > 0) paint(trail[--cursor]); }
 
+// m is a mode or a topic (#birds = everything, birds only)
 function setMode(m, push) {
-  if (!TEMPLATE[m]) m = 'everything';
+  if (TOPICS[m]) { topic = m; m = 'everything'; }
+  else { if (!TEMPLATE[m]) m = 'everything'; if (m !== 'everything' || push) topic = ''; }
   mode = m; document.body.dataset.mode = m;
   document.querySelectorAll('nav button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === m));
-  if (push) location.hash = m === 'everything' ? '' : m;
+  showTopic();
+  if (push) location.hash = topic || (m === 'everything' ? '' : m);
   trail.length = 0; cursor = -1; stage.innerHTML = ''; stage.classList.remove('in');
   next();
 }
@@ -374,19 +401,39 @@ function setTheme(t, save) {
 setTheme(root.dataset.theme);
 dark.addEventListener('change', e => { try { if (localStorage.getItem('theme')) return; } catch (x) {} setTheme(e.matches ? 'dark' : 'light'); });
 
+const seeBtn = document.getElementById('seeBtn'), seePanel = document.getElementById('seealso'), seeList = document.getElementById('seeList');
+seeList.innerHTML = [['', '🌍 Everything'], ...Object.entries(TOPICS).map(([k, t]) => [k, t.label])]
+  .map(([k, label]) => `<li><a href="#${k}" data-topic="${k}">${label}</a></li>`).join('');
+function showTopic() {
+  const t = TOPICS[topic], [emoji, ...name] = t ? t.label.split(' ') : [];   // a topic swaps its emoji in for 👁️
+  document.getElementById('seeIcon').textContent = t ? emoji : '👁️';
+  document.getElementById('seeNow').innerHTML = t ? `<span class="name">: ${name.join(' ').toLowerCase()}</span>` : '';
+  seeBtn.classList.toggle('on', !!t);
+  seeList.querySelectorAll('a').forEach(a => a.toggleAttribute('aria-current', mode === 'everything' && a.dataset.topic === topic));
+}
+function openSee(open) { seePanel.hidden = !open; seeBtn.setAttribute('aria-expanded', open); }
+
 const about = document.getElementById('about');
 document.addEventListener('click', e => {
   if (about.open) { if (e.target === about) about.close(); return; }
+  if (!seePanel.hidden) {                       // a click while the list is open only closes it (or picks)
+    const a = e.target.closest('#seealso a');
+    if (a) { e.preventDefault(); if (a.dataset.topic !== topic || mode !== 'everything') setMode(a.dataset.topic || 'everything', true); }
+    if (e.target.closest('#aboutBtn')) { openSee(false); return about.showModal(); }
+    if (a || !e.target.closest('#seealso')) openSee(false);
+    return;
+  }
+  if (e.target.closest('#seeBtn')) return openSee(true);
   const modeBtn = e.target.closest('nav button');
   if (modeBtn) return setMode(modeBtn.dataset.mode, true);
-  if (e.target.closest('#aboutBtn')) return about.showModal();
   if (e.target.closest('#themeBtn')) return setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark', true);
-  if (e.target.closest('a, figcaption.placard, .shelf figcaption')) return;   // reading, not advancing
+  if (e.target.closest('a, figcaption.placard')) return;   // reading, not advancing
   document.getElementById('hint').classList.add('gone');
   next();
 });
 document.addEventListener('keydown', e => {
   if (about.open || e.metaKey || e.ctrlKey) return;
+  if (e.key === 'Escape' && !seePanel.hidden) return openSee(false);
   if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter') {
     if (e.target.closest('a, button')) return;
     e.preventDefault(); document.getElementById('hint').classList.add('gone'); next();
