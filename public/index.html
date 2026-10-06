@@ -26,7 +26,7 @@
   :root {
     --bg: #ffffff; --ink: #202122; --dim: #72777d; --link: #3366cc;
     --line: #c8ccd1; --thumb: #f8f9fa; --icon: #54595d; --rule: #a2a9b1;
-    --track: #c8ccd1; --knob: #ffffff; --moon: #72777d;
+    --track: #c8ccd1; --knob: #3b4a6b;
     --panel: #ffffff; --panel-ink: #202122; --panel-link: #3366cc;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Lato, Helvetica, Arial, sans-serif;
     --serif: "Linux Libertine", Georgia, "Times New Roman", serif;
@@ -36,7 +36,7 @@
     color-scheme: dark;
     --bg: #101418; --ink: #eaecf0; --dim: #a2a9b1; --link: #88a3e8;
     --line: #54595d; --thumb: #202122; --icon: #a2a9b1; --rule: #54595d;
-    --track: #5d636a; --knob: #f8f9fa; --moon: #101418;
+    --track: #5d636a; --knob: #f8f9fa;
     --panel: #101418; --panel-ink: #eaecf0; --panel-link: #88a3e8;
   }
   * { box-sizing: border-box; }
@@ -93,8 +93,8 @@
   button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 
   /* chrome */
-  nav, .corner, .hint { position: fixed; font-size: 13px; color: var(--dim); z-index: 2; }
-  nav { top: 16px; left: 16px; display: flex; gap: 14px; }
+  nav, .corner, .hint { position: fixed; font-size: 14.5px; color: var(--dim); z-index: 2; }
+  nav { top: 16px; left: 16px; display: flex; gap: 16px; }
   nav button[aria-pressed="true"] { color: var(--ink); }
   nav button[aria-pressed="true"] span { border-bottom: 1px solid currentColor; }
   nav button:hover, .corner button:hover, .see-btn.on { color: var(--ink); }
@@ -102,10 +102,11 @@
   .see-btn:hover, .see-btn.on { opacity: 1; }
   .corner { bottom: 16px; right: 16px; display: flex; gap: 14px; }
   @media (max-width: 360px) { .see-btn .name { display: none; } }   /* only on the narrowest phones */
+  @media (max-width: 480px) { .about-btn .name { display: none; } nav { gap: 13px; } }   /* phones: ℹ️ alone, so the top bar fits */
 
   /* topics, as a Wikipedia "See also" section */
   .seealso {
-    position: fixed; right: 16px; bottom: 44px; z-index: 3; width: min(420px, calc(100vw - 32px));
+    position: fixed; right: 16px; bottom: 46px; z-index: 3; width: min(460px, calc(100vw - 32px));
     padding: 12px 18px 8px; background: var(--panel); color: var(--panel-ink); border: 1px solid var(--line);
     box-shadow: 0 8px 24px rgba(0,0,0,.12); cursor: auto;
   }
@@ -113,17 +114,17 @@
     display: flex; justify-content: space-between; align-items: baseline;
     margin-bottom: 8px; padding-bottom: 2px; border-bottom: 1px solid var(--rule);
   }
-  .seealso h2 { font-family: var(--serif); font-weight: 400; font-size: 22px; margin: 0; }
+  .seealso h2 { font-family: var(--serif); font-weight: 400; font-size: 24px; margin: 0; }
   .see-head button { font-size: 13px; color: var(--panel-link); }   /* sits where Wikipedia puts [edit] */
   .see-head button:hover { text-decoration: underline; }
-  .seealso ul { columns: 2; column-gap: 24px; margin: 0 0 6px; padding-left: 1.3em; font-size: 14px; line-height: 1.75; }
+  .seealso ul { columns: 2; column-gap: 24px; margin: 0 0 6px; padding-left: 1.3em; font-size: 15.5px; line-height: 1.75; }
   .seealso li { break-inside: avoid; }
   .seealso a { color: var(--panel-link); }
   .seealso a[aria-current] { color: var(--panel-ink); font-weight: 700; text-decoration: none; cursor: default; }   /* a self-link, Wikipedia-style */
   /* the one instruction: centred near the bottom, breathing gently until the first click, then gone */
   .hint {
-    bottom: 52px; left: 50%; transform: translateX(-50%); white-space: nowrap;
-    font-size: 15px; color: var(--ink); opacity: .7; pointer-events: none; transition: opacity 1.2s;
+    bottom: 84px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+    font-size: 16.5px; color: var(--ink); opacity: .7; pointer-events: none; transition: opacity 1.2s;
   }
   .hint b { font-weight: inherit; }
   .hint > span { display: inline-block; animation: breathe 7s ease-in-out infinite; }   /* breathing on the inside, fading on the outside */
@@ -131,29 +132,35 @@
   .hint.gone { opacity: 0; }
   @media (prefers-reduced-motion: reduce) { .hint > span { animation: none; } }
   .theme { position: fixed; top: 4px; right: 6px; z-index: 2; padding: 10px; }   /* padding = a bigger target */
+  .about-btn { position: fixed; top: 16px; right: 68px; z-index: 2; font-size: 14.5px; color: var(--dim); padding: 10px 7px; margin: -10px -7px; }
+  .about-btn:hover { color: var(--ink); }
+  body[data-mode="poetry"] .about-btn { text-shadow: 0 1px 2px rgba(30,15,5,.45); }
   .track {
     position: relative; display: block;
-    width: 34px; height: 20px; border-radius: 10px; background: var(--track);
+    width: 38px; height: 22px; border-radius: 11px; background: var(--track);
     box-shadow: inset 0 1px 2px rgba(0,0,0,.18);
     transition: background .3s;
   }
-  .track::before, .track::after { content: ""; position: absolute; transition: transform .25s; }
+  .track::before, .track::after { position: absolute; transition: transform .25s; }
+  .track::before { content: ""; }
   .track::before {
-    top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
+    top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%;
     background: var(--knob); box-shadow: 0 1px 2px rgba(0,0,0,.3);
   }
   .track::after {   /* the moon rides on the knob */
-    top: 4px; left: 4px; width: 12px; height: 12px; background: var(--moon);
-    -webkit-mask: url(dark-mode.svg) center / contain no-repeat; mask: url(dark-mode.svg) center / contain no-repeat;
+    content: "🌝"; top: 2px; left: 2px; width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center; font-size: 13.5px; line-height: 1;
+    padding-right: 2px;   /* the moon's shading weights it right: nudge it 1px left so it looks centred */
   }
-  .theme[aria-checked="true"] .track::before, .theme[aria-checked="true"] .track::after { transform: translateX(14px); }
+  .theme[aria-checked="true"] .track::before, .theme[aria-checked="true"] .track::after { transform: translateX(16px); }
+  .theme[aria-checked="true"] .track::after { content: "🌞"; padding-right: 0; }
 
   /* bigger targets: padding grows the hit area, the negative margin keeps the layout where it was */
   nav button, .corner button { padding: 10px 7px; margin: -10px -7px; }
   .see-head button { padding: 8px; margin: -8px; }
   .seealso a { display: inline-block; padding: 1px 8px; margin: -1px -8px; }
 
-  main { height: 100%; display: grid; place-items: center; padding: 56px 16px; }
+  main { height: 100%; display: grid; place-items: center; padding: 56px 16px 116px; }   /* the bottom leaves room for the hint */
   #stage { margin: 0; opacity: 0; transition: opacity .35s; cursor: pointer; }
   #stage.in { opacity: 1; }
   #stage img { display: block; }
@@ -163,26 +170,26 @@
     width: min-content; border: 1px solid var(--line); background: var(--thumb); padding: 4px;
   }
   .thumb img {
-    max-width: min(88vw, 720px); max-height: 62vh; min-width: min(280px, 80vw);
+    max-width: min(88vw, 720px); max-height: min(62vh, calc(100vh - 300px)); min-width: min(280px, 80vw);
     width: auto; height: auto; border: 1px solid var(--line); background: #fff;
   }
   .thumb figcaption {
     display: flex; gap: 10px; align-items: flex-start;
-    padding: 6px 4px 4px; font-size: clamp(15px, 2.1vw, 19px); line-height: 1.4; text-align: left;
+    padding: 6px 4px 4px; font-size: clamp(16.5px, 2.3vw, 21px); line-height: 1.4; text-align: left;
   }
   .thumb figcaption span { flex: 1; }
   .enlarge { flex: none; margin: -6px -8px -8px; padding: 10px 8px 8px; opacity: .75; line-height: 0; color: var(--icon); }
   .enlarge:hover { opacity: 1; }
-  .more { display: block; width: fit-content; margin: 4px 0 0 auto; padding: 8px 0 8px 12px; font-size: 13px; text-align: right; }
+  .more { display: block; width: fit-content; margin: 4px 0 0 auto; padding: 8px 0 8px 12px; font-size: 14.5px; text-align: right; }
   .more-row { display: flex; align-items: baseline; gap: 14px; }
-  .edited { margin-top: 4px; padding: 8px 12px 8px 0; font-size: 12px; font-style: italic; color: var(--dim); }
+  .edited { margin-top: 4px; padding: 8px 12px 8px 0; font-size: 13px; font-style: italic; color: var(--dim); }
 
   /* —— art: a painting on a wall —— */
   .room { position: fixed; inset: 0; z-index: 0; pointer-events: none; display: none; }
   body[data-mode="art"] .room { display: block; }
   main { position: relative; z-index: 1; }
-  body[data-mode="art"] main { padding-bottom: calc(17vh + 20px); }   /* hang the work on the wall, above the floor */
-  @media (max-width: 700px) { body[data-mode="art"] main { padding-bottom: calc(11vh + 12px); } }
+  body[data-mode="art"] main { padding-bottom: max(116px, calc(17vh + 20px)); }   /* hang the work on the wall, above the floor */
+  @media (max-width: 700px) { body[data-mode="art"] main { padding-bottom: max(116px, calc(11vh + 12px)); } }
   .room::before {   /* light pooled where the work hangs, falling off toward the corners */
     content: ""; position: absolute; inset: 0;
     background:
@@ -196,16 +203,14 @@
   }
   .floor {
     position: absolute; left: 0; right: 0; bottom: 0; height: 17vh; overflow: hidden;
-    perspective: 340px; perspective-origin: 50% 0;
     box-shadow: 0 -1px 0 rgba(0,0,0,.18);   /* the shadow gap where wall meets floor */
   }
-  .floor::before {   /* planks running away from you */
-    content: ""; position: absolute; left: -60%; right: -60%; top: 0; height: 420%;
-    transform-origin: 50% 0; transform: rotateX(72deg);
+  .floor::before {   /* planks running away from you: lines fanning from a vanishing point above (flat 2D, so it renders the same everywhere) */
+    content: ""; position: absolute; inset: 0;
     background:
-      repeating-linear-gradient(90deg, var(--plank-seam) 0 1px, transparent 1px 3.1%),
-      repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 6.2%, rgba(0,0,0,.03) 6.2% 9.3%, transparent 9.3% 15.5%, rgba(0,0,0,.05) 15.5% 18.6%),
-      repeating-linear-gradient(90deg, rgba(0,0,0,.035) 0 1px, transparent 1px 5px),
+      repeating-conic-gradient(from 90deg at 50% -160%, var(--plank-seam) 0 .12deg, transparent .12deg 2.4deg),
+      repeating-conic-gradient(from 90deg at 50% -160%, rgba(255,255,255,.04) 0 4.8deg, rgba(0,0,0,.03) 4.8deg 7.2deg, transparent 7.2deg 12deg, rgba(0,0,0,.05) 12deg 14.4deg),
+      repeating-conic-gradient(from 90deg at 50% -160%, rgba(0,0,0,.035) 0 .05deg, transparent .05deg .5deg),
       var(--plank);
   }
   .floor::after {   /* shade at the wall, light spilling onto the boards */
@@ -274,10 +279,10 @@
   }
   .placard {
     background: #fbfaf7; color: #2a2825; padding: 10px 14px; max-width: min(80vw, 340px);
-    font-size: 12px; line-height: 1.45; text-align: left; cursor: auto;
+    font-size: 13px; line-height: 1.45; text-align: left; cursor: auto;
     box-shadow: 0 1px 2px rgba(0,0,0,.25);
   }
-  .placard b { display: block; font-family: var(--serif); font-size: 16px; font-weight: 400; font-style: italic; }
+  .placard b { display: block; font-family: var(--serif); font-size: 17.5px; font-weight: 400; font-style: italic; }
   .placard a { display: inline-block; margin: 0 -10px -6px; padding: 6px 10px; color: #3366cc; }
   :root[data-theme="dark"] .placard {   /* a dark card, just catching the spill of light */
     background: #2a2723; color: #d9d3c8; box-shadow: 0 0 0 1px rgba(255,240,215,.06), 0 1px 3px rgba(0,0,0,.5);
@@ -299,17 +304,19 @@
     box-shadow: 0 1px 1px rgba(40,20,5,.15), 0 14px 30px -10px rgba(40,20,5,.5), 0 30px 60px -30px rgba(40,20,5,.35);
   }
   .verse { font-size: clamp(18px, 2.3vw, 23px); line-height: 1.6; }
+  @media (max-width: 480px) { .verse { font-size: 16.5px; line-height: 1.5; } }
   .verse span { display: block; padding-left: 1.4em; text-indent: -1.4em; }   /* long lines wrap with a hanging indent */
-  .byline { margin-top: clamp(22px, 3vw, 32px); font-size: 15px; line-height: 1.5; color: #6d6253; }
+  .byline { margin-top: clamp(22px, 3vw, 32px); font-size: 16.5px; line-height: 1.5; color: #6d6253; }
   .byline i { color: #3b342b; }
-  .byline a { display: inline-block; margin: 2px -8px -6px; padding: 6px 8px; font-family: var(--sans); font-size: 12px; color: #7a5a35; }
+  .byline a { display: inline-block; margin: 2px -8px -6px; padding: 6px 8px; font-family: var(--sans); font-size: 13px; color: #7a5a35; }
 
-  .status { font-size: 13px; color: var(--dim); }
+  .status { font-size: 14.5px; color: var(--dim); }
 
   dialog {
-    border: 1px solid var(--line); padding: 22px 24px; max-width: min(420px, calc(100vw - 32px));
-    font-size: 14px; line-height: 1.55; color: var(--panel-ink); background: var(--panel); cursor: auto; user-select: text;
+    border: 1px solid var(--line); padding: 22px 24px; max-width: min(460px, calc(100vw - 32px));
+    font-size: 15.5px; line-height: 1.55; color: var(--panel-ink); background: var(--panel); cursor: auto; user-select: text;
   }
+  dialog:focus { outline: none; }
   dialog::backdrop { background: rgba(0,0,0,.35); }
   dialog h1 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0 0 8px; border-bottom: 1px solid var(--rule); }
   dialog p { margin: 0 0 10px; }
@@ -333,14 +340,16 @@
   <button class="see-btn" id="seeBtn" aria-expanded="false" aria-controls="seealso"><span id="seeIcon">👁️</span> see also<span id="seeNow"></span></button>
 </div>
 <section class="seealso" id="seealso" aria-label="See also" hidden>
-  <div class="see-head"><h2>See also</h2><button id="aboutBtn">ℹ️ about</button></div>
+  <div class="see-head"><h2>See also</h2></div>
   <ul id="seeList"></ul>
 </section>
+<button class="about-btn" id="aboutBtn" aria-label="About">ℹ️<span class="name"> about</span></button>
 <button class="theme" id="themeBtn" role="switch" aria-label="Dark mode"><span class="track"></span></button>
 
-<dialog id="about">
+<dialog id="about" tabindex="-1" autofocus>
   <h1>See also</h1>
-  <p>A picture from Wikipedia, with the caption somebody wrote for it. Click anywhere for another. Follow the link to read the article it came from.</p>
+  <p>A picture from Wikipedia, with the caption somebody wrote for it. Follow the link to read the article it came from.</p>
+  <p class="how">👆 <span class="verb">Click</span> anywhere for another. On a keyboard, → for the next one and ← to go back.</p>
   <p>Inspired by the wikipoetics and Earth-loading-screen corners of TikTok.</p>
   <p>All images and text come live from <a href="https://en.wikipedia.org" target="_blank" rel="noopener">Wikipedia</a> and its volunteer contributors, mostly under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA</a>; each image's own page lists its author and license. Not affiliated with the Wikimedia Foundation.</p>
   <p>Wikipedia is written by volunteers and kept free by small donations. If this made you smile, <a href="https://donate.wikimedia.org" target="_blank" rel="noopener">consider giving a little to Wikipedia</a>.</p>
@@ -660,7 +669,8 @@ async function fetchPoems(key) {
     const d = await getJSON(API + 'action=parse&prop=text&redirects=1&page=' + encodeURIComponent(title));
     const stanzas = stanzasIn(d.parse.text);
     if (!stanzas.length) return null;
-    const verse = pick(stanzas);
+    const short = stanzas.filter(v => v.length <= 240);   // phones: prefer stanzas that fit on the page
+    const verse = pick(innerWidth < 600 && short.length ? short : stanzas);
     return { img: 'poem:' + title + ':' + verse.slice(0, 40), verse, title: title.replace(/ \([^)]*\)$/, ''),
       caption: /^(a )?poem$/i.test(desc[title] || '') ? (POETS[section] || '') : desc[title] || '', url: wikiUrl(title), tilt: (Math.random() * 2.4 - 1.2).toFixed(2) };
   }).map(p => p.catch(() => null)));
@@ -845,13 +855,16 @@ function openSee(open) { seePanel.hidden = !open; seeBtn.setAttribute('aria-expa
 
 // A click within a few pixels of a link or control was meant for it: don't advance.
 function nearControl(e, pad = 14) {
-  return [...document.querySelectorAll('nav button, .corner button, .theme, #stage a')].some(el => {
+  return [...document.querySelectorAll('nav button, .corner button, .theme, .about-btn, #stage a')].some(el => {
     const r = el.getBoundingClientRect();
     return e.clientX > r.left - pad && e.clientX < r.right + pad && e.clientY > r.top - pad && e.clientY < r.bottom + pad;
   });
 }
 
-if (matchMedia('(hover: none)').matches) document.getElementById('hintVerb').textContent = 'tap';   // phones and tablets
+if (matchMedia('(hover: none)').matches) {   // phones and tablets
+  document.getElementById('hintVerb').textContent = 'tap';
+  document.querySelector('#about .verb').textContent = 'Tap';
+}
 
 const about = document.getElementById('about');
 document.addEventListener('click', e => {
@@ -859,11 +872,11 @@ document.addEventListener('click', e => {
   if (!seePanel.hidden) {                       // a click while the list is open only closes it (or picks)
     const a = e.target.closest('#seealso a');
     if (a) { e.preventDefault(); if (a.dataset.topic !== topic) setMode(mode + (a.dataset.topic ? '/' + a.dataset.topic : ''), true); }
-    if (e.target.closest('#aboutBtn')) { openSee(false); return about.showModal(); }
     if (a || !e.target.closest('#seealso')) openSee(false);
     return;
   }
   if (e.target.closest('#seeBtn')) return openSee(true);
+  if (e.target.closest('#aboutBtn')) return about.showModal();
   const modeBtn = e.target.closest('nav button');
   if (modeBtn) return setMode(modeBtn.dataset.mode, true);
   if (e.target.closest('#themeBtn')) return setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark', true);
