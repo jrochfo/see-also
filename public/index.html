@@ -45,6 +45,36 @@
     --pool: rgba(255,226,180,.17); --edge: rgba(0,0,0,.5);
     --plank: #352a21; --plank-seam: rgba(0,0,0,.35); --floor-light: rgba(255,220,170,.1); --haze: rgba(27,26,24,.35);
   }
+  /* poetry: a sheet of paper on a leather desk blotter, seen from above */
+  body[data-mode="poetry"] {
+    --ink: #f7f0e4; --dim: rgba(247,240,228,.78); --link: #f7f0e4;
+    --paper: #fbf7ee; --paper-2: #f3ecdd;
+    --leather: #3d5040; --leather-2: #2c3c30; --lamp: rgba(255,240,215,.14); --corner: rgba(8,5,2,.35); --veil: transparent;
+    --inset: 52px max(16px, 3vw);
+    background: linear-gradient(var(--veil), var(--veil)),
+      repeating-linear-gradient(180deg, transparent 0 calc(34vh - 2px), rgba(25,12,4,.5) calc(34vh - 2px) 34vh),   /* plank seams */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='900'%3E%3Cfilter id='p' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.008 .9' numOctaves='2' seed='8'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .06 0 0 0 0 .02 0 0 0 -1.2 .6'/%3E%3C/filter%3E%3Cfilter id='w' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0022 .06' numOctaves='5' seed='3'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='table' tableValues='.3 .41 .31 .44 .32 .42 .3 .4 .31'/%3E%3CfeFuncG type='table' tableValues='.19 .27 .2 .29 .21 .28 .19 .26 .2'/%3E%3CfeFuncB type='table' tableValues='.11 .16 .11 .17 .12 .16 .11 .15 .12'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E") center / cover, #4d3626;   /* generated wood: stretched noise mapped to growth rings, plus pores */
+  }
+  :root[data-theme="dark"] body[data-mode="poetry"] {   /* late, under a desk lamp */
+    --paper: #f1e7d3; --paper-2: #e6dac2;
+    --leather: #2a3a2e; --leather-2: #1c271f; --lamp: rgba(255,214,150,.16); --corner: rgba(0,0,0,.6); --veil: rgba(8,5,2,.5);
+  }
+  body[data-mode="poetry"]::before, body[data-mode="poetry"]::after {
+    content: ""; position: fixed; z-index: 0; inset: var(--inset); pointer-events: none;
+  }
+  body[data-mode="poetry"]::before {   /* the blotter */
+    border-radius: 3px;
+    background:
+      radial-gradient(ellipse 60% 62% at 50% 46%, var(--lamp), transparent 72%),
+      radial-gradient(ellipse 95% 95% at 50% 46%, transparent 50%, var(--corner)),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='1000'%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' seed='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -.7 .38'/%3E%3C/filter%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.008' numOctaves='3' seed='5'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .9 0 0 0 0 .7 0 0 0 -.45 .14'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23l)'/%3E%3C/svg%3E") center / cover,   /* mottled patina and fine grain */
+      linear-gradient(160deg, var(--leather), var(--leather-2));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(0,0,0,.4), 0 6px 16px rgba(0,0,0,.4), inset 0 0 50px 8px rgba(0,0,0,.28);
+  }
+  body[data-mode="poetry"]::after {   /* gold tooling */
+    margin: 12px; border: 4px double rgba(214,178,98,.62); border-radius: 2px;
+  }
+  @media (max-width: 560px) { body[data-mode="poetry"] { --inset: 48px 10px; } }
 
   a { color: var(--link); text-decoration: none; }
   a:hover { text-decoration: underline; }
@@ -233,6 +263,25 @@
   :root[data-theme="dark"] .placard b { color: #eee8dd; }
   :root[data-theme="dark"] .placard a { color: #88a3e8; }
 
+  /* —— poetry: a stanza on a sheet of paper —— */
+  body[data-mode="poetry"] :is(nav, .corner, .hint) { text-shadow: 0 1px 2px rgba(30,15,5,.45); }
+  .sheet {
+    --book: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    position: relative; width: max-content; min-width: min(340px, calc(100vw - 32px)); max-width: min(600px, calc(100vw - 32px));
+    padding: clamp(30px, 6vw, 60px) clamp(26px, 6vw, 68px) clamp(24px, 4vw, 40px);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .28 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
+      linear-gradient(172deg, var(--paper), var(--paper-2));
+    color: #2b2620; font-family: var(--book); text-align: left;
+    transform: rotate(var(--tilt)); border-radius: 1px;
+    box-shadow: 0 1px 1px rgba(40,20,5,.15), 0 14px 30px -10px rgba(40,20,5,.5), 0 30px 60px -30px rgba(40,20,5,.35);
+  }
+  .verse { font-size: clamp(18px, 2.3vw, 23px); line-height: 1.6; }
+  .verse span { display: block; padding-left: 1.4em; text-indent: -1.4em; }   /* long lines wrap with a hanging indent */
+  .byline { margin-top: clamp(22px, 3vw, 32px); font-size: 15px; line-height: 1.5; color: #6d6253; }
+  .byline i { color: #3b342b; }
+  .byline a { display: inline-block; margin: 2px -8px -6px; padding: 6px 8px; font-family: var(--sans); font-size: 12px; color: #7a5a35; }
+
   .status { font-size: 13px; color: var(--dim); }
 
   dialog {
@@ -251,6 +300,7 @@
 <nav aria-label="Mode">
   <button data-mode="everything">🌍 <span>everything</span></button>
   <button data-mode="art">🖼️ <span>art</span></button>
+  <button data-mode="poetry">🪶 <span>poetry</span></button>
 </nav>
 
 <div class="room" aria-hidden="true"><div class="floor"></div></div>
@@ -354,7 +404,28 @@ const ART_TOPICS = {
   wonders:   { label: '😇 Angels & wonders' },   // angels, dragons, mermaids, unicorns, fairies
   stilllife: { label: '🍐 Still life' }
 };
-const TOPIC_SETS = { everything: TOPICS, art: ART_TOPICS };
+// Topics for poetry: the sections of poems.json (Wikipedia articles about poems; hand-picked, plus
+// every poem by the poets below whose article quotes a clean stanza).
+const POETRY_TOPICS = {
+  nursery:    { label: '🧸 Nursery rhymes' },
+  nonsense:   { label: '🦉 Nonsense verse' },       // Carroll and Lear
+  blake:      { label: '🐯 Blake', poet: 'William Blake' },
+  dickinson:  { label: '🐝 Dickinson', poet: 'Emily Dickinson' },
+  stevens:    { label: '🍦 Stevens', poet: 'Wallace Stevens' },
+  yeats:      { label: '🦢 Yeats', poet: 'W. B. Yeats' },
+  coleridge:  { label: '⛵ Coleridge', poet: 'Samuel Taylor Coleridge' },
+  tennyson:   { label: '🪞 Tennyson', poet: 'Alfred, Lord Tennyson' },
+  byron:      { label: '🌌 Byron', poet: 'Lord Byron' },
+  burns:      { label: '🐭 Burns', poet: 'Robert Burns' },
+  housman:    { label: '🌸 Housman', poet: 'A. E. Housman' },
+  longfellow: { label: '🔔 Longfellow', poet: 'Henry Wadsworth Longfellow' },
+  bronte:     { label: '🕯️ Brontë', poet: 'Emily Brontë' },
+  cowper:     { label: '🐎 Cowper', poet: 'William Cowper' },
+  classics:   { label: '📜 More classics' },
+  modern:     { label: '🍂 Early 20th century' },
+  world:      { label: '🌏 In translation' }
+};
+const TOPIC_SETS = { everything: TOPICS, art: ART_TOPICS, poetry: POETRY_TOPICS };
 
 // Never show these (article titles), e.g. if a rights holder asks for a work to come down
 const HIDE = new Set([]);
@@ -423,7 +494,9 @@ async function fetchTopic(key) {
   return sets.map(s => s.filter(c => !TOPIC_SKIP.test(c.caption))).filter(s => s.length).map(s => t.lead ? s[0] : pick(s));
 }
 
-const PAGE_PROPS = '&prop=pageimages|description|info&piprop=thumbnail&pithumbsize=960&pilicense=any&inprop=url';
+const PAGE_PROPS = '&prop=pageimages|description|info&piprop=thumbnail|name&pithumbsize=960&pilicense=any&inprop=url';
+// Skip lead images that are photos of the work in a room rather than the work (e.g. "White_Flag_(with_observer).jpg")
+const NOT_THE_WORK = /observer|visitor|viewer|spectator|exhibit|installation|in[_ ]situ|on[_ ]display|gallery[_ ]view/i;
 const toItem = p => ({
   img: p.thumbnail.source, title: p.title.replace(/ \([^)]*\)$/, ''),
   caption: p.description || '', url: p.fullurl || wikiUrl(p.title)
@@ -433,7 +506,56 @@ async function fetchSearch(mode) {
   const d = await getJSON(API + 'action=query&generator=search&gsrnamespace=0&gsrlimit=20&gsrsort=random'
     + '&gsrsearch=' + encodeURIComponent(SEARCH[mode]) + PAGE_PROPS);
   return ((d.query && d.query.pages) || [])
-    .filter(p => p.thumbnail && !HIDE.has(p.title) && (!KEEP[mode] || KEEP[mode].test(p.description || ''))).map(toItem);
+    .filter(p => p.thumbnail && !HIDE.has(p.title) && !NOT_THE_WORK.test(p.pageimage || '') && (!KEEP[mode] || KEEP[mode].test(p.description || ''))).map(toItem);
+}
+
+// Poems: pick a few titles (from one topic, or a random section for "all" so nursery rhymes
+// don't crowd out the rest), read each article, and keep one clean stanza from it.
+let poemLists;
+// When Wikipedia only says "Poem", credit the poet from the section
+const POETS = Object.fromEntries(Object.entries(POETRY_TOPICS).filter(([, t]) => t.poet).map(([k, t]) => [k, 'Poem by ' + t.poet]));
+const STANZA_LABEL = /^(chorus|refrain|verse \d+|(literal |english )?translation|original|middle english|modern english)[:.]?$/i;
+const NOT_ENGLISH = /[\u0370-\u03ff\u0400-\u04ff\u0590-\u06ff\u0900-\u0dff\u3040-\u9fff\uac00-\ud7af\u0100-\u017f\u01cd-\u01dc]/;
+const FOREIGN_WORDS = /\b(le|la|les|des|et|une|du|und|der|die|das|den|dem|ein|eine|nicht|ich|wir|est|qui|pour|sur|dans|que|mit|sie|wie|nec|quem|quam|tibi|mihi)\b/gi;
+function stanzasIn(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html'), found = [];
+  doc.querySelectorAll('blockquote, .poem').forEach(el => {
+    el = el.cloneNode(true);
+    el.querySelectorAll('sup, style, .mw-cite-backlink').forEach(x => x.remove());
+    const walk = doc.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    while (walk.nextNode()) walk.currentNode.data = walk.currentNode.data.replace(/\n/g, ' ');
+    el.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+    el.querySelectorAll('p, dd, div').forEach(b => b.append('\n\n'));
+    for (const block of el.textContent.split(/\n\s*\n/)) {
+      const lines = block.split('\n').map(l => l.replace(/[\s\u00a0]+/g, ' ').trim()
+        .replace(/\s*\((lines? )?[\d.]+[–-][\d.]+\)$/, '').replace(/^\d+\.\s+/, ''))
+        .filter(l => l && !STANZA_LABEL.test(l) && !/^[—―–]/.test(l) && !/^([IVXLC]+|\d+)\.?$/.test(l));   // no section numerals
+      const text = lines.join('\n');
+      if (lines.length < 2 || lines.length > 10 || lines.some(l => l.length > 70)) continue;
+      if (NOT_ENGLISH.test(text) || (text.match(FOREIGN_WORDS) || []).length >= 2) continue;
+      if (!found.includes(text)) found.push(text);
+    }
+  });
+  return found;
+}
+async function fetchPoems(key) {
+  poemLists = poemLists || getJSON('poems.json').catch(e => { poemLists = null; throw e; });
+  const lists = await poemLists;
+  const section = key || pick(Object.keys(lists));
+  const titles = [...lists[section]].sort(() => Math.random() - 0.5).slice(0, 3);
+  const info = await getJSON(API + 'action=query&redirects=1&prop=description&titles=' + encodeURIComponent(titles.join('|')));
+  const desc = {};
+  ((info.query && info.query.pages) || []).forEach(p => desc[p.title] = p.description || '');
+  (info.query && info.query.redirects || []).forEach(r => desc[r.from] = desc[r.to]);
+  const items = await Promise.all(titles.map(async title => {
+    const d = await getJSON(API + 'action=parse&prop=text&redirects=1&page=' + encodeURIComponent(title));
+    const stanzas = stanzasIn(d.parse.text);
+    if (!stanzas.length) return null;
+    const verse = pick(stanzas);
+    return { img: 'poem:' + title + ':' + verse.slice(0, 40), verse, title: title.replace(/ \([^)]*\)$/, ''),
+      caption: /^(a )?poem$/i.test(desc[title] || '') ? (POETS[section] || '') : desc[title] || '', url: wikiUrl(title), tilt: (Math.random() * 2.4 - 1.2).toFixed(2) };
+  }).map(p => p.catch(() => null)));
+  return items.filter(Boolean);
 }
 
 let artLists;
@@ -441,7 +563,7 @@ async function fetchArtTopic(key) {
   artLists = artLists || getJSON('art-themes.json').catch(e => { artLists = null; throw e; });
   const titles = [...(await artLists)[key]].sort(() => Math.random() - 0.5).slice(0, 8);
   const d = await getJSON(API + 'action=query&redirects=1&titles=' + encodeURIComponent(titles.join('|')) + PAGE_PROPS);
-  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail && !HIDE.has(p.title)).map(toItem);
+  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail && !HIDE.has(p.title) && !NOT_THE_WORK.test(p.pageimage || '')).map(toItem);
 }
 
 /* ————————————————— queue ————————————————— */
@@ -454,6 +576,7 @@ function loadImage(src) {
   return new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(src); i.onerror = no; i.src = src; });
 }
 async function ready(item) {          // make sure the picture is in cache before we show it
+  if (item.mode === 'poetry') return item;
   if (item.mode === 'everything') {
     try { item.img = await loadImage(bigger(item.img)); return item; } catch (e) {}
   }
@@ -494,7 +617,10 @@ function fill(f) {
     let repeats = [];   // already-seen pictures, used only if a small topic has run out of new ones
     for (let tries = 0; tries < 6 && q.length < 3; tries++) {
       let items = [];
-      try { items = await (t ? (m === 'art' ? fetchArtTopic(t) : fetchTopic(t)) : m === 'everything' ? fetchEverything() : fetchSearch(m)); } catch (e) {}
+      try {
+        items = await (m === 'poetry' ? fetchPoems(t) : t ? (m === 'art' ? fetchArtTopic(t) : fetchTopic(t))
+          : m === 'everything' ? fetchEverything() : fetchSearch(m));
+      } catch (e) {}
       if (!q.length && tries === 5) items = items.length ? items : repeats;
       else { repeats = items.filter(i => seen.has(i.img)); items = items.filter(i => !seen.has(i.img)); }
       items = items.map(i => (seen.add(i.img), { ...i, mode: m }));
@@ -519,6 +645,10 @@ const TEMPLATE = {
   art: i => `<div class="wall"><div class="frame" data-frame="${i.frame.style}" style="--tint-mat:${i.frame.mat};--tint-liner:${i.frame.liner}">
     <div class="mat"><img src="${esc(i.img)}" alt="${esc(i.title)}"${i.cors ? ' crossorigin="anonymous"' : ''}></div></div>
     <figcaption class="placard"><b>${esc(i.title)}</b>${esc(i.caption)}<br>
+    <a href="${esc(i.url)}" target="_blank" rel="noopener">Read on Wikipedia →</a></figcaption></div>`,
+  poetry: i => `<div class="sheet" style="--tilt:${i.tilt}deg">
+    <div class="verse">${i.verse.split('\n').map(l => `<span>${esc(l)}</span>`).join('')}</div>
+    <figcaption class="byline">from <i>${esc(i.title)}</i>${i.caption ? '<br>' + esc(i.caption) : ''}<br>
     <a href="${esc(i.url)}" target="_blank" rel="noopener">Read on Wikipedia →</a></figcaption></div>`
 };
 
@@ -568,7 +698,7 @@ setTheme(root.dataset.theme);
 dark.addEventListener('change', e => { try { if (localStorage.getItem('theme')) return; } catch (x) {} setTheme(e.matches ? 'dark' : 'light'); });
 
 const seeBtn = document.getElementById('seeBtn'), seePanel = document.getElementById('seealso'), seeList = document.getElementById('seeList');
-const ALL_LABEL = { everything: '🌍 Everything', art: '🖼️ All art' };
+const ALL_LABEL = { everything: '🌍 Everything', art: '🖼️ All art', poetry: '🪶 All poems' };
 function showTopic() {   // the corner link, and the list for this mode
   const t = TOPIC_SETS[mode][topic], [emoji, ...name] = t ? t.label.split(' ') : [];   // a topic swaps its emoji in for 👁️
   document.getElementById('seeIcon').textContent = t ? emoji : '👁️';

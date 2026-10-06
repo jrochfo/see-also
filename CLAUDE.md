@@ -7,8 +7,10 @@ Wikipedia image captions.
 - Single file: public/index.html (HTML, CSS, JS inline, no build step, no dependencies)
 - Hosted on Cloudflare Workers (static assets): wrangler.jsonc serves public/;
   pushing to main on github.com/jrochfo/see-also deploys automatically
-- Two modes: everything (Wikipedia thumb box + caption), art (framed on a
-  gallery wall)
+- Three modes: everything (Wikipedia thumb box + caption), art (framed on a
+  gallery wall), poetry (one stanza on paper on a leather desk blotter; mockup stage)
+- Poetry reads public/poems.json (hand-picked poem articles plus whole poets'
+  "Poetry by X" categories, by section = POETRY_TOPICS) and pulls a random clean stanza live (stanzasIn)
 - Topics (TOPICS) filter "everything"; picked from a Wikipedia-style "See also"
   panel (bottom right, also holds About). Each topic is search queries and/or
   hand-picked titles; #topic in the URL links straight to one

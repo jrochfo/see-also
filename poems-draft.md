@@ -42,7 +42,6 @@ The quote after each title is a sample stanza from the page (the site may pick a
 - **Hush, Little Baby** — “Hush, little baby, don't say a word, / Mama's gonna buy you a mockingbird.”
 - **I Had a Little Nut Tree** — “I had a little nut tree, / Nothing would it bear, / But a silver nutmeg / And a golden pear.”
 - **I Have Two Hands** — “I have two hands, the left and the right. / Hold them up high, so clean and bright. / Clap them softly, 1-2-3. / Clean little hands are good to see.”
-- **I Love Little Pussy** — “I love little pussy, / Her coat is so warm, / And if I don't hurt her, / She'll do me no harm. / …”
 - **If wishes were horses, beggars would ride** — “If wishes were horses, beggars would ride. / If turnips were watches, I'd wear one by my side. / If "ifs" and "ands" were pots and pans, / There'd be no work for tinkers' hands.”
 - **Itsy Bitsy Spider** — “The itsy bitsy spider climbed up the waterspout. / Down came the rain / And washed the spider out. / Out came the sun / …”
 - **Jack Be Nimble** — “Jack be nimble, / Jack be quick, / Jack jump over the candlestick.”
