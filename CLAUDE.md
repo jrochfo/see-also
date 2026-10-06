@@ -12,7 +12,10 @@ Wikipedia image captions.
 - Topics (TOPICS) filter "everything"; picked from a Wikipedia-style "See also"
   panel (bottom right, also holds About). Each topic is search queries and/or
   hand-picked titles; #topic in the URL links straight to one
-- No albums/movies: their images are non-free (fair use), the rest is PD/CC
+- Art topics (ART_TOPICS) read public/art-themes.json: enwiki painting titles that
+  Wikidata says depict each theme's subjects (P180), pulled once via SPARQL
+- No albums/movies. Art does show non-free (fair use) images by Jake's choice;
+  HIDE lists titles to never show, for takedown requests
 - Click anywhere advances; every image links to its source article
 - Images come live from the Wikipedia API. "Everything" mixes a curated SEEDS
   list with random articles, filtered by SKIP_FILE and caption length

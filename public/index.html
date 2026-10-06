@@ -226,7 +226,12 @@
     box-shadow: 0 1px 2px rgba(0,0,0,.25);
   }
   .placard b { display: block; font-family: var(--serif); font-size: 16px; font-weight: 400; font-style: italic; }
-  .placard a { display: inline-block; margin: 0 -10px -6px; padding: 6px 10px; color: #3366cc; }   /* the card stays lit in both themes */
+  .placard a { display: inline-block; margin: 0 -10px -6px; padding: 6px 10px; color: #3366cc; }
+  :root[data-theme="dark"] .placard {   /* a dark card, just catching the spill of light */
+    background: #2a2723; color: #d9d3c8; box-shadow: 0 0 0 1px rgba(255,240,215,.06), 0 1px 3px rgba(0,0,0,.5);
+  }
+  :root[data-theme="dark"] .placard b { color: #eee8dd; }
+  :root[data-theme="dark"] .placard a { color: #88a3e8; }
 
   .status { font-size: 13px; color: var(--dim); }
 
@@ -334,6 +339,26 @@ const SEARCH = {
 // Results must also have a description like this (the search also finds statues and photos)
 const KEEP = { art: /painting|portrait|fresco|triptych|mural|altarpiece|canvas|watercolou?r|panel/i };
 
+// Topics for art. Each one's paintings are listed in art-themes.json: Wikipedia articles about
+// paintings that Wikidata says depict the theme's subjects (battle scenes left out).
+const ART_TOPICS = {
+  night:     { label: '🌙 Night & the moon' },   // moon, night, stars
+  sea:       { label: '🌊 The sea' },            // sea, ocean, boats, ships, beaches
+  skies:     { label: '☁️ Skies' },              // clouds, sky, sunsets, rainbows
+  sublime:   { label: '⛰️ The sublime' },        // mountains, storms, waterfalls, volcanoes, glaciers, shipwrecks
+  snow:      { label: '❄️ Snow' },               // snow, winter, ice
+  flowers:   { label: '🌸 Flowers & gardens' },
+  animals:   { label: '🐈 Animals' },            // cats, dogs, birds, horses
+  quiet:     { label: '🪟 Quiet rooms' },        // windows, reading, letters, mirrors, books
+  music:     { label: '🎻 Music & dance' },
+  wonders:   { label: '😇 Angels & wonders' },   // angels, dragons, mermaids, unicorns, fairies
+  stilllife: { label: '🍐 Still life' }
+};
+const TOPIC_SETS = { everything: TOPICS, art: ART_TOPICS };
+
+// Never show these (article titles), e.g. if a rights holder asks for a work to come down
+const HIDE = new Set([]);
+
 /* ————————————————— wikipedia ————————————————— */
 
 const API = 'https://en.wikipedia.org/w/api.php?origin=*&format=json&formatversion=2&';
@@ -398,21 +423,32 @@ async function fetchTopic(key) {
   return sets.map(s => s.filter(c => !TOPIC_SKIP.test(c.caption))).filter(s => s.length).map(s => t.lead ? s[0] : pick(s));
 }
 
+const PAGE_PROPS = '&prop=pageimages|description|info&piprop=thumbnail&pithumbsize=960&pilicense=any&inprop=url';
+const toItem = p => ({
+  img: p.thumbnail.source, title: p.title.replace(/ \([^)]*\)$/, ''),
+  caption: p.description || '', url: p.fullurl || wikiUrl(p.title)
+});
+
 async function fetchSearch(mode) {
   const d = await getJSON(API + 'action=query&generator=search&gsrnamespace=0&gsrlimit=20&gsrsort=random'
-    + '&gsrsearch=' + encodeURIComponent(SEARCH[mode])
-    + '&prop=pageimages|description|info&piprop=thumbnail&pithumbsize=960&pilicense=any&inprop=url');
-  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail && (!KEEP[mode] || KEEP[mode].test(p.description || ''))).map(p => ({
-    img: p.thumbnail.source, title: p.title.replace(/ \([^)]*\)$/, ''),
-    caption: p.description || '', url: p.fullurl || wikiUrl(p.title)
-  }));
+    + '&gsrsearch=' + encodeURIComponent(SEARCH[mode]) + PAGE_PROPS);
+  return ((d.query && d.query.pages) || [])
+    .filter(p => p.thumbnail && !HIDE.has(p.title) && (!KEEP[mode] || KEEP[mode].test(p.description || ''))).map(toItem);
+}
+
+let artLists;
+async function fetchArtTopic(key) {
+  artLists = artLists || getJSON('art-themes.json').catch(e => { artLists = null; throw e; });
+  const titles = [...(await artLists)[key]].sort(() => Math.random() - 0.5).slice(0, 8);
+  const d = await getJSON(API + 'action=query&redirects=1&titles=' + encodeURIComponent(titles.join('|')) + PAGE_PROPS);
+  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail && !HIDE.has(p.title)).map(toItem);
 }
 
 /* ————————————————— queue ————————————————— */
 
-const queue = {}, filling = {}, seen = new Set();   // keyed by feed: "art", "everything", "everything/birds"…
+const queue = {}, filling = {}, seen = new Set();   // keyed by feed: "art", "everything", "everything/birds", "art/snow"…
 const trail = []; let cursor = -1; let mode = 'everything', topic = ''; let token = 0;
-const feed = () => mode === 'everything' && topic ? 'everything/' + topic : mode;
+const feed = () => topic ? mode + '/' + topic : mode;
 
 function loadImage(src) {
   return new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(src); i.onerror = no; i.src = src; });
@@ -455,10 +491,13 @@ function fill(f) {
   if (filling[f]) return filling[f];
   const [m, t] = f.split('/'), q = queue[f] = queue[f] || [];
   filling[f] = (async () => {
+    let repeats = [];   // already-seen pictures, used only if a small topic has run out of new ones
     for (let tries = 0; tries < 6 && q.length < 3; tries++) {
       let items = [];
-      try { items = await (t ? fetchTopic(t) : m === 'everything' ? fetchEverything() : fetchSearch(m)); } catch (e) {}
-      items = items.filter(i => !seen.has(i.img)).map(i => (seen.add(i.img), { ...i, mode: m }));
+      try { items = await (t ? (m === 'art' ? fetchArtTopic(t) : fetchTopic(t)) : m === 'everything' ? fetchEverything() : fetchSearch(m)); } catch (e) {}
+      if (!q.length && tries === 5) items = items.length ? items : repeats;
+      else { repeats = items.filter(i => seen.has(i.img)); items = items.filter(i => !seen.has(i.img)); }
+      items = items.map(i => (seen.add(i.img), { ...i, mode: m }));
       const loaded = await Promise.all(items.map(i => ready(i).catch(() => null)));
       q.push(...loaded.filter(Boolean));
     }
@@ -504,14 +543,15 @@ async function next() {
 }
 function back() { if (cursor > 0) paint(trail[--cursor]); }
 
-// m is a mode or a topic (#birds = everything, birds only)
+// m is a mode, a mode/topic ("art/snow"), or an everything topic on its own ("birds")
 function setMode(m, push) {
-  if (TOPICS[m]) { topic = m; m = 'everything'; }
-  else { if (!TEMPLATE[m]) m = 'everything'; if (m !== 'everything' || push) topic = ''; }
-  mode = m; document.body.dataset.mode = m;
-  document.querySelectorAll('nav button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === m));
+  let [md, t = ''] = TOPICS[m] ? ['everything', m] : m.split('/');
+  if (!TEMPLATE[md]) md = 'everything';
+  if (!TOPIC_SETS[md][t]) t = '';
+  mode = md; topic = t; document.body.dataset.mode = md;
+  document.querySelectorAll('nav button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === md));
   showTopic();
-  if (push) location.hash = topic || (m === 'everything' ? '' : m);
+  if (push) location.hash = md === 'everything' ? t : md + (t ? '/' + t : '');
   trail.length = 0; cursor = -1; stage.innerHTML = ''; stage.classList.remove('in');
   next();
 }
@@ -528,14 +568,15 @@ setTheme(root.dataset.theme);
 dark.addEventListener('change', e => { try { if (localStorage.getItem('theme')) return; } catch (x) {} setTheme(e.matches ? 'dark' : 'light'); });
 
 const seeBtn = document.getElementById('seeBtn'), seePanel = document.getElementById('seealso'), seeList = document.getElementById('seeList');
-seeList.innerHTML = [['', '🌍 Everything'], ...Object.entries(TOPICS).map(([k, t]) => [k, t.label])]
-  .map(([k, label]) => `<li><a href="#${k}" data-topic="${k}">${label}</a></li>`).join('');
-function showTopic() {
-  const t = TOPICS[topic], [emoji, ...name] = t ? t.label.split(' ') : [];   // a topic swaps its emoji in for 👁️
+const ALL_LABEL = { everything: '🌍 Everything', art: '🖼️ All art' };
+function showTopic() {   // the corner link, and the list for this mode
+  const t = TOPIC_SETS[mode][topic], [emoji, ...name] = t ? t.label.split(' ') : [];   // a topic swaps its emoji in for 👁️
   document.getElementById('seeIcon').textContent = t ? emoji : '👁️';
   document.getElementById('seeNow').innerHTML = t ? `<span class="name">: ${name.join(' ').toLowerCase()}</span>` : '';
   seeBtn.classList.toggle('on', !!t);
-  seeList.querySelectorAll('a').forEach(a => a.toggleAttribute('aria-current', mode === 'everything' && a.dataset.topic === topic));
+  seeList.innerHTML = [['', ALL_LABEL[mode]], ...Object.entries(TOPIC_SETS[mode]).map(([k, x]) => [k, x.label])]
+    .map(([k, label]) => `<li><a href="#${mode === 'everything' ? k : mode + (k ? '/' + k : '')}" data-topic="${k}"`
+      + `${k === topic ? ' aria-current="page"' : ''}>${label}</a></li>`).join('');
 }
 function openSee(open) { seePanel.hidden = !open; seeBtn.setAttribute('aria-expanded', open); }
 
@@ -552,7 +593,7 @@ document.addEventListener('click', e => {
   if (about.open) { if (e.target === about) about.close(); return; }
   if (!seePanel.hidden) {                       // a click while the list is open only closes it (or picks)
     const a = e.target.closest('#seealso a');
-    if (a) { e.preventDefault(); if (a.dataset.topic !== topic || mode !== 'everything') setMode(a.dataset.topic || 'everything', true); }
+    if (a) { e.preventDefault(); if (a.dataset.topic !== topic) setMode(mode + (a.dataset.topic ? '/' + a.dataset.topic : ''), true); }
     if (e.target.closest('#aboutBtn')) { openSee(false); return about.showModal(); }
     if (a || !e.target.closest('#seealso')) openSee(false);
     return;
