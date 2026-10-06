@@ -4,7 +4,9 @@ A StumbleUpon-style microsite for spontaneous discovery, built on Wikipedia.
 Inspired by wikipoetics / Earth loading screen on TikTok: the poetry of
 Wikipedia image captions.
 
-- Single file: index.html (HTML, CSS, JS inline, no build step, no dependencies)
+- Single file: public/index.html (HTML, CSS, JS inline, no build step, no dependencies)
+- Hosted on Cloudflare Workers (static assets): wrangler.jsonc serves public/;
+  pushing to main on github.com/jrochfo/see-also deploys automatically
 - Three modes: everything (Wikipedia thumb box + caption), art (framed on a
   gallery wall), albums (jewel case)
 - Click anywhere advances; every image links to its source article
