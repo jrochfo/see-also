@@ -14,7 +14,7 @@
   :root {
     --bg: #ffffff; --ink: #202122; --dim: #72777d; --link: #3366cc;
     --line: #c8ccd1; --thumb: #f8f9fa; --icon: #54595d; --rule: #a2a9b1;
-    --track: #dfe2e6; --knob: #ffffff; --moon: #a2a9b1;
+    --track: #c8ccd1; --knob: #ffffff; --moon: #72777d;
     --panel: #ffffff; --panel-ink: #202122; --panel-link: #3366cc;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Lato, Helvetica, Arial, sans-serif;
     --serif: "Linux Libertine", Georgia, "Times New Roman", serif;
@@ -24,7 +24,7 @@
     color-scheme: dark;
     --bg: #101418; --ink: #eaecf0; --dim: #a2a9b1; --link: #88a3e8;
     --line: #54595d; --thumb: #202122; --icon: #a2a9b1; --rule: #54595d;
-    --track: #3a3f45; --knob: #eaecf0; --moon: #101418;
+    --track: #5d636a; --knob: #f8f9fa; --moon: #101418;
     --panel: #101418; --panel-ink: #eaecf0; --panel-link: #88a3e8;
   }
   * { box-sizing: border-box; }
@@ -34,13 +34,16 @@
     cursor: pointer; overflow: hidden; transition: background .5s;
     -webkit-tap-highlight-color: transparent; user-select: none;
   }
+  /* art: a white-walled gallery, hardwood floor, light pooled on the work */
   body[data-mode="art"] {
-    --bg: #ece7df; --dim: #7d766b;
-    background: linear-gradient(#f1ece5 0 78%, #d9d2c7 78% 78.4%, #c9c0b3 78.4%);
+    --bg: #edebe6; --dim: #7a756c;
+    --pool: rgba(255,253,248,.95); --edge: rgba(70,60,45,.13);
+    --plank: #c4ad92; --plank-seam: rgba(70,50,30,.22); --floor-light: rgba(255,248,235,.3); --haze: rgba(237,235,230,.38);
   }
-  :root[data-theme="dark"] body[data-mode="art"] {   /* the gallery after hours */
-    --bg: #24211d; --dim: #9a9285;
-    background: linear-gradient(#2a2622 0 78%, #1a1815 78% 78.4%, #151310 78.4%);
+  :root[data-theme="dark"] body[data-mode="art"] {   /* after hours: only the work is lit */
+    --bg: #1b1a18; --dim: #8f897e;
+    --pool: rgba(255,226,180,.17); --edge: rgba(0,0,0,.5);
+    --plank: #352a21; --plank-seam: rgba(0,0,0,.35); --floor-light: rgba(255,220,170,.1); --haze: rgba(27,26,24,.35);
   }
 
   a { color: var(--link); text-decoration: none; }
@@ -53,6 +56,8 @@
   nav button[aria-pressed="true"] { color: var(--ink); }
   nav button[aria-pressed="true"] span { border-bottom: 1px solid currentColor; }
   nav button:hover, .corner button:hover, .see-btn.on { color: var(--ink); }
+  .see-btn { color: var(--ink); opacity: .82; }   /* the way into topics and About, so a little stronger than the rest */
+  .see-btn:hover, .see-btn.on { opacity: 1; }
   .corner { bottom: 16px; right: 16px; display: flex; gap: 14px; }
   @media (max-width: 560px) { .see-btn .name { display: none; } }   /* just the emoji, next to the hint */
 
@@ -75,21 +80,28 @@
   .seealso a[aria-current] { color: var(--panel-ink); font-weight: 700; text-decoration: none; cursor: default; }   /* a self-link, Wikipedia-style */
   .hint { bottom: 16px; left: 16px; transition: opacity 1.2s; pointer-events: none; }
   .hint.gone { opacity: 0; }
-  .theme {
-    position: fixed; top: 14px; right: 16px; z-index: 2;
+  .theme { position: fixed; top: 4px; right: 6px; z-index: 2; padding: 10px; }   /* padding = a bigger target */
+  .track {
+    position: relative; display: block;
     width: 34px; height: 20px; border-radius: 10px; background: var(--track);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.18);
     transition: background .3s;
   }
-  .theme::before, .theme::after { content: ""; position: absolute; transition: transform .25s; }
-  .theme::before {
+  .track::before, .track::after { content: ""; position: absolute; transition: transform .25s; }
+  .track::before {
     top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
     background: var(--knob); box-shadow: 0 1px 2px rgba(0,0,0,.3);
   }
-  .theme::after {   /* the moon rides on the knob */
+  .track::after {   /* the moon rides on the knob */
     top: 4px; left: 4px; width: 12px; height: 12px; background: var(--moon);
     -webkit-mask: url(dark-mode.svg) center / contain no-repeat; mask: url(dark-mode.svg) center / contain no-repeat;
   }
-  .theme[aria-checked="true"]::before, .theme[aria-checked="true"]::after { transform: translateX(14px); }
+  .theme[aria-checked="true"] .track::before, .theme[aria-checked="true"] .track::after { transform: translateX(14px); }
+
+  /* bigger targets: padding grows the hit area, the negative margin keeps the layout where it was */
+  nav button, .corner button { padding: 10px 7px; margin: -10px -7px; }
+  .see-head button { padding: 8px; margin: -8px; }
+  .seealso a { display: inline-block; padding: 1px 8px; margin: -1px -8px; }
 
   main { height: 100%; display: grid; place-items: center; padding: 56px 16px; }
   #stage { margin: 0; opacity: 0; transition: opacity .35s; cursor: pointer; }
@@ -109,21 +121,104 @@
     padding: 6px 4px 4px; font-size: clamp(15px, 2.1vw, 19px); line-height: 1.4; text-align: left;
   }
   .thumb figcaption span { flex: 1; }
-  .enlarge { flex: none; margin-top: 4px; opacity: .75; line-height: 0; color: var(--icon); }
+  .enlarge { flex: none; margin: -6px -8px -8px; padding: 10px 8px 8px; opacity: .75; line-height: 0; color: var(--icon); }
   .enlarge:hover { opacity: 1; }
-  .more { display: block; margin-top: 12px; font-size: 13px; text-align: right; }
+  .more { display: block; width: fit-content; margin: 4px 0 0 auto; padding: 8px 0 8px 12px; font-size: 13px; text-align: right; }
 
   /* —— art: a painting on a wall —— */
-  .wall { display: flex; flex-direction: column; align-items: center; gap: 26px; }
-  .frame {
-    padding: clamp(8px, 1.6vw, 16px);
-    background: linear-gradient(135deg, #5b4630, #3a2b1c 45%, #6a5238);
-    box-shadow: 0 1px 0 #7d6444 inset, 0 22px 30px -12px rgba(40,30,15,.45), 0 4px 8px rgba(40,30,15,.25);
+  .room { position: fixed; inset: 0; z-index: 0; pointer-events: none; display: none; }
+  body[data-mode="art"] .room { display: block; }
+  main { position: relative; z-index: 1; }
+  body[data-mode="art"] main { padding-bottom: calc(17vh + 20px); }   /* hang the work on the wall, above the floor */
+  @media (max-width: 700px) { body[data-mode="art"] main { padding-bottom: calc(11vh + 12px); } }
+  .room::before {   /* light pooled where the work hangs, falling off toward the corners */
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 42% 50% at 50% 41%, var(--pool), transparent 75%),
+      radial-gradient(ellipse 90% 85% at 50% 40%, transparent 55%, var(--edge));
   }
-  .frame img {
-    max-width: min(80vw, 760px); max-height: 54vh; width: auto; height: auto;
-    box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 0 0 clamp(4px,1vw,10px) #f4efe4;
-    margin: clamp(4px,1vw,10px);
+  :root[data-theme="dark"] .room::after {   /* a soft beam from the ceiling */
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 75%;
+    background: conic-gradient(from 160deg at 50% -12%, transparent, rgba(255,228,185,.075) 12deg 28deg, transparent 40deg);
+    -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent);
+  }
+  .floor {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 17vh; overflow: hidden;
+    perspective: 340px; perspective-origin: 50% 0;
+    box-shadow: 0 -1px 0 rgba(0,0,0,.18);   /* the shadow gap where wall meets floor */
+  }
+  .floor::before {   /* planks running away from you */
+    content: ""; position: absolute; left: -60%; right: -60%; top: 0; height: 420%;
+    transform-origin: 50% 0; transform: rotateX(72deg);
+    background:
+      repeating-linear-gradient(90deg, var(--plank-seam) 0 1px, transparent 1px 3.1%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 6.2%, rgba(0,0,0,.03) 6.2% 9.3%, transparent 9.3% 15.5%, rgba(0,0,0,.05) 15.5% 18.6%),
+      repeating-linear-gradient(90deg, rgba(0,0,0,.035) 0 1px, transparent 1px 5px),
+      var(--plank);
+  }
+  .floor::after {   /* shade at the wall, light spilling onto the boards */
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 34% 90% at 50% 0, var(--floor-light), transparent),
+      linear-gradient(rgba(0,0,0,.2), transparent 35%),
+      linear-gradient(var(--haze), var(--haze));   /* a veil of the wall colour, so the floor recedes */
+  }
+  @media (max-width: 700px) { .floor { height: 11vh; } }
+
+  .wall { position: relative; display: flex; flex-direction: column; align-items: center; gap: 26px; }
+  .frame {
+    position: relative; padding: var(--fw); --mat: var(--tint-mat);
+    box-shadow: 0 26px 34px -16px rgba(30,20,10,.55), 0 6px 10px -4px rgba(30,20,10,.3);   /* lit from above */
+  }
+  .frame::before, .frame::after { content: ""; position: absolute; pointer-events: none; }
+  .mat { padding: var(--mw); background: var(--mat); box-shadow: inset 0 0 0 1px rgba(0,0,0,.25), inset 0 3px 6px rgba(0,0,0,.25); }
+  .mat img {
+    display: block; width: auto; height: auto; max-width: min(70vw, 760px); max-height: 42vh;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.35), 1px 1px 0 2px rgba(255,255,255,.55);   /* the mat's bevelled cut */
+  }
+  /* frames, chosen per painting from its colours (frameFor) */
+  .frame[data-frame="gilt"] {   /* carved gold, for warm and old work */
+    --fw: clamp(14px, 2.4vw, 28px); --mw: clamp(4px, .6vw, 7px); --mat: var(--tint-liner);
+    background: linear-gradient(135deg, #f6e3a0, #b48a2c 16%, #f0d47c 30%, #8a6420 48%, #e7c66b 64%, #a57a26 82%, #f4df98);
+    box-shadow: inset 0 0 0 2px #5a3f12, inset 0 0 0 4px #ecd27e, inset 0 0 0 6px #6b4a16,
+      inset 0 0 16px 7px rgba(70,45,5,.5), 0 26px 34px -16px rgba(30,20,10,.6), 0 6px 10px -4px rgba(30,20,10,.3);
+  }
+  .frame[data-frame="gilt"]::before { inset: calc(var(--fw) * .34); border: 3px dotted rgba(255,242,195,.8); }   /* beading */
+  .frame[data-frame="gilt"]::after { inset: calc(var(--fw) * .78); border: 2px dotted rgba(90,60,15,.7); }
+  .frame[data-frame="silver"] {
+    --fw: clamp(12px, 2vw, 22px); --mw: clamp(4px, .6vw, 6px); --mat: var(--tint-liner);
+    background: linear-gradient(135deg, #f4f4f2, #9da0a3 18%, #e7e8e8 34%, #6f7275 52%, #d9dadb 70%, #8c8f92 86%, #f0f0ef);
+    box-shadow: inset 0 0 0 2px #3c3e40, inset 0 0 0 4px #e3e4e5, inset 0 0 12px 5px rgba(20,25,30,.45),
+      0 26px 34px -16px rgba(20,20,25,.55), 0 6px 10px -4px rgba(20,20,25,.3);
+  }
+  .frame[data-frame="silver"]::before { inset: calc(var(--fw) * .45); border: 2px dotted rgba(255,255,255,.7); }
+  .frame[data-frame="walnut"] {
+    --fw: clamp(12px, 2vw, 20px); --mw: clamp(10px, 2.6vw, 30px);
+    background: repeating-linear-gradient(90deg, rgba(0,0,0,.09) 0 2px, transparent 2px 7px), linear-gradient(135deg, #5a3a24, #2b1a10 50%, #4a2f1d);
+    box-shadow: inset 2px 2px 0 rgba(255,255,255,.12), inset -2px -2px 0 rgba(0,0,0,.45), inset 0 0 0 1px #160d07,
+      0 26px 34px -16px rgba(30,20,10,.6), 0 6px 10px -4px rgba(30,20,10,.3);
+  }
+  .frame[data-frame="oak"] {
+    --fw: clamp(8px, 1.4vw, 14px); --mw: clamp(14px, 3.4vw, 40px);
+    background: repeating-linear-gradient(90deg, rgba(120,80,40,.09) 0 1px, transparent 1px 5px), linear-gradient(135deg, #e0c497, #c49e6a 50%, #d8b98a);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,.4), inset -1px -1px 0 rgba(80,50,20,.35),
+      0 26px 34px -16px rgba(30,20,10,.5), 0 6px 10px -4px rgba(30,20,10,.25);
+  }
+  .frame[data-frame="black"] {   /* thin and modern, wide white mat */
+    --fw: clamp(6px, 1vw, 10px); --mw: clamp(18px, 4.4vw, 52px); --mat: #f6f5f1;
+    background: linear-gradient(135deg, #2c2c2c, #0c0c0c);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,.12), 0 26px 34px -16px rgba(0,0,0,.6), 0 6px 10px -4px rgba(0,0,0,.3);
+  }
+  .frame[data-frame="white"] {   /* painted gallery frame, the work floated */
+    --fw: clamp(8px, 1.2vw, 12px); --mw: clamp(8px, 1.6vw, 16px);
+    background: linear-gradient(135deg, #fbfbfa, #e4e3df);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.08), inset -2px -2px 0 rgba(0,0,0,.06),
+      0 26px 34px -16px rgba(30,25,20,.45), 0 6px 10px -4px rgba(30,25,20,.2);
+  }
+  /* wide screens: the label hangs to the right of the work, at its lower edge */
+  @media (min-width: 1100px) {
+    .mat img { max-width: min(calc(100vw - 680px), 820px); max-height: 54vh; }
+    .wall .placard { position: absolute; left: calc(100% + clamp(36px, 3vw, 56px)); bottom: 0; width: 220px; }
   }
   .placard {
     background: #fbfaf7; color: #2a2825; padding: 10px 14px; max-width: min(80vw, 340px);
@@ -131,7 +226,7 @@
     box-shadow: 0 1px 2px rgba(0,0,0,.25);
   }
   .placard b { display: block; font-family: var(--serif); font-size: 16px; font-weight: 400; font-style: italic; }
-  .placard a { display: inline-block; margin-top: 6px; color: #3366cc; }   /* the card stays lit in both themes */
+  .placard a { display: inline-block; margin: 0 -10px -6px; padding: 6px 10px; color: #3366cc; }   /* the card stays lit in both themes */
 
   .status { font-size: 13px; color: var(--dim); }
 
@@ -153,6 +248,7 @@
   <button data-mode="art">🖼️ <span>art</span></button>
 </nav>
 
+<div class="room" aria-hidden="true"><div class="floor"></div></div>
 <main><figure id="stage" aria-live="polite"></figure></main>
 
 <div class="hint" id="hint">👆 click anywhere for another</div>
@@ -163,7 +259,7 @@
   <div class="see-head"><h2>See also</h2><button id="aboutBtn">ℹ️ about</button></div>
   <ul id="seeList"></ul>
 </section>
-<button class="theme" id="themeBtn" role="switch" aria-label="Dark mode"></button>
+<button class="theme" id="themeBtn" role="switch" aria-label="Dark mode"><span class="track"></span></button>
 
 <dialog id="about">
   <h1>See also</h1>
@@ -235,6 +331,8 @@ const CAPTION_MIN = 14, CAPTION_MAX = 170;
 const SEARCH = {
   art: 'hastemplate:"Infobox artwork" painting'
 };
+// Results must also have a description like this (the search also finds statues and photos)
+const KEEP = { art: /painting|portrait|fresco|triptych|mural|altarpiece|canvas|watercolou?r|panel/i };
 
 /* ————————————————— wikipedia ————————————————— */
 
@@ -304,8 +402,8 @@ async function fetchSearch(mode) {
   const d = await getJSON(API + 'action=query&generator=search&gsrnamespace=0&gsrlimit=20&gsrsort=random'
     + '&gsrsearch=' + encodeURIComponent(SEARCH[mode])
     + '&prop=pageimages|description|info&piprop=thumbnail&pithumbsize=960&pilicense=any&inprop=url');
-  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail).map(p => ({
-    img: p.thumbnail.source, title: p.title.replace(/ \((painting|[^)]*painting[^)]*)\)$/, ''),
+  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail && (!KEEP[mode] || KEEP[mode].test(p.description || ''))).map(p => ({
+    img: p.thumbnail.source, title: p.title.replace(/ \([^)]*\)$/, ''),
     caption: p.description || '', url: p.fullurl || wikiUrl(p.title)
   }));
 }
@@ -323,7 +421,34 @@ async function ready(item) {          // make sure the picture is in cache befor
   if (item.mode === 'everything') {
     try { item.img = await loadImage(bigger(item.img)); return item; } catch (e) {}
   }
+  if (item.mode === 'art') {
+    const im = new Image(); im.crossOrigin = 'anonymous';   // so we can read its colours
+    try { await new Promise((ok, no) => { im.onload = ok; im.onerror = no; im.src = item.img; }); item.cors = true; }
+    catch (e) { await loadImage(item.img); }
+    item.frame = frameFor(item.cors ? im : null, item.title);
+    return item;
+  }
   await loadImage(item.img); return item;
+}
+
+// Pick a frame from the painting's average colour: warm and dark → gilt, cool → silver or walnut,
+// colourless → thin black with a wide mat. The title breaks ties, so a painting always gets the same frame.
+function frameFor(im, title) {
+  let r = 150, g = 135, b = 110;
+  try {
+    const c = document.createElement('canvas'); c.width = c.height = 12;
+    const x = c.getContext('2d'); x.drawImage(im, 0, 0, 12, 12);
+    const d = x.getImageData(0, 0, 12, 12).data; r = g = b = 0;
+    for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; }
+    r /= d.length / 4; g /= d.length / 4; b /= d.length / 4;
+  } catch (e) {}
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), light = (max + min) / 510, sat = max ? (max - min) / max : 0;
+  const coin = [...title].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) | 0, 7) & 1;
+  const style = sat < .12 ? 'black'
+    : (r - b) / max > .12 ? (light < .42 ? 'gilt' : coin ? 'gilt' : 'oak')
+    : light < .4 ? (coin ? 'walnut' : 'silver') : (coin ? 'silver' : 'white');
+  const tint = (base, k) => `rgb(${base.map((v, i) => Math.round(v * (1 - k) + [r, g, b][i] * k)).join(',')})`;
+  return { style, mat: tint([246, 242, 234], .1), liner: tint([228, 216, 192], .22) };
 }
 
 function fill(f) {
@@ -352,7 +477,8 @@ const TEMPLATE = {
       <figcaption><span>${esc(i.caption)}</span>
       <a class="enlarge" href="${esc(i.url)}" target="_blank" rel="noopener" title="Read: ${esc(i.title)}" aria-label="Read the article: ${esc(i.title)}">${ENLARGE}</a></figcaption></div>
     <a class="more" href="${esc(i.url)}" target="_blank" rel="noopener">from “${esc(i.title)}” →</a>`,
-  art: i => `<div class="wall"><div class="frame"><img src="${esc(i.img)}" alt="${esc(i.title)}"></div>
+  art: i => `<div class="wall"><div class="frame" data-frame="${i.frame.style}" style="--tint-mat:${i.frame.mat};--tint-liner:${i.frame.liner}">
+    <div class="mat"><img src="${esc(i.img)}" alt="${esc(i.title)}"${i.cors ? ' crossorigin="anonymous"' : ''}></div></div>
     <figcaption class="placard"><b>${esc(i.title)}</b>${esc(i.caption)}<br>
     <a href="${esc(i.url)}" target="_blank" rel="noopener">Read on Wikipedia →</a></figcaption></div>`
 };
@@ -413,6 +539,14 @@ function showTopic() {
 }
 function openSee(open) { seePanel.hidden = !open; seeBtn.setAttribute('aria-expanded', open); }
 
+// A click within a few pixels of a link or control was meant for it: don't advance.
+function nearControl(e, pad = 14) {
+  return [...document.querySelectorAll('nav button, .corner button, .theme, #stage a')].some(el => {
+    const r = el.getBoundingClientRect();
+    return e.clientX > r.left - pad && e.clientX < r.right + pad && e.clientY > r.top - pad && e.clientY < r.bottom + pad;
+  });
+}
+
 const about = document.getElementById('about');
 document.addEventListener('click', e => {
   if (about.open) { if (e.target === about) about.close(); return; }
@@ -427,7 +561,7 @@ document.addEventListener('click', e => {
   const modeBtn = e.target.closest('nav button');
   if (modeBtn) return setMode(modeBtn.dataset.mode, true);
   if (e.target.closest('#themeBtn')) return setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark', true);
-  if (e.target.closest('a, figcaption.placard')) return;   // reading, not advancing
+  if (e.target.closest('a, figcaption.placard') || nearControl(e)) return;   // reading or a near-miss, not advancing
   document.getElementById('hint').classList.add('gone');
   next();
 });
