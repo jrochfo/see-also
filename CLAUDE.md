@@ -16,7 +16,7 @@ Wikipedia image captions.
   hand-picked titles; #topic in the URL links straight to one
 - Humanity (topic + weighting): public/humanity.json, found captions in the
   wikipoetics spirit. featured = Jake's originals (every fresh visit opens on
-  one; 1/3 of Humanity picks). Captions since edited off Wikipedia keep their
+  one; FEATURED_SHARE of Humanity picks). Captions since edited off Wikipedia keep their
   own img (+ oldid) and show "caption since edited". HUMANITY_RATE in everything
 - The main page opens on a featured caption: a first-time visitor (no
   localStorage "visited") always gets INTRO, Sailing stones ("Tracks are
