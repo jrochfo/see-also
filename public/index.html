@@ -357,27 +357,68 @@ const SEED_RATE = 0.25;            // share of "everything" drawn from SEEDS
 const sp = c => `hastemplate:"Speciesbox" deepcat:"${c}"`;   // species pages under a taxon
 const TOPICS = {
   humanity:   { label: '🫶 Humanity', humanity: true },   // found captions, from humanity.json
-  dinosaurs:  { label: '🦕 Dinosaurs', lead: true, search: ['deepcat:"Dinosaur genera"'],   // "Dinosaurs" includes birds
+  dinosaurs:  { label: '🦕 Dinosaurs', search: ['deepcat:"Dinosaur genera"'],   // "Dinosaurs" includes birds
+                want: /restoration|reconstruct|skeleton|mount|model|statue|life |artist|depiction/i, skip: /scan|multiview|nasal|cavity/i,   // the animal, not its bones in a tray
                 titles: ['Tyrannosaurus', 'Triceratops', 'Stegosaurus', 'Brachiosaurus', 'Velociraptor', 'Ankylosaurus',
                   'Parasaurolophus', 'Diplodocus', 'Spinosaurus', 'Iguanodon', 'Pachycephalosaurus', 'Apatosaurus',
                   'Allosaurus', 'Brontosaurus', 'Archaeopteryx', 'Protoceratops', 'Styracosaurus', 'Maiasaura',
                   'Therizinosaurus', 'Dilophosaurus', 'Compsognathus', 'Oviraptor', 'Edmontosaurus', 'Argentinosaurus'] },
-  birds:      { label: '🐦 Birds', lead: true, search: [sp('Birds'), sp('Passeriformes')] },
-  bugs:       { label: '🐞 Bugs', lead: true, search: ['Nymphalidae', 'Lycaenidae', 'Saturniidae', 'Sphingidae', 'Apidae',
-                  'Lampyridae', 'Phasmatodea', 'Coccinellidae', 'Odonata'].map(sp) },
-  sea:        { label: '🐙 Sea creatures', lead: true, search: ['Cephalopods', 'Nudibranchs', 'Scyphozoa', 'Starfish', 'Cetaceans',
-                  'Seahorses', 'Pomacentridae', 'Sea turtles'].map(sp) },
+  birds:      { label: '🐦 Birds', lead: true, skip: /\begg|specimen|collection|museum|skin|skull/i, search: [sp('Birds'), sp('Passeriformes')],
+                titles: ['Snowy owl', 'Barn owl', 'Atlantic puffin', 'Emperor penguin', 'Peafowl', 'Flamingo', 'Kingfisher',
+                  'Hummingbird', 'Toucan', 'Scarlet macaw', 'Shoebill', 'Great blue heron', 'Mandarin duck', 'Superb lyrebird',
+                  'Bald eagle', 'Common loon', 'Resplendent quetzal', 'Wilson\'s bird-of-paradise', 'Lilac-breasted roller',
+                  'Gouldian finch', 'European robin', 'Northern cardinal', 'Blue jay', 'Common raven', 'Mute swan',
+                  'Secretarybird', 'Kakapo', 'Kiwi (bird)', 'Albatross', 'Pelican', 'Roseate spoonbill', 'Hoopoe',
+                  'Bee-eater', 'Wood duck', 'Tawny frogmouth', 'Arctic tern', 'Cockatoo', 'Ostrich', 'Barn swallow'] },
+  bugs:       { label: '🐞 Bugs', lead: true, skip: /\begg|specimen|collection|museum|dorsal|ventral|pinned|genitalia|caution|\bsign\b|slits/i,
+                search: ['Nymphalidae', 'Lycaenidae', 'Saturniidae', 'Sphingidae', 'Apidae',
+                  'Lampyridae', 'Phasmatodea', 'Coccinellidae', 'Odonata'].map(sp),
+                titles: ['Luna moth', 'Monarch butterfly', 'Atlas moth', 'Firefly', 'Coccinella septempunctata', 'Western honey bee',
+                  'Bumblebee', 'Praying mantis', 'Orchid mantis', 'Dragonfly', 'Damselfly', 'Stick insect', 'Leaf insect',
+                  'Hercules beetle', 'Stag beetle', 'Dung beetle', 'Morpho', 'Blue morpho', 'Glasswing butterfly',
+                  'Hummingbird hawk-moth', 'Rosy maple moth', 'Cicada', 'Grasshopper', 'Katydid', 'Jewel beetle',
+                  'Aglais io', 'Swallowtail butterfly', 'Caterpillar', 'Ant', 'Weaver ant', 'Leafcutter ant',
+                  'Termite', 'Water strider', 'Lanternfly', 'Rhinoceros beetle', 'Tiger beetle', 'Moth', 'Butterfly'] },
+  sea:        { label: '🐙 Sea creatures', lead: true, skip: /\begg|specimen|collection|museum|holotype|mandible|skull|nests? found|angle views|views of/i,
+                search: ['Cephalopods', 'Nudibranchs', 'Scyphozoa', 'Starfish', 'Cetaceans', 'Seahorses', 'Pomacentridae'].map(sp),
+                titles: ['Octopus', 'Giant Pacific octopus', 'Mimic octopus', 'Blue-ringed octopus', 'Cuttlefish', 'Nautilus',
+                  'Jellyfish', 'Moon jellyfish', 'Portuguese man o\' war', 'Manta ray', 'Whale shark', 'Humpback whale',
+                  'Blue whale', 'Orca', 'Narwhal', 'Beluga whale', 'Bottlenose dolphin', 'Sea otter', 'Seahorse',
+                  'Leafy seadragon', 'Clownfish', 'Mandarinfish', 'Pufferfish', 'Ocean sunfish', 'Sea turtle', 'Green sea turtle',
+                  'Starfish', 'Sea urchin', 'Sea anemone', 'Nudibranch', 'Sea slug', 'Coral reef', 'Giant clam',
+                  'Hermit crab', 'Mantis shrimp', 'Lobster', 'Anglerfish', 'Lionfish', 'Walrus', 'Harbor seal'] },
   sweets:     { label: '🍬 Sweets', lead: true, search: ['hastemplate:"Infobox food" deepcat:"Desserts"', 'hastemplate:"Infobox food" deepcat:"Confectionery"'],
+                skip: /\bbox\b|packag|wrapper|brand|\bpan\b|\bmould|\bmold\b|for sale|\bsign\b|ingredients|grapes?\b|factory|building|in front of|pâtisserie|patisserie/i,
                 notDesc: /meat|savou?ry|sandwich|soup|stew|sausage|fish|chicken|pork|beef|lamb|cheese|bakery|restaurant|company|brand|shop|street/i },
-  produce:    { label: '🥕 Fruits & vegetables', search: ['incategory:"Leaf vegetables|Root vegetables|Edible fruits|Squashes and pumpkins"'] },
-  trains:     { label: '🚂 Trains', search: ['hastemplate:"Infobox locomotive"'] },
+  produce:    { label: '🥕 Fruits & vegetables', lead: true, skip: /flower|tree\b|trunk|plants?\b|nursery|leaves|illustration|drawing|structure|chemical|component|aldehyde|field|crop|harvest|seeds?\b|seedling|germinat|compared|stew|juice|dehisc/i,
+                titles: ['Romanesco broccoli', 'Pomegranate', 'Pitaya', 'Starfruit', 'Rambutan', 'Mangosteen', 'Durian', 'Jackfruit',
+                  'Kiwifruit', 'Passion fruit', 'Lychee', 'Persimmon', 'Fig', 'Quince', 'Pear', 'Apple', 'Cherry', 'Strawberry',
+                  'Raspberry', 'Blueberry', 'Blackberry', 'Gooseberry', 'Redcurrant', 'Grape', 'Watermelon', 'Cantaloupe', 'Lemon',
+                  'Lime (fruit)', 'Orange (fruit)', 'Blood orange', 'Grapefruit', 'Pomelo', 'Buddha\'s hand', 'Finger lime', 'Kumquat',
+                  'Banana', 'Plantain', 'Mango', 'Papaya', 'Pineapple', 'Coconut', 'Avocado', 'Date palm', 'Olive', 'Apricot', 'Peach',
+                  'Plum', 'Cranberry', 'Carrot', 'Beetroot', 'Radish', 'Daikon', 'Turnip', 'Parsnip',
+                  'Potato', 'Sweet potato', 'Yam (vegetable)', 'Taro', 'Ginger', 'Garlic', 'Onion', 'Shallot', 'Leek', 'Cabbage',
+                  'Red cabbage', 'Kohlrabi', 'Brussels sprout', 'Cauliflower', 'Broccoli', 'Kale', 'Bok choy', 'Lettuce', 'Spinach',
+                  'Chard', 'Artichoke', 'Asparagus', 'Celery', 'Fennel', 'Rhubarb', 'Pea', 'Green bean', 'Okra', 'Corn', 'Pumpkin',
+                  'Butternut squash', 'Zucchini', 'Cucumber', 'Eggplant', 'Tomato', 'Bell pepper', 'Chili pepper', 'Mushroom',
+                  'Bitter melon', 'Chayote', 'Jicama', 'Lotus root', 'Bamboo shoot', 'Horned melon', 'Ugli fruit', 'Salak',
+                  'Cherimoya', 'Feijoa', 'Physalis', 'Tamarillo', 'Loquat', 'Medlar', 'Elderberry', 'Mulberry', 'Ackee', 'Breadfruit'] },
+  trains:     { label: '🚂 Trains', search: ['hastemplate:"Infobox locomotive"'], skip: /medal|diagram|drawing|plan\b/i },
   space:      { label: '🪐 Space', search: ['hastemplate:"Infobox nebula|Infobox galaxy"',
-                  'hastemplate:"Infobox planet" incategory:"Planets of the Solar System|Moons of Jupiter|Moons of Saturn"'] },
-  mushrooms:  { label: '🍄 Mushrooms', search: ['hastemplate:"Mycomorphbox"'] },
-  toys:       { label: '🧸 Toys', skip: /reborn|haunted|company|brands|\binc\b|corporation/i, search: ['incategory:"Toys|Traditional toys|Dolls|Construction toys|Wooden toys|Mechanical toys|Stuffed toys|Spinning tops|Physical activity and dexterity toys"'] },
-  instruments:{ label: '🎻 Musical instruments', search: ['hastemplate:"Infobox instrument"'] },
+                  'hastemplate:"Infobox planet" incategory:"Planets of the Solar System|Moons of Jupiter|Moons of Saturn"'],
+                skip: /SDSS|DSS\b|light curve|curve|spectrum|plot|heat flow|graph|wider perspective|position of|location of|magnetic|modell?ing|overview|observations|structure of|trajectory|ground-based|exosphere|names? of|labell?ed/i,
+                titles: ['Pillars of Creation', 'Earthrise', 'Pale Blue Dot', 'The Blue Marble', 'Saturn', 'Rings of Saturn',
+                  'Jupiter', 'Great Red Spot', 'Mars', 'Olympus Mons', 'Venus', 'Mercury (planet)', 'Uranus', 'Neptune', 'Pluto',
+                  'Moon', 'Io (moon)', 'Europa (moon)', 'Enceladus', 'Titan (moon)', 'Crab Nebula', 'Orion Nebula', 'Horsehead Nebula',
+                  'Ring Nebula', 'Cat\'s Eye Nebula', 'Helix Nebula', 'Eagle Nebula', 'Carina Nebula', 'Andromeda Galaxy',
+                  'Whirlpool Galaxy', 'Sombrero Galaxy', 'Milky Way', 'Pleiades', 'Comet', 'Halley\'s Comet', 'Comet Hale–Bopp',
+                  'Aurora', 'Solar eclipse', 'Sun', 'Hubble Ultra-Deep Field', 'Black hole', 'Messier 87'] },
+  mushrooms:  { label: '🍄 Mushrooms', search: ['hastemplate:"Mycomorphbox"'], skip: /\bacid\b|compound|structure|spores? (print|under)|microscop/i },
+  toys:       { label: '🧸 Toys', skip: /reborn|haunted|company|brands|\binc\b|corporation|\bbox\b|packag|for sale|store|shop|display|patent|plasterer|drywall/i,
+                search: ['incategory:"Toys|Traditional toys|Dolls|Construction toys|Wooden toys|Mechanical toys|Stuffed toys|Spinning tops|Physical activity and dexterity toys"'] },
+  instruments:{ label: '🎻 Musical instruments', search: ['hastemplate:"Infobox instrument"'], skip: /inscription|plan of|body shape|form\b|=/i },
   towers:     { label: '🗼 Towers', search: ['hastemplate:"Infobox lighthouse"', 'deepcat:"Observation towers"',
-                  'deepcat:"Bell towers"', 'deepcat:"Round towers"', 'deepcat:"Pagodas"'],
+                  'deepcat:"Bell towers"', 'deepcat:"Round towers"', 'deepcat:"Pagodas"'], skip: /plan\b|elevation|cornerstone|plaque|issue of|railroad|railway/i,
                 titles: ['Eiffel Tower', 'Leaning Tower of Pisa', 'Big Ben', 'CN Tower', 'Burj Khalifa', 'Empire State Building',
                   'Chrysler Building', 'Flatiron Building', 'Tokyo Tower', 'Tokyo Skytree', 'Space Needle', 'Taipei 101',
                   'Petronas Towers', 'Shanghai Tower', 'Oriental Pearl Tower', 'Fernsehturm Berlin', 'Ostankino Tower',
@@ -386,18 +427,18 @@ const TOPICS = {
                   'Bell Rock Lighthouse', 'Eddystone Lighthouse', 'Cape Hatteras Lighthouse', 'Portland Head Light',
                   'Lighthouse of Alexandria', 'Porcelain Tower of Nanjing', 'Watts Towers', 'Tower of Babel',
                   'Shwedagon Pagoda', 'Minaret of Jam', 'Tower Bridge'] },
-  waterfalls: { label: '💧 Waterfalls', search: ['hastemplate:"Infobox waterfall"'] },
-  weather:    { label: '🌦️ Weather', search: ['incategory:"Clouds"'], titles: [
+  waterfalls: { label: '💧 Waterfalls', search: ['hastemplate:"Infobox waterfall"'], skip: /namesake|portrait|poem|memorial|monument/i },
+  weather:    { label: '🌦️ Weather', search: ['incategory:"Clouds"'], skip: /averaged|global|atlas|map\b|frequency|instability in the sun|demonstration|experiment|microscope|anemometer|counter|NEXRAD|UTC|future for Earth|orographic/i, titles: [
                   'Cloud', 'Cumulus cloud', 'Cirrus cloud', 'Cumulonimbus cloud', 'Lenticular cloud', 'Mammatus cloud',
                   'Noctilucent cloud', 'Rainbow', 'Moonbow', 'Fogbow', 'Sun dog', 'Halo (optical phenomenon)',
                   'Glory (optical phenomenon)', 'Crepuscular rays', 'Light pillar', 'Aurora', 'Lightning', 'Thunderstorm',
-                  'Rain', 'Snow', 'Snowflake', 'Hail', 'Frost', 'Hoarfrost', 'Dew', 'Fog', 'Mist', 'Diamond dust',
+                  'Rain', 'Snow', 'Snowflake', 'Hail', 'Frost', 'Dew', 'Fog', 'Mist', 'Diamond dust',
                   'Ice storm', 'Waterspout', 'Dust devil', 'Wind', 'Monsoon', 'Sunset', 'Twilight', 'Weather'] }
 };
 // Never show articles with titles like these, in any topic
 const TITLE_SKIP = /\bsex|porn|erotic|fetish|nude|nudity/i;
 // In topics, skip captions like these (animal articles can hold grim or technical pictures)
-const TOPIC_SKIP = /\b(hunt\w*|kill\w*|dead|carcass\w*|slaughter\w*|butcher\w*|roadkill|disease\w*|infect\w*|parasit\w*|distribution|range|cladogram|phylogen\w*|diagram|comparison|anatomy|tuning|notation|score)\b/i;
+const TOPIC_SKIP = /\b(hunt\w*|kill\w*|dead|death|suicide|carcass\w*|slaughter\w*|butcher\w*|roadkill|disease\w*|infect\w*|parasit\w*|distribution|range|cladogram|phylogen\w*|diagram|comparison|anatomy|tuning|notation|score|maps?|chart|cross-section|holotype|type specimen|localit\w*|outcrop|excavat\w*|skull elements|known remains|vertebra\w*|chevron|morphology|chemical|molecul\w*)\b/i;
 const SKIP_FILE = /\.svg|map|logo|flag|coat[_ ]of|locator|icon|signature|seal[_ ]of|chart|graph|diagram|\.gif|\.pdf|\.ogv|\.webm/i;
 const CAPTION_MIN = 14, CAPTION_MAX = 170;
 
@@ -546,7 +587,8 @@ async function fetchTopic(key) {
       .sort(() => Math.random() - 0.5).slice(0, 4);
   }
   const sets = await Promise.all(titles.map(x => captionsIn(x).catch(() => [])));
-  return sets.map(s => s.filter(c => !TOPIC_SKIP.test(c.caption) && !(t.skip && t.skip.test(c.caption)))).filter(s => s.length).map(s => t.lead ? s[0] : pick(s));
+  return sets.map(s => s.filter(c => !TOPIC_SKIP.test(c.caption) && !(t.skip && t.skip.test(c.caption)) && !(t.want && !t.want.test(c.caption))))
+    .filter(s => s.length).map(s => t.lead ? s[0] : pick(s));
 }
 
 const PAGE_PROPS = '&prop=pageimages|description|info&piprop=thumbnail|name&pithumbsize=960&pilicense=any&inprop=url';
