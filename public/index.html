@@ -4,7 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>See also</title>
-<meta name="description" content="Click for another picture from Wikipedia.">
+<meta name="description" content="A picture from Wikipedia, with the caption somebody wrote for it. Click for another.">
+<link rel="canonical" href="https://seealso.wiki/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://seealso.wiki/">
+<meta property="og:title" content="See also">
+<meta property="og:description" content="A picture from Wikipedia, with the caption somebody wrote for it. Click for another.">
+<meta property="og:image" content="https://seealso.wiki/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A sailing stone on a dry lakebed, captioned “Tracks are sometimes non-linear.”, beside a Wikipedia-style See also list">
+<meta name="twitter:card" content="summary_large_image">
 <script>
   // saved choice wins; otherwise follow the device
   try { var t = localStorage.getItem('theme'); } catch (e) {}
@@ -154,6 +164,8 @@
   .enlarge { flex: none; margin: -6px -8px -8px; padding: 10px 8px 8px; opacity: .75; line-height: 0; color: var(--icon); }
   .enlarge:hover { opacity: 1; }
   .more { display: block; width: fit-content; margin: 4px 0 0 auto; padding: 8px 0 8px 12px; font-size: 13px; text-align: right; }
+  .more-row { display: flex; align-items: baseline; gap: 14px; }
+  .edited { margin-top: 4px; padding: 8px 12px 8px 0; font-size: 12px; font-style: italic; color: var(--dim); }
 
   /* —— art: a painting on a wall —— */
   .room { position: fixed; inset: 0; z-index: 0; pointer-events: none; display: none; }
@@ -321,6 +333,7 @@
   <p>A picture from Wikipedia, with the caption somebody wrote for it. Click anywhere for another. Follow the link to read the article it came from.</p>
   <p>Inspired by the wikipoetics and Earth-loading-screen corners of TikTok.</p>
   <p>All images and text come live from <a href="https://en.wikipedia.org" target="_blank" rel="noopener">Wikipedia</a> and its volunteer contributors, mostly under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA</a>; each image's own page lists its author and license. Not affiliated with the Wikimedia Foundation.</p>
+  <p>Wikipedia is written by volunteers and kept free by small donations. If this made you smile, <a href="https://donate.wikimedia.org" target="_blank" rel="noopener">consider giving a little to Wikipedia</a>.</p>
   <form method="dialog"><button>close</button></form>
 </dialog>
 
@@ -343,6 +356,7 @@ const SEED_RATE = 0.25;            // share of "everything" drawn from SEEDS
 // `lead: true` shows the article's first captioned picture (animal pages save diagrams for later).
 const sp = c => `hastemplate:"Speciesbox" deepcat:"${c}"`;   // species pages under a taxon
 const TOPICS = {
+  humanity:   { label: '🫶 Humanity', humanity: true },   // found captions, from humanity.json
   dinosaurs:  { label: '🦕 Dinosaurs', lead: true, search: ['deepcat:"Dinosaur genera"'],   // "Dinosaurs" includes birds
                 titles: ['Tyrannosaurus', 'Triceratops', 'Stegosaurus', 'Brachiosaurus', 'Velociraptor', 'Ankylosaurus',
                   'Parasaurolophus', 'Diplodocus', 'Spinosaurus', 'Iguanodon', 'Pachycephalosaurus', 'Apatosaurus',
@@ -353,12 +367,14 @@ const TOPICS = {
                   'Lampyridae', 'Phasmatodea', 'Coccinellidae', 'Odonata'].map(sp) },
   sea:        { label: '🐙 Sea creatures', lead: true, search: ['Cephalopods', 'Nudibranchs', 'Scyphozoa', 'Starfish', 'Cetaceans',
                   'Seahorses', 'Pomacentridae', 'Sea turtles'].map(sp) },
-  baked:      { label: '🥐 Baked goods', search: ['hastemplate:"Infobox food" deepcat:"Baked goods"'] },
+  sweets:     { label: '🍬 Sweets', lead: true, search: ['hastemplate:"Infobox food" deepcat:"Desserts"', 'hastemplate:"Infobox food" deepcat:"Confectionery"'],
+                notDesc: /meat|savou?ry|sandwich|soup|stew|sausage|fish|chicken|pork|beef|lamb|cheese|bakery|restaurant|company|brand|shop|street/i },
   produce:    { label: '🥕 Fruits & vegetables', search: ['incategory:"Leaf vegetables|Root vegetables|Edible fruits|Squashes and pumpkins"'] },
   trains:     { label: '🚂 Trains', search: ['hastemplate:"Infobox locomotive"'] },
   space:      { label: '🪐 Space', search: ['hastemplate:"Infobox nebula|Infobox galaxy"',
                   'hastemplate:"Infobox planet" incategory:"Planets of the Solar System|Moons of Jupiter|Moons of Saturn"'] },
   mushrooms:  { label: '🍄 Mushrooms', search: ['hastemplate:"Mycomorphbox"'] },
+  toys:       { label: '🧸 Toys', search: ['incategory:"Toys|Traditional toys|Dolls|Construction toys|Wooden toys|Mechanical toys|Stuffed toys|Spinning tops|Physical activity and dexterity toys"'] },
   instruments:{ label: '🎻 Musical instruments', search: ['hastemplate:"Infobox instrument"'] },
   towers:     { label: '🗼 Towers', search: ['hastemplate:"Infobox lighthouse"', 'deepcat:"Observation towers"',
                   'deepcat:"Bell towers"', 'deepcat:"Round towers"', 'deepcat:"Pagodas"'],
@@ -462,8 +478,42 @@ async function captionsIn(title) {
     .map(f => ({ ...f, title, url: wikiUrl(title) }));
 }
 
+// Humanity: found captions (humanity.json), each an article and the caption to show from it. Captions
+// Wikipedia has since edited away are kept with their image and marked as such ("live": pinned image, caption still current).
+let humanityList;
+// The main page always opens on a featured caption: for a first-time visitor, this one.
+const INTRO = 'Sailing stones';   // "Tracks are sometimes non-linear."
+let wantFeatured = false;
+// Dealt like cards: each pile is shuffled and drawn from without repeats, and only reshuffled once empty.
+const piles = {};
+function deal(name, all) {
+  if (!piles[name] || !piles[name].length) piles[name] = (name === 'featured' ? all.filter(h => h.featured) : [...all]).sort(() => Math.random() - 0.5);
+  return piles[name].pop();
+}
+const HUMANITY_RATE = 1 / 8;          // share of "everything" drawn from Humanity, after the first picture
+async function fetchHumanity(n, featuredOnly, only) {   // "featured" = Jake's originals: a third of picks, and the main page's opener
+  humanityList = humanityList || getJSON('humanity.json').catch(e => { humanityList = null; throw e; });
+  const all = await humanityList;
+  const picks = only ? all.filter(h => h.article === only)
+    : Array.from({ length: n }, () => deal(featuredOnly || Math.random() < 1 / 3 ? 'featured' : 'all', all));
+  const items = await Promise.all(picks.map(async h => {
+    const title = h.article, url = wikiUrl(title);
+    if (h.img) return { img: h.img, caption: h.caption, title, url, edited: h.live ? '' : h.oldid
+      ? 'https://en.wikipedia.org/w/index.php?oldid=' + h.oldid
+      : 'https://en.wikipedia.org/w/index.php?action=history&title=' + encodeURIComponent(title) };
+    const d = await getJSON(REST + 'page/media-list/' + encodeURIComponent(title.replace(/ /g, '_')));
+    const hit = (d.items || []).find(i => i.caption && i.srcset && i.caption.text.toLowerCase().includes(h.caption.toLowerCase()));
+    return hit && { img: abs(hit.srcset[hit.srcset.length - 1].src), caption: hit.caption.text.replace(/\[\d+\]/g, '').trim(), title, url };
+  }).map(p => p.catch(() => null)));
+  return items.filter(Boolean);
+}
+
 let seedPool = [...SEEDS];
 async function fetchEverything() {
+  if (Math.random() < HUMANITY_RATE) {
+    const h = await fetchHumanity(1).catch(() => []);
+    if (h.length) return h;
+  }
   if (seedPool.length && Math.random() < SEED_RATE) {
     const s = seedPool.splice(Math.floor(Math.random() * seedPool.length), 1)[0];
     const [title, want] = Array.isArray(s) ? s : [s];
@@ -481,13 +531,14 @@ async function fetchEverything() {
 
 async function fetchTopic(key) {
   const t = TOPICS[key];
+  if (t.humanity) return fetchHumanity(3);
   let titles;
   if (t.titles && (!t.search || Math.random() < 0.6)) {
     titles = [...t.titles].sort(() => Math.random() - 0.5).slice(0, 3);
   } else {
     const d = await getJSON(API + 'action=query&generator=search&gsrnamespace=0&gsrlimit=20&gsrsort=random'
-      + '&gsrsearch=' + encodeURIComponent(pick(t.search)) + '&prop=pageimages&piprop=name');
-    titles = ((d.query && d.query.pages) || []).filter(p => p.pageimage).map(p => p.title)
+      + '&gsrsearch=' + encodeURIComponent(pick(t.search)) + '&prop=pageimages|description&piprop=name');
+    titles = ((d.query && d.query.pages) || []).filter(p => p.pageimage && !(t.notDesc && t.notDesc.test(p.description || ''))).map(p => p.title)
       .sort(() => Math.random() - 0.5).slice(0, 4);
   }
   const sets = await Promise.all(titles.map(x => captionsIn(x).catch(() => [])));
@@ -622,7 +673,11 @@ function fill(f) {
           : m === 'everything' ? fetchEverything() : fetchSearch(m));
       } catch (e) {}
       if (!q.length && tries === 5) items = items.length ? items : repeats;
-      else { repeats = items.filter(i => seen.has(i.img)); items = items.filter(i => !seen.has(i.img)); }
+      else {
+        repeats = items.filter(i => seen.has(i.img));
+        const batch = new Set();   // also drop doubles within this batch
+        items = items.filter(i => !seen.has(i.img) && !batch.has(i.img) && batch.add(i.img));
+      }
       items = items.map(i => (seen.add(i.img), { ...i, mode: m }));
       const loaded = await Promise.all(items.map(i => ready(i).catch(() => null)));
       q.push(...loaded.filter(Boolean));
@@ -641,7 +696,8 @@ const TEMPLATE = {
   everything: i => `<div class="thumb"><img src="${esc(i.img)}" alt="">
       <figcaption><span>${esc(i.caption)}</span>
       <a class="enlarge" href="${esc(i.url)}" target="_blank" rel="noopener" title="Read: ${esc(i.title)}" aria-label="Read the article: ${esc(i.title)}">${ENLARGE}</a></figcaption></div>
-    <a class="more" href="${esc(i.url)}" target="_blank" rel="noopener">from “${esc(i.title)}” →</a>`,
+    <div class="more-row">${i.edited ? `<a class="edited" href="${esc(i.edited)}" target="_blank" rel="noopener" title="This caption has since been changed on Wikipedia">caption since edited</a>` : ''}
+    <a class="more" href="${esc(i.url)}" target="_blank" rel="noopener">from “${esc(i.title)}” →</a></div>`,
   art: i => `<div class="wall"><div class="frame" data-frame="${i.frame.style}" style="--tint-mat:${i.frame.mat};--tint-liner:${i.frame.liner}">
     <div class="mat"><img src="${esc(i.img)}" alt="${esc(i.title)}"${i.cors ? ' crossorigin="anonymous"' : ''}></div></div>
     <figcaption class="placard"><b>${esc(i.title)}</b>${esc(i.caption)}<br>
@@ -661,9 +717,24 @@ function paint(item) {
 }
 function say(text) { stage.innerHTML = `<p class="status">${text}</p>`; stage.classList.add('in'); }
 
+async function openerItem() {
+  let first = false;
+  try { first = !localStorage.getItem('visited'); localStorage.setItem('visited', '1'); } catch (e) {}
+  const [h] = (await fetchHumanity(1, true, first ? INTRO : null)).filter(i => !seen.has(i.img));
+  if (!h) return null;
+  seen.add(h.img);
+  return ready({ ...h, mode: 'everything' });
+}
+
 async function next() {
   if (cursor < trail.length - 1) return paint(trail[++cursor]);   // walking forward after going back
   const mine = ++token, f = feed();
+  if (wantFeatured && f === 'everything') {   // opening the main page: a featured caption first
+    wantFeatured = false;
+    const item = await openerItem().catch(() => null);
+    if (mine !== token) return;
+    if (item) { trail.push(item); cursor = trail.length - 1; paint(item); fill(f); return; }
+  }
   if (!(queue[f] || []).length) { if (!stage.innerHTML) say('looking…'); await fill(f); }
   if (mine !== token) return;
   const item = queue[f].shift();
@@ -681,6 +752,7 @@ function setMode(m, push) {
   mode = md; topic = t; document.body.dataset.mode = md;
   document.querySelectorAll('nav button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === md));
   showTopic();
+  if (md === 'everything' && !t) wantFeatured = true;   // on load, and whenever you come back to the main page
   if (push) location.hash = md === 'everything' ? t : md + (t ? '/' + t : '');
   trail.length = 0; cursor = -1; stage.innerHTML = ''; stage.classList.remove('in');
   next();

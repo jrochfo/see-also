@@ -14,6 +14,14 @@ Wikipedia image captions.
 - Topics (TOPICS) filter "everything"; picked from a Wikipedia-style "See also"
   panel (bottom right, also holds About). Each topic is search queries and/or
   hand-picked titles; #topic in the URL links straight to one
+- Humanity (topic + weighting): public/humanity.json, found captions in the
+  wikipoetics spirit. featured = Jake's originals (every fresh visit opens on
+  one; 1/3 of Humanity picks). Captions since edited off Wikipedia keep their
+  own img (+ oldid) and show "caption since edited". HUMANITY_RATE in everything
+- The main page opens on a featured caption: a first-time visitor (no
+  localStorage "visited") always gets INTRO, Sailing stones ("Tracks are
+  sometimes non-linear."); later returns to everything get another featured one
+- Link preview: public/og.jpg (1200x630, that photo is public domain) + og/twitter tags
 - Art topics (ART_TOPICS) read public/art-themes.json: enwiki painting titles that
   Wikidata says depict each theme's subjects (P180), pulled once via SPARQL
 - No albums/movies. Art does show non-free (fair use) images by Jake's choice;
