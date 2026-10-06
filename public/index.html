@@ -374,7 +374,7 @@ const TOPICS = {
   space:      { label: '🪐 Space', search: ['hastemplate:"Infobox nebula|Infobox galaxy"',
                   'hastemplate:"Infobox planet" incategory:"Planets of the Solar System|Moons of Jupiter|Moons of Saturn"'] },
   mushrooms:  { label: '🍄 Mushrooms', search: ['hastemplate:"Mycomorphbox"'] },
-  toys:       { label: '🧸 Toys', search: ['incategory:"Toys|Traditional toys|Dolls|Construction toys|Wooden toys|Mechanical toys|Stuffed toys|Spinning tops|Physical activity and dexterity toys"'] },
+  toys:       { label: '🧸 Toys', skip: /reborn|haunted|company|brands|\binc\b|corporation/i, search: ['incategory:"Toys|Traditional toys|Dolls|Construction toys|Wooden toys|Mechanical toys|Stuffed toys|Spinning tops|Physical activity and dexterity toys"'] },
   instruments:{ label: '🎻 Musical instruments', search: ['hastemplate:"Infobox instrument"'] },
   towers:     { label: '🗼 Towers', search: ['hastemplate:"Infobox lighthouse"', 'deepcat:"Observation towers"',
                   'deepcat:"Bell towers"', 'deepcat:"Round towers"', 'deepcat:"Pagodas"'],
@@ -394,6 +394,8 @@ const TOPICS = {
                   'Rain', 'Snow', 'Snowflake', 'Hail', 'Frost', 'Hoarfrost', 'Dew', 'Fog', 'Mist', 'Diamond dust',
                   'Ice storm', 'Waterspout', 'Dust devil', 'Wind', 'Monsoon', 'Sunset', 'Twilight', 'Weather'] }
 };
+// Never show articles with titles like these, in any topic
+const TITLE_SKIP = /\bsex|porn|erotic|fetish|nude|nudity/i;
 // In topics, skip captions like these (animal articles can hold grim or technical pictures)
 const TOPIC_SKIP = /\b(hunt\w*|kill\w*|dead|carcass\w*|slaughter\w*|butcher\w*|roadkill|disease\w*|infect\w*|parasit\w*|distribution|range|cladogram|phylogen\w*|diagram|comparison|anatomy|tuning|notation|score)\b/i;
 const SKIP_FILE = /\.svg|map|logo|flag|coat[_ ]of|locator|icon|signature|seal[_ ]of|chart|graph|diagram|\.gif|\.pdf|\.ogv|\.webm/i;
@@ -524,7 +526,7 @@ async function fetchEverything() {
   }
   const d = await getJSON(API + 'action=query&generator=random&grnnamespace=0&grnlimit=20&prop=pageimages|info&piprop=name');
   const pages = ((d.query && d.query.pages) || [])
-    .filter(p => p.pageimage && p.length > 3500 && !/^List of|\(disambiguation\)/.test(p.title))
+    .filter(p => p.pageimage && p.length > 3500 && !/^List of|\(disambiguation\)/.test(p.title) && !TITLE_SKIP.test(p.title))
     .sort((a, b) => b.length - a.length).slice(0, 4);
   const sets = await Promise.all(pages.map(p => captionsIn(p.title).catch(() => [])));
   return sets.filter(s => s.length).map(pick);
@@ -539,11 +541,12 @@ async function fetchTopic(key) {
   } else {
     const d = await getJSON(API + 'action=query&generator=search&gsrnamespace=0&gsrlimit=20&gsrsort=random'
       + '&gsrsearch=' + encodeURIComponent(pick(t.search)) + '&prop=pageimages|description&piprop=name');
-    titles = ((d.query && d.query.pages) || []).filter(p => p.pageimage && !(t.notDesc && t.notDesc.test(p.description || ''))).map(p => p.title)
+    titles = ((d.query && d.query.pages) || []).filter(p => p.pageimage && !TITLE_SKIP.test(p.title) && !(t.skip && t.skip.test(p.title))
+      && !(t.notDesc && t.notDesc.test(p.description || ''))).map(p => p.title)
       .sort(() => Math.random() - 0.5).slice(0, 4);
   }
   const sets = await Promise.all(titles.map(x => captionsIn(x).catch(() => [])));
-  return sets.map(s => s.filter(c => !TOPIC_SKIP.test(c.caption))).filter(s => s.length).map(s => t.lead ? s[0] : pick(s));
+  return sets.map(s => s.filter(c => !TOPIC_SKIP.test(c.caption) && !(t.skip && t.skip.test(c.caption)))).filter(s => s.length).map(s => t.lead ? s[0] : pick(s));
 }
 
 const PAGE_PROPS = '&prop=pageimages|description|info&piprop=thumbnail|name&pithumbsize=960&pilicense=any&inprop=url';
