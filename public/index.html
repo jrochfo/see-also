@@ -438,8 +438,8 @@ const TOPICS = {
 // Never show articles with titles like these, in any topic
 const TITLE_SKIP = /\bsex|porn|erotic|fetish|nude|nudity/i;
 // In topics, skip captions like these (animal articles can hold grim or technical pictures)
-const TOPIC_SKIP = /\b(hunt\w*|kill\w*|dead|death|suicide|carcass\w*|slaughter\w*|butcher\w*|roadkill|disease\w*|infect\w*|parasit\w*|distribution|range|cladogram|phylogen\w*|diagram|comparison|anatomy|tuning|notation|score|maps?|chart|cross-section|holotype|type specimen|localit\w*|outcrop|excavat\w*|skull elements|known remains|vertebra\w*|chevron|morphology|chemical|molecul\w*)\b/i;
-const SKIP_FILE = /\.svg|map|logo|flag|coat[_ ]of|locator|icon|signature|seal[_ ]of|chart|graph|diagram|\.gif|\.pdf|\.ogv|\.webm/i;
+const TOPIC_SKIP = /\b(hunt\w*|kill\w*|dead|death|suicide|carcass\w*|slaughter\w*|butcher\w*|roadkill|disease\w*|infect\w*|parasit\w*|distribution|range|cladogram|phylogen\w*|diagram|comparison|anatomy|tuning|notation|score|maps?|chart|cross-section|holotype|type specimen|localit\w*|outcrop|excavat\w*|skull elements|known remains|vertebra\w*|chevron|morphology|chemical|molecul\w*|kamon|crest|emblem|stylized|stylised|logo|icon)\b/i;
+const SKIP_FILE = /\.svg|map|logo|flag|coat[_ ]of|locator|icon|signature|seal[_ ]of|chart|graph|diagram|kamon|mon[_ ]|crest|emblem|symbol|clip[_ ]?art|\.gif|\.pdf|\.ogv|\.webm/i;
 const CAPTION_MIN = 14, CAPTION_MAX = 170;
 
 const SEARCH = {
