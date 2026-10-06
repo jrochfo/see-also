@@ -99,7 +99,7 @@
   .see-btn { color: var(--ink); opacity: .82; }   /* the way into topics and About, so a little stronger than the rest */
   .see-btn:hover, .see-btn.on { opacity: 1; }
   .corner { bottom: 16px; right: 16px; display: flex; gap: 14px; }
-  @media (max-width: 560px) { .see-btn .name { display: none; } }   /* just the emoji, next to the hint */
+  @media (max-width: 360px) { .see-btn .name { display: none; } }   /* only on the narrowest phones */
 
   /* topics, as a Wikipedia "See also" section */
   .seealso {
@@ -118,8 +118,16 @@
   .seealso li { break-inside: avoid; }
   .seealso a { color: var(--panel-link); }
   .seealso a[aria-current] { color: var(--panel-ink); font-weight: 700; text-decoration: none; cursor: default; }   /* a self-link, Wikipedia-style */
-  .hint { bottom: 16px; left: 16px; transition: opacity 1.2s; pointer-events: none; }
+  /* the one instruction: centred near the bottom, breathing gently until the first click, then gone */
+  .hint {
+    bottom: 52px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+    font-size: 15px; color: var(--ink); opacity: .7; pointer-events: none; transition: opacity 1.2s;
+  }
+  .hint b { font-weight: inherit; }
+  .hint > span { display: inline-block; animation: breathe 7s ease-in-out infinite; }   /* breathing on the inside, fading on the outside */
+  @keyframes breathe { 50% { opacity: .7; } }
   .hint.gone { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { .hint > span { animation: none; } }
   .theme { position: fixed; top: 4px; right: 6px; z-index: 2; padding: 10px; }   /* padding = a bigger target */
   .track {
     position: relative; display: block;
@@ -318,7 +326,7 @@
 <div class="room" aria-hidden="true"><div class="floor"></div></div>
 <main><figure id="stage" aria-live="polite"></figure></main>
 
-<div class="hint" id="hint">👆 click anywhere for another</div>
+<div class="hint" id="hint"><span>👆 <b id="hintVerb">click</b> anywhere for another</span></div>
 <div class="corner">
   <button class="see-btn" id="seeBtn" aria-expanded="false" aria-controls="seealso"><span id="seeIcon">👁️</span> see also<span id="seeNow"></span></button>
 </div>
@@ -836,6 +844,8 @@ function nearControl(e, pad = 14) {
     return e.clientX > r.left - pad && e.clientX < r.right + pad && e.clientY > r.top - pad && e.clientY < r.bottom + pad;
   });
 }
+
+if (matchMedia('(hover: none)').matches) document.getElementById('hintVerb').textContent = 'tap';   // phones and tablets
 
 const about = document.getElementById('about');
 document.addEventListener('click', e => {
