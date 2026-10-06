@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>See also</title>
+<meta name="description" content="Click for another picture from Wikipedia.">
+<style>
+  :root {
+    --bg: #ffffff; --ink: #202122; --dim: #72777d; --link: #3366cc;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Lato, Helvetica, Arial, sans-serif;
+    --serif: "Linux Libertine", Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg); color: var(--ink); font-family: var(--sans);
+    cursor: pointer; overflow: hidden; transition: background .5s;
+    -webkit-tap-highlight-color: transparent; user-select: none;
+  }
+  body[data-mode="art"] {
+    --bg: #ece7df; --dim: #7d766b;
+    background: linear-gradient(#f1ece5 0 78%, #d9d2c7 78% 78.4%, #c9c0b3 78.4%);
+  }
+  body[data-mode="albums"] { --bg: #17181a; --ink: #e9e9e6; --dim: #8b8d91; --link: #9db7ee; }
+
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+  /* chrome */
+  nav, .about-btn, .hint { position: fixed; font-size: 13px; color: var(--dim); z-index: 2; }
+  nav { top: 16px; left: 16px; display: flex; gap: 14px; }
+  nav button[aria-pressed="true"] { color: var(--ink); border-bottom: 1px solid currentColor; }
+  nav button:hover, .about-btn:hover { color: var(--ink); }
+  .about-btn { bottom: 16px; right: 16px; }
+  .hint { bottom: 16px; left: 16px; transition: opacity 1.2s; pointer-events: none; }
+  .hint.gone { opacity: 0; }
+
+  main { height: 100%; display: grid; place-items: center; padding: 56px 16px; }
+  #stage { margin: 0; opacity: 0; transition: opacity .35s; cursor: pointer; }
+  #stage.in { opacity: 1; }
+  #stage img { display: block; }
+
+  /* —— everything: the Wikipedia thumb box —— */
+  .thumb {
+    width: min-content; border: 1px solid #c8ccd1; background: #f8f9fa; padding: 4px;
+  }
+  .thumb img {
+    max-width: min(88vw, 720px); max-height: 62vh; min-width: min(280px, 80vw);
+    width: auto; height: auto; border: 1px solid #c8ccd1; background: #fff;
+  }
+  .thumb figcaption {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 6px 4px 4px; font-size: clamp(15px, 2.1vw, 19px); line-height: 1.4; text-align: left;
+  }
+  .thumb figcaption span { flex: 1; }
+  .enlarge { flex: none; margin-top: 4px; opacity: .75; line-height: 0; }
+  .enlarge:hover { opacity: 1; }
+  .more { display: block; margin-top: 12px; font-size: 13px; text-align: right; }
+
+  /* —— art: a painting on a wall —— */
+  .wall { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+  .frame {
+    padding: clamp(8px, 1.6vw, 16px);
+    background: linear-gradient(135deg, #5b4630, #3a2b1c 45%, #6a5238);
+    box-shadow: 0 1px 0 #7d6444 inset, 0 22px 30px -12px rgba(40,30,15,.45), 0 4px 8px rgba(40,30,15,.25);
+  }
+  .frame img {
+    max-width: min(80vw, 760px); max-height: 54vh; width: auto; height: auto;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 0 0 clamp(4px,1vw,10px) #f4efe4;
+    margin: clamp(4px,1vw,10px);
+  }
+  .placard {
+    background: #fbfaf7; color: #2a2825; padding: 10px 14px; max-width: min(80vw, 340px);
+    font-size: 12px; line-height: 1.45; text-align: left; cursor: auto;
+    box-shadow: 0 1px 2px rgba(0,0,0,.25);
+  }
+  .placard b { display: block; font-family: var(--serif); font-size: 16px; font-weight: 400; font-style: italic; }
+  .placard a { display: inline-block; margin-top: 6px; }
+
+  /* —— albums: a jewel case —— */
+  .shelf { display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; }
+  .case {
+    position: relative; display: flex; width: min(78vw, 56vh, 460px); aspect-ratio: 1.13 / 1;
+    border-radius: 4px; background: rgba(255,255,255,.07);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.22), 0 30px 50px -20px #000;
+    padding: 1.6%;
+  }
+  .case .spine {
+    flex: 0 0 10.5%; margin-right: 1.2%; border-radius: 2px;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.10) 0 2px, transparent 2px 7px),
+      linear-gradient(90deg, #0b0b0c, #26272a 60%, #101011);
+  }
+  .case img { flex: 1; min-width: 0; height: 100%; object-fit: cover; border-radius: 1px; background: #222; }
+  .case::after { /* plastic glare */
+    content: ""; position: absolute; inset: 0; border-radius: 4px; pointer-events: none;
+    background: linear-gradient(115deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.04) 22%, transparent 40%, transparent 78%, rgba(255,255,255,.07) 100%);
+  }
+  .shelf figcaption { font-size: 14px; line-height: 1.5; color: var(--dim); cursor: auto; max-width: min(86vw, 460px); }
+  .shelf figcaption b { display: block; color: var(--ink); font-size: 17px; font-weight: 500; }
+
+  .status { font-size: 13px; color: var(--dim); }
+
+  dialog {
+    border: 1px solid #c8ccd1; padding: 22px 24px; max-width: min(420px, calc(100vw - 32px));
+    font-size: 14px; line-height: 1.55; color: #202122; background: #fff; cursor: auto; user-select: text;
+  }
+  dialog::backdrop { background: rgba(0,0,0,.35); }
+  dialog h1 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0 0 8px; border-bottom: 1px solid #a2a9b1; }
+  dialog p { margin: 0 0 10px; }
+  dialog button { color: #3366cc; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body data-mode="everything">
+
+<nav aria-label="Mode">
+  <button data-mode="everything">everything</button>
+  <button data-mode="art">art</button>
+  <button data-mode="albums">albums</button>
+</nav>
+
+<main><figure id="stage" aria-live="polite"></figure></main>
+
+<div class="hint" id="hint">click anywhere for another</div>
+<button class="about-btn" id="aboutBtn">about</button>
+
+<dialog id="about">
+  <h1>See also</h1>
+  <p>A picture from Wikipedia, with the caption somebody wrote for it. Click anywhere for another. Follow the link to read the article it came from.</p>
+  <p>Inspired by the wikipoetics and Earth-loading-screen corners of TikTok.</p>
+  <p>All images and text come live from <a href="https://en.wikipedia.org" target="_blank" rel="noopener">Wikipedia</a> and its volunteer contributors, mostly under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA</a>; each image's own page lists its author and license. Album covers belong to their rights holders. Not affiliated with the Wikimedia Foundation.</p>
+  <form method="dialog"><button>close</button></form>
+</dialog>
+
+<script>
+/* ————————————————— config ————————————————— */
+
+// Hand-picked articles that tend to have lovely captions. Edit freely.
+// A string is an article title; [title, "text"] prefers the caption containing that text.
+const SEEDS = [
+  ["Oceanic feeling", "View of an ocean"], ["Kaomoji", "painting"], ["Optical disc drive", "disc"],
+  "Liminality", "Saudade", "Nap", "Pareidolia", "Desire path", "Petrichor", "Loneliness",
+  "Wonder (emotion)", "Hug", "Picnic", "Comfort object", "Hobby", "Friendship", "Boredom",
+  "Happiness", "Sleep", "Laughter", "Play (activity)", "Souvenir", "Kitchen", "Night",
+  "Daydream", "Walking", "Smile", "Gift", "Home", "Waiting room", "Sunday", "Puddle"
+];
+const SEED_RATE = 0.25;            // share of "everything" drawn from SEEDS
+const SKIP_FILE = /\.svg|map|logo|flag|coat[_ ]of|locator|icon|signature|seal[_ ]of|chart|graph|diagram|\.gif|\.pdf|\.ogv|\.webm/i;
+const CAPTION_MIN = 14, CAPTION_MAX = 170;
+
+const SEARCH = {
+  art:    'hastemplate:"Infobox artwork" painting',
+  albums: 'hastemplate:"Infobox album"'
+};
+
+/* ————————————————— wikipedia ————————————————— */
+
+const API = 'https://en.wikipedia.org/w/api.php?origin=*&format=json&formatversion=2&';
+const REST = 'https://en.wikipedia.org/api/rest_v1/';
+const wikiUrl = t => 'https://en.wikipedia.org/wiki/' + encodeURIComponent(t.replace(/ /g, '_'));
+const getJSON = async u => { const r = await fetch(u); if (!r.ok) throw new Error(r.status); return r.json(); };
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const abs = s => s && s.startsWith('//') ? 'https:' + s : s;
+const bigger = s => s.replace(/\/\d+px-/, '/960px-');
+
+// All captioned images in an article → [{img, caption, title, url}]
+async function captionsIn(title) {
+  let found = [];
+  try {
+    const d = await getJSON(REST + 'page/media-list/' + encodeURIComponent(title.replace(/ /g, '_')));
+    found = (d.items || []).filter(i => i.type === 'image' && i.caption && i.srcset && i.srcset.length)
+      .map(i => ({ file: i.title || '', caption: i.caption.text, img: abs(i.srcset[i.srcset.length - 1].src) }));
+  } catch (e) {
+    // fallback: read captions straight out of the rendered article
+    const d = await getJSON(API + 'action=parse&prop=text&redirects=1&page=' + encodeURIComponent(title));
+    const doc = new DOMParser().parseFromString(d.parse.text, 'text/html');
+    doc.querySelectorAll('figure').forEach(f => {
+      const im = f.querySelector('img'), cap = f.querySelector('figcaption');
+      if (im && cap) found.push({ file: im.getAttribute('src') || '', caption: cap.textContent, img: abs(im.getAttribute('src')) });
+    });
+  }
+  return found
+    .map(f => ({ ...f, caption: (f.caption || '').replace(/\[\d+\]/g, '').replace(/\s+/g, ' ').trim() }))
+    .filter(f => f.img && !SKIP_FILE.test(f.file) && f.caption.length >= CAPTION_MIN && f.caption.length <= CAPTION_MAX)
+    .map(f => ({ ...f, title, url: wikiUrl(title) }));
+}
+
+let seedPool = [...SEEDS];
+async function fetchEverything() {
+  if (seedPool.length && Math.random() < SEED_RATE) {
+    const s = seedPool.splice(Math.floor(Math.random() * seedPool.length), 1)[0];
+    const [title, want] = Array.isArray(s) ? s : [s];
+    const c = await captionsIn(title).catch(() => []);
+    const hit = want && c.find(x => x.caption.toLowerCase().includes(want.toLowerCase()));
+    if (hit || c.length) return [hit || pick(c)];
+  }
+  const d = await getJSON(API + 'action=query&generator=random&grnnamespace=0&grnlimit=20&prop=pageimages|info&piprop=name');
+  const pages = ((d.query && d.query.pages) || [])
+    .filter(p => p.pageimage && p.length > 3500 && !/^List of|\(disambiguation\)/.test(p.title))
+    .sort((a, b) => b.length - a.length).slice(0, 4);
+  const sets = await Promise.all(pages.map(p => captionsIn(p.title).catch(() => [])));
+  return sets.filter(s => s.length).map(pick);
+}
+
+async function fetchSearch(mode) {
+  const d = await getJSON(API + 'action=query&generator=search&gsrnamespace=0&gsrlimit=20&gsrsort=random'
+    + '&gsrsearch=' + encodeURIComponent(SEARCH[mode])
+    + '&prop=pageimages|description|info&piprop=thumbnail&pithumbsize=960&pilicense=any&inprop=url');
+  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail).map(p => ({
+    img: p.thumbnail.source, title: p.title.replace(/ \((album|painting|[^)]*(album|painting|EP)[^)]*)\)$/, ''),
+    caption: p.description || '', url: p.fullurl || wikiUrl(p.title)
+  }));
+}
+
+/* ————————————————— queue ————————————————— */
+
+const queue = { everything: [], art: [], albums: [] };
+const filling = {}, seen = new Set();
+const trail = []; let cursor = -1; let mode = 'everything'; let token = 0;
+
+function loadImage(src) {
+  return new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(src); i.onerror = no; i.src = src; });
+}
+async function ready(item) {          // make sure the picture is in cache before we show it
+  if (item.mode === 'everything') {
+    try { item.img = await loadImage(bigger(item.img)); return item; } catch (e) {}
+  }
+  await loadImage(item.img); return item;
+}
+
+function fill(m) {
+  if (filling[m]) return filling[m];
+  filling[m] = (async () => {
+    for (let tries = 0; tries < 6 && queue[m].length < 3; tries++) {
+      let items = [];
+      try { items = await (m === 'everything' ? fetchEverything() : fetchSearch(m)); } catch (e) {}
+      items = items.filter(i => !seen.has(i.img)).map(i => (seen.add(i.img), { ...i, mode: m }));
+      const loaded = await Promise.all(items.map(i => ready(i).catch(() => null)));
+      queue[m].push(...loaded.filter(Boolean));
+    }
+  })().finally(() => { filling[m] = null; });
+  return filling[m];
+}
+
+/* ————————————————— render ————————————————— */
+
+const stage = document.getElementById('stage');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ENLARGE = '<svg width="15" height="11" viewBox="0 0 15 11" aria-hidden="true"><path fill="none" stroke="#54595d" d="M.5 3.5h8v7h-8zM3.5 3.5v-3h11v7h-6"/></svg>';
+
+const TEMPLATE = {
+  everything: i => `<div class="thumb"><img src="${esc(i.img)}" alt="">
+      <figcaption><span>${esc(i.caption)}</span>
+      <a class="enlarge" href="${esc(i.url)}" target="_blank" rel="noopener" title="Read: ${esc(i.title)}" aria-label="Read the article: ${esc(i.title)}">${ENLARGE}</a></figcaption></div>
+    <a class="more" href="${esc(i.url)}" target="_blank" rel="noopener">from “${esc(i.title)}” →</a>`,
+  art: i => `<div class="wall"><div class="frame"><img src="${esc(i.img)}" alt="${esc(i.title)}"></div>
+    <figcaption class="placard"><b>${esc(i.title)}</b>${esc(i.caption)}<br>
+    <a href="${esc(i.url)}" target="_blank" rel="noopener">Read on Wikipedia →</a></figcaption></div>`,
+  albums: i => `<div class="shelf"><div class="case"><div class="spine"></div><img src="${esc(i.img)}" alt="${esc(i.title)}"></div>
+    <figcaption><b>${esc(i.title)}</b>${esc(i.caption)}<br>
+    <a href="${esc(i.url)}" target="_blank" rel="noopener">Read on Wikipedia →</a></figcaption></div>`
+};
+
+function paint(item) {
+  stage.classList.remove('in');
+  setTimeout(() => {
+    stage.innerHTML = TEMPLATE[item.mode](item);
+    requestAnimationFrame(() => stage.classList.add('in'));
+  }, stage.innerHTML ? 180 : 0);
+}
+function say(text) { stage.innerHTML = `<p class="status">${text}</p>`; stage.classList.add('in'); }
+
+async function next() {
+  if (cursor < trail.length - 1) return paint(trail[++cursor]);   // walking forward after going back
+  const mine = ++token, m = mode;
+  if (!queue[m].length) { if (!stage.innerHTML) say('looking…'); await fill(m); }
+  if (mine !== token) return;
+  const item = queue[m].shift();
+  if (!item) return say('Wikipedia didn’t answer. Click to try again.');
+  trail.push(item); cursor = trail.length - 1;
+  paint(item); fill(m);
+}
+function back() { if (cursor > 0) paint(trail[--cursor]); }
+
+function setMode(m, push) {
+  if (!TEMPLATE[m]) m = 'everything';
+  mode = m; document.body.dataset.mode = m;
+  document.querySelectorAll('nav button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === m));
+  if (push) location.hash = m === 'everything' ? '' : m;
+  trail.length = 0; cursor = -1; stage.innerHTML = ''; stage.classList.remove('in');
+  next();
+}
+
+/* ————————————————— input ————————————————— */
+
+const about = document.getElementById('about');
+document.addEventListener('click', e => {
+  if (about.open) { if (e.target === about) about.close(); return; }
+  const modeBtn = e.target.closest('nav button');
+  if (modeBtn) return setMode(modeBtn.dataset.mode, true);
+  if (e.target.closest('#aboutBtn')) return about.showModal();
+  if (e.target.closest('a, figcaption.placard, .shelf figcaption')) return;   // reading, not advancing
+  document.getElementById('hint').classList.add('gone');
+  next();
+});
+document.addEventListener('keydown', e => {
+  if (about.open || e.metaKey || e.ctrlKey) return;
+  if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter') {
+    if (e.target.closest('a, button')) return;
+    e.preventDefault(); document.getElementById('hint').classList.add('gone'); next();
+  }
+  if (e.key === 'ArrowLeft') back();
+});
+
+setMode(location.hash.slice(1) || 'everything');
+</script>
+</body>
+</html>
