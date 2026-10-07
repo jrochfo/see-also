@@ -402,7 +402,7 @@ const TOPICS = {
                   'Hummingbird hawk-moth', 'Rosy maple moth', 'Cicada', 'Grasshopper', 'Katydid', 'Jewel beetle',
                   'Aglais io', 'Swallowtail butterfly', 'Caterpillar', 'Ant', 'Weaver ant', 'Leafcutter ant',
                   'Termite', 'Water strider', 'Lanternfly', 'Rhinoceros beetle', 'Tiger beetle', 'Moth', 'Butterfly'] },
-  sea:        { label: '🐙 Sea creatures', lead: true, skip: /\begg|specimen|collection|museum|holotype|mandible|skull|nests? found|angle views|views of/i,
+  sea:        { label: '🐙 Sea life', lead: true, skip: /\begg|specimen|collection|museum|holotype|mandible|skull|nests? found|angle views|views of/i,
                 search: ['Cephalopods', 'Nudibranchs', 'Scyphozoa', 'Starfish', 'Cetaceans', 'Seahorses', 'Pomacentridae'].map(sp),
                 titles: ['Octopus', 'Giant Pacific octopus', 'Mimic octopus', 'Blue-ringed octopus', 'Cuttlefish', 'Nautilus',
                   'Jellyfish', 'Moon jellyfish', 'Portuguese man o\' war', 'Manta ray', 'Whale shark', 'Humpback whale',
@@ -413,7 +413,7 @@ const TOPICS = {
   sweets:     { label: '🍬 Sweets', lead: true, search: ['hastemplate:"Infobox food" deepcat:"Desserts"', 'hastemplate:"Infobox food" deepcat:"Confectionery"'],
                 skip: /\bbox\b|packag|wrapper|brand|\bpan\b|\bmould|\bmold\b|for sale|\bsign\b|ingredients|grapes?\b|factory|building|in front of|pâtisserie|patisserie/i,
                 notDesc: /meat|savou?ry|sandwich|soup|stew|sausage|fish|chicken|pork|beef|lamb|cheese|bakery|restaurant|company|brand|shop|street/i },
-  produce:    { label: '🥕 Fruits & vegetables', lead: true, skip: /flower|tree\b|trunk|plants?\b|nursery|leaves|illustration|drawing|structure|chemical|component|aldehyde|field|crop|harvest|seeds?\b|seedling|germinat|compared|stew|juice|dehisc/i,
+  harvest:    { label: '🥕 Harvest', lead: true, skip: /flower|tree\b|trunk|plants?\b|nursery|leaves|illustration|drawing|structure|chemical|component|aldehyde|field|crop|harvest|seeds?\b|seedling|germinat|compared|stew|juice|dehisc/i,
                 titles: ['Romanesco broccoli', 'Pomegranate', 'Pitaya', 'Starfruit', 'Rambutan', 'Mangosteen', 'Durian', 'Jackfruit',
                   'Kiwifruit', 'Passion fruit', 'Lychee', 'Persimmon', 'Fig', 'Quince', 'Pear', 'Apple', 'Cherry', 'Strawberry',
                   'Raspberry', 'Blueberry', 'Blackberry', 'Gooseberry', 'Redcurrant', 'Grape', 'Watermelon', 'Cantaloupe', 'Lemon',
@@ -437,9 +437,18 @@ const TOPICS = {
                   'Whirlpool Galaxy', 'Sombrero Galaxy', 'Milky Way', 'Pleiades', 'Comet', 'Halley\'s Comet', 'Comet Hale–Bopp',
                   'Aurora', 'Solar eclipse', 'Sun', 'Hubble Ultra-Deep Field', 'Black hole', 'Messier 87'] },
   mushrooms:  { label: '🍄 Mushrooms', search: ['hastemplate:"Mycomorphbox"'], skip: /\bacid\b|compound|structure|spores? (print|under)|microscop/i },
-  toys:       { label: '🧸 Toys', skip: /reborn|haunted|company|brands|\binc\b|corporation|\bbox\b|packag|for sale|store|shop|display|patent|plasterer|drywall/i,
-                search: ['incategory:"Toys|Traditional toys|Dolls|Construction toys|Wooden toys|Mechanical toys|Stuffed toys|Spinning tops|Physical activity and dexterity toys"'] },
-  instruments:{ label: '🎻 Musical instruments', search: ['hastemplate:"Infobox instrument"'], skip: /inscription|plan of|body shape|form\b|=/i },
+  play:       { label: '🪁 Play', skip: /reborn|haunted|geometry|aerial photo|kite lines?\b|dice\b|company|brands|\binc\b|corporation|\bbox\b|packag|for sale|store|shop|display|patent|plasterer|drywall/i,
+                search: ['incategory:"Toys|Traditional toys|Dolls|Construction toys|Wooden toys|Mechanical toys|Stuffed toys|Spinning tops|Physical activity and dexterity toys"',
+                  'incategory:"Kites"', 'deepcat:"Puppets"', 'deepcat:"Playground equipment"'] },
+  rides:      { label: '🎢 Rides', lead: true, search: ['hastemplate:"Infobox roller coaster"', 'deepcat:"Amusement rides"'],
+                titles: ['Ferris wheel', 'London Eye', 'Wonder Wheel', 'Riesenrad', 'Ain Dubai', 'Singapore Flyer', 'High Roller (Ferris wheel)',
+                  'Cosmo Clock 21', 'Carousel', "Jane's Carousel", 'Flying Horses Carousel', 'Highland Park Dentzel Carousel and Shelter Building', 'Roller coaster', 'Coney Island Cyclone',
+                  'Leap-The-Dips', 'Kingda Ka', 'Formula Rossa', 'Steel Vengeance', 'Millennium Force', 'The Beast (roller coaster)', 'Thunderbolt (Kennywood)',
+                  'Scenic Railway (Luna Park Melbourne)', 'Rutschebanen', 'Mad Tea Party', 'Teacups', 'Log flume (ride)', 'Bumper cars',
+                  'Swing ride', 'Chair-O-Planes', 'Pirate ship (ride)', 'Tilt-A-Whirl', 'Dark ride', 'Tunnel of love (ride)',
+                  'Helter skelter (ride)', 'Waltzer', 'Drop tower', "It's a Small World", "Pirates of the Caribbean (attraction)", 'The Haunted Mansion',
+                  'Water slide', 'Miniature railway', 'Monorail', 'Pony ride', 'Roundabout (play)'],
+                skip: /accident|incident|collapse|derail|injur|death|died|fire\b|demoli|construction|closed|removed|lawsuit|logo|sign\b|entrance|queue|station|map\b|layout|patent|blueprint/i },
   towers:     { label: '🗼 Towers', search: ['hastemplate:"Infobox lighthouse"', 'deepcat:"Observation towers"',
                   'deepcat:"Bell towers"', 'deepcat:"Round towers"', 'deepcat:"Pagodas"'], skip: /plan\b|elevation|cornerstone|plaque|issue of|railroad|railway/i,
                 titles: ['Eiffel Tower', 'Leaning Tower of Pisa', 'Big Ben', 'CN Tower', 'Burj Khalifa', 'Empire State Building',
@@ -474,16 +483,16 @@ const KEEP = { art: /painting|portrait|fresco|triptych|mural|altarpiece|canvas|w
 // Topics for art. Each one's paintings are listed in art-themes.json: Wikipedia articles about
 // paintings that Wikidata says depict the theme's subjects (battle scenes left out).
 const ART_TOPICS = {
-  night:     { label: '🌙 Night & the moon' },   // moon, night, stars
+  night:     { label: '🌙 Night' },        // moon, night, stars
   sea:       { label: '🌊 The sea' },            // sea, ocean, boats, ships, beaches
   skies:     { label: '☁️ Skies' },              // clouds, sky, sunsets, rainbows
   sublime:   { label: '⛰️ The sublime' },        // mountains, storms, waterfalls, volcanoes, glaciers, shipwrecks
   snow:      { label: '❄️ Snow' },               // snow, winter, ice
-  flowers:   { label: '🌸 Flowers & gardens' },
+  flowers:   { label: '🌸 Flowers' },
   animals:   { label: '🐈 Animals' },            // cats, dogs, birds, horses
   quiet:     { label: '🪟 Quiet rooms' },        // windows, reading, letters, mirrors, books
-  music:     { label: '🎻 Music & dance' },
-  wonders:   { label: '😇 Angels & wonders' },   // angels, dragons, mermaids, unicorns, fairies
+  music:     { label: '🎻 Music' },
+  wonders:   { label: '😇 Wonders' },   // angels, dragons, mermaids, unicorns, fairies
   stilllife: { label: '🍐 Still life' }
 };
 // Topics for poetry: the sections of poems.json (Wikipedia articles about poems; hand-picked, plus
@@ -503,7 +512,7 @@ const POETRY_TOPICS = {
   longfellow: { label: '🔔 Longfellow', poet: 'Henry Wadsworth Longfellow' },
   bronte:     { label: '🕯️ Brontë', poet: 'Emily Brontë' },
   cowper:     { label: '🐎 Cowper', poet: 'William Cowper' },
-  classics:   { label: '📜 More classics' },
+  classics:   { label: '📜 Classics' },
   modern:     { label: '🍂 Early 20th century' },
   world:      { label: '🌏 In translation' }
 };
@@ -838,6 +847,7 @@ function back() { if (cursor > 0) paint(trail[--cursor]); }
 
 // m is a mode, a mode/topic ("art/snow"), or an everything topic on its own ("birds")
 function setMode(m, push) {
+  m = { produce: 'harvest', toys: 'play', instruments: 'rides' }[m] || m;   // old topic links
   let [md, t = ''] = TOPICS[m] ? ['everything', m] : m.split('/');
   if (!TEMPLATE[md]) md = 'everything';
   if (!TOPIC_SETS[md][t]) t = '';
