@@ -31,3 +31,4 @@ Wikipedia image captions.
   list with random articles, filtered by SKIP_FILE and caption length
 - Keep it extremely simple: one centered visual, minimal chrome
 - The "everything" mode should stay faithful to Wikipedia's thumbnail look
+- tools/README.md: how to mine Humanity, check poems, rebuild art themes, check/sample topics, QA, og image

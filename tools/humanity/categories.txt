@@ -1,0 +1,117 @@
+# Wikipedia categories to mine for Humanity captions (one per line, without "Category:").
+# Pass 1 (2026-10-06, "things"): ~2,900 articles -> 1,513 candidates -> 170 kept.
+# Pass 2 (2026-10-06, "people"): ~3,100 articles -> 418 candidates -> 74 kept. People-focused ones landed best.
+# Add new lines below and run mine.py; already-mined articles are skipped automatically.
+
+## pass 1
+Toys
+Traditional toys
+Balls
+Dolls
+Gestures
+Hand gestures
+Confectionery
+Candy
+Desserts
+Snack foods
+Breads
+Children's games
+Playground games
+Party games
+Childhood
+Play (activity)
+Kitchenware
+Tableware
+Household goods
+Furniture
+Weather
+Atmospheric optical phenomena
+Clouds
+Emotions
+Sleep
+Friendship
+Love
+Smiling
+Laughter
+Vegetables
+Fruit
+Dairy products
+Bubbles (physics)
+Paper products
+Stationery
+Musical toys
+Practical jokes
+Birthdays
+Holidays
+Picnics
+Gardens
+Pets
+Cats
+Dogs
+Clothing
+Footwear
+Hats
+Umbrellas
+Bicycles
+Kites
+
+## pass 2
+Greetings
+Hugging
+Kissing
+Happiness
+Positive emotions
+Celebrations
+Parties
+Birthday parties
+Social dance
+Family
+Parenting
+Traditional games
+Human communication
+Nonverbal communication
+Facial expressions
+Crying
+Kindness
+Altruism
+Courtship
+Weddings
+Rituals
+Humour
+Fads
+Internet memes
+Human behavior
+Leisure activities
+Hobbies
+Gift-giving
+Holiday traditions
+Dreams
+Memory
+Nostalgia
+Loneliness
+Waiting
+Queueing
+Handwriting
+Letters (message)
+Notes (message)
+Graffiti
+Street performance
+Busking
+Singing
+Lullabies
+Clapping games
+Amateur
+Volunteering
+Neighbourhood
+Teaching
+Learning
+
+## ideas for pass 3 (not yet mined)
+# Breakfast foods
+# Bathing
+# Morning
+# Gardening
+# Grandparents
+# School supplies
+# Knitting
+# Toys by type

@@ -2,3 +2,6 @@
 .wrangler/
 node_modules/
 .dev.vars
+tools/data/qa/
+tools/data/sheets/
+tools/data/samples.json
