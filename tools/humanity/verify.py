@@ -6,7 +6,7 @@
 Entries with their own "img" are skipped (they're pinned). A caption that has vanished has usually been
 edited away: recover it with recover.py, or drop it.
 """
-import json, os, sys
+import json, os, re, sys
 from concurrent.futures import ThreadPoolExecutor
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'lib'))
 from wiki import media_list
@@ -16,7 +16,7 @@ H = json.load(open(P))
 
 
 def ok(h):
-    return True if h.get('img') else any(h['caption'].lower() in c.lower() for c, _, _ in media_list(h['article']))
+    return True if h.get('img') else any(h['caption'].lower() in re.sub(r'\[\d+\]', '', c).lower() for c, _, _ in media_list(h['article']))
 
 
 with ThreadPoolExecutor(3) as ex:

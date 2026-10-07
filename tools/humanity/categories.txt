@@ -106,58 +106,58 @@ Neighbourhood
 Teaching
 Learning
 
-## pass 3 — vetted 2026-10-06, not yet mined (remove the "# " to include; counts = articles in the category)
+## pass 3 (2026-10-06, "sayings, rituals, home, wonder"): ~2,860 articles -> 1,112 candidates -> 149 kept.
 # language & sayings
-# Slang
-# Proverbs
-# Aphorisms
-# Idioms
-# Catchphrases
-# Wordplay
-# Riddles
-# Jokes
-# Word games
+Slang
+Proverbs
+Aphorisms
+Idioms
+Catchphrases
+Wordplay
+Riddles
+Jokes
+Word games
 # rituals & gatherings
-# Social events
-# Rites of passage
-# Traditions
-# Wedding traditions
-# Superstitions
-# Folklore
-# Etiquette
-# Drinking culture
-# Meals
-# Breakfast
-# Tea culture
-# Coffee culture
-# Street food
+Social events
+Rites of passage
+Traditions
+Wedding traditions
+Superstitions
+Folklore
+Etiquette
+Drinking culture
+Meals
+Breakfast
+Tea culture
+Coffee culture
+Street food
 # home & care
-# Bathing
-# Home
-# Cleaning
-# Sewing
-# Knitting
-# Baking
-# Gardening
-# Handicrafts
-# Folk art
+Bathing
+Home
+Cleaning
+Sewing
+Knitting
+Baking
+Gardening
+Handicrafts
+Folk art
 # inner life
-# Daydreaming
-# Imagination
-# Habits
-# Adolescence
+Daydreaming
+Imagination
+Habits
+Adolescence
 # odd & wonderful
-# Collecting
-# World records
-# Signage
-# Lost and found
-# Windows
-# Animal sounds
-# Working animals
-# Tickling
-# Children's songs
-# Snow
-# Rain
+Collecting
+World records
+Signage
+Lost and found
+Windows
+Animal sounds
+Working animals
+Tickling
+Children's songs
+Snow
+Rain
 # skipped on purpose: Nicknames (1,328, mostly people's nicknames), Animal welfare (heavy), Vernacular architecture /
 # Pottery / Woodworking (building and technique photos). Not categories on Wikipedia: Gatherings (use Social events),
 # Bedtime, Comfort food, Hospitality, Imaginary friends, Coming of age (use Rites of passage), Mending (use Sewing).

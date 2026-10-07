@@ -570,7 +570,7 @@ async function fetchHumanity(n, featuredOnly, only) {
       ? 'https://en.wikipedia.org/w/index.php?oldid=' + h.oldid
       : 'https://en.wikipedia.org/w/index.php?action=history&title=' + encodeURIComponent(title) };
     const d = await getJSON(REST + 'page/media-list/' + encodeURIComponent(title.replace(/ /g, '_')));
-    const hit = (d.items || []).find(i => i.caption && i.srcset && !SKIP_FILE.test(i.title || '') && i.caption.text.toLowerCase().includes(h.caption.toLowerCase()));
+    const hit = (d.items || []).find(i => i.caption && i.srcset && !SKIP_FILE.test(i.title || '') && i.caption.text.replace(/\[\d+\]/g, '').toLowerCase().includes(h.caption.toLowerCase()));
     return hit && { img: abs(hit.srcset[hit.srcset.length - 1].src), caption: hit.caption.text.replace(/\[\d+\]/g, '').trim(), title, url };
   }).map(p => p.catch(() => null)));
   return items.filter(Boolean);

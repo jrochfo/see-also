@@ -21,7 +21,7 @@ shown with "caption since edited"), `live: true` (pinned image but caption still
    funny ("Some amount of time later"), accidental philosophy ("Oranges, like apples, grow on trees."), small
    human moments ("A couple holds hands on their fiftieth anniversary"). People-focused ones land best.
    Skip clinical, sexual, flat, or sad-without-tender. Past passes, with ✓ on keepers:
-   `tools/data/humanity-candidates-pass1.txt`, `-pass2.txt`.
+   `tools/data/humanity-candidates-pass1.txt`, `-pass2.txt`, `-pass3.txt`.
 3. **Add** keepers to `public/humanity.json`.
 4. **Verify** — `python3 tools/humanity/verify.py` (add `--prune` to drop vanished ones).
 5. **Recover** an edited-away caption — `python3 tools/humanity/recover.py "Whoopee cushion" "awaiting a victim"`
