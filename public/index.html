@@ -162,6 +162,8 @@
   main { height: 100%; display: grid; place-items: center; padding: 56px 16px 116px; }   /* the bottom leaves room for the hint */
   #stage { margin: 0; opacity: 0; transition: opacity .35s; cursor: pointer; }
   #stage.in { opacity: 1; }
+  #stage.in.waiting { opacity: .55; transition: opacity .6s; }
+  body:has(#stage.waiting) { cursor: progress; }
   #stage img { display: block; }
 
   /* —— everything: the Wikipedia thumb box —— */
@@ -730,28 +732,36 @@ function frameFor(im, title) {
   return { style, mat: tint([246, 242, 234], .1), liner: tint([228, 216, 192], .22) };
 }
 
+const BUFFER = 6;                     // pictures kept ready ahead of you
+const waiters = {};                   // clicks waiting on an empty queue, woken by the first picture that arrives
+function waitFor(f) {
+  if ((queue[f] || []).length) return Promise.resolve();
+  return new Promise(ok => { (waiters[f] = waiters[f] || []).push(ok); fill(f).then(ok); });
+}
 function fill(f) {
   if (filling[f]) return filling[f];
   const [m, t] = f.split('/'), q = queue[f] = queue[f] || [];
-  filling[f] = (async () => {
-    let repeats = [];   // already-seen pictures, used only if a small topic has run out of new ones
-    for (let tries = 0; tries < 6 && q.length < 3; tries++) {
+  const fetchOne = () => m === 'poetry' ? fetchPoems(t) : t ? (m === 'art' ? fetchArtTopic(t) : fetchTopic(t))
+    : m === 'everything' ? fetchEverything() : fetchSearch(m);
+  let tries = 0, repeats = [];   // already-seen pictures, used only if a small topic has run out of new ones
+  const worker = async () => {   // two of these run side by side
+    while (tries < 8 && q.length < BUFFER) {
+      const last = ++tries === 8;
       let items = [];
-      try {
-        items = await (m === 'poetry' ? fetchPoems(t) : t ? (m === 'art' ? fetchArtTopic(t) : fetchTopic(t))
-          : m === 'everything' ? fetchEverything() : fetchSearch(m));
-      } catch (e) {}
-      if (!q.length && tries === 5) items = items.length ? items : repeats;
+      try { items = await fetchOne(); } catch (e) {}
+      if (!q.length && last) items = items.length ? items : repeats;
       else {
         repeats = items.filter(i => seen.has(i.img));
         const batch = new Set();   // also drop doubles within this batch
         items = items.filter(i => !seen.has(i.img) && !batch.has(i.img) && batch.add(i.img));
       }
       items = items.map(i => (seen.add(i.img), { ...i, mode: m }));
-      const loaded = await Promise.all(items.map(i => ready(i).catch(() => null)));
-      q.push(...loaded.filter(Boolean));
+      await Promise.all(items.map(i => ready(i).then(r => {   // each picture joins the queue the moment it has loaded
+        q.push(r); (waiters[f] || []).splice(0).forEach(ok => ok());
+      }).catch(() => {})));
     }
-  })().finally(() => { filling[f] = null; });
+  };
+  filling[f] = Promise.all([worker(), worker()]).finally(() => { filling[f] = null; });
   return filling[f];
 }
 
@@ -804,9 +814,13 @@ async function next() {
     if (mine !== token) return;
     if (item) { trail.push(item); cursor = trail.length - 1; paint(item); fill(f); return; }
   }
-  if (!(queue[f] || []).length) { if (!stage.innerHTML) say('looking…'); await fill(f); }
+  if (!(queue[f] || []).length) {
+    if (!stage.innerHTML) say('looking…'); else stage.classList.add('waiting');   // the click registered; the next one is on its way
+    await waitFor(f);
+  }
   if (mine !== token) return;
-  const item = queue[f].shift();
+  stage.classList.remove('waiting');
+  const item = (queue[f] || []).shift();
   if (!item) return say('Wikipedia didn’t answer. Click to try again.');
   trail.push(item); cursor = trail.length - 1;
   paint(item); fill(f);
@@ -855,9 +869,9 @@ function showTopic() {   // the corner link, and the list for this mode
 function openSee(open) { seePanel.hidden = !open; seeBtn.setAttribute('aria-expanded', open); }
 
 // A click within a few pixels of a link or control was meant for it: don't advance.
-function nearControl(e, pad = 14) {
+function nearControl(e) {
   return [...document.querySelectorAll('nav button, .corner button, .theme, .about-btn, #stage a')].some(el => {
-    const r = el.getBoundingClientRect();
+    const r = el.getBoundingClientRect(), pad = el.closest('#stage') ? 6 : 14;   // a tighter margin around links under the picture
     return e.clientX > r.left - pad && e.clientX < r.right + pad && e.clientY > r.top - pad && e.clientY < r.bottom + pad;
   });
 }
