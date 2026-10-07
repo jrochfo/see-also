@@ -440,7 +440,8 @@ const TOPICS = {
   play:       { label: '🪁 Play', skip: /reborn|haunted|geometry|aerial photo|kite lines?\b|dice\b|company|brands|\binc\b|corporation|\bbox\b|packag|for sale|store|shop|display|patent|plasterer|drywall/i,
                 search: ['incategory:"Toys|Traditional toys|Dolls|Construction toys|Wooden toys|Mechanical toys|Stuffed toys|Spinning tops|Physical activity and dexterity toys"',
                   'incategory:"Kites"', 'deepcat:"Puppets"', 'deepcat:"Playground equipment"'] },
-  rides:      { label: '🎢 Rides', lead: true, search: ['hastemplate:"Infobox roller coaster"', 'deepcat:"Amusement rides"'],
+  rides:      { label: '🎢 Rides', lead: true, search: ['hastemplate:"Infobox roller coaster"',   // not deepcat:"Amusement rides": it wanders into bands, shows and pavilions
+                  'incategory:"Ferris wheels|Carousels|Pendulum rides|Drop tower rides|Log flume rides|Swing rides|Amusement rides by type"'],
                 titles: ['Ferris wheel', 'London Eye', 'Wonder Wheel', 'Riesenrad', 'Ain Dubai', 'Singapore Flyer', 'High Roller (Ferris wheel)',
                   'Cosmo Clock 21', 'Carousel', "Jane's Carousel", 'Flying Horses Carousel', 'Highland Park Dentzel Carousel and Shelter Building', 'Roller coaster', 'Coney Island Cyclone',
                   'Leap-The-Dips', 'Kingda Ka', 'Formula Rossa', 'Steel Vengeance', 'Millennium Force', 'The Beast (roller coaster)', 'Thunderbolt (Kennywood)',
@@ -448,7 +449,7 @@ const TOPICS = {
                   'Swing ride', 'Chair-O-Planes', 'Pirate ship (ride)', 'Tilt-A-Whirl', 'Dark ride', 'Tunnel of love (ride)',
                   'Helter skelter (ride)', 'Waltzer', 'Drop tower', "It's a Small World", "Pirates of the Caribbean (attraction)", 'The Haunted Mansion',
                   'Water slide', 'Miniature railway', 'Monorail', 'Pony ride', 'Roundabout (play)'],
-                skip: /accident|incident|collapse|derail|injur|death|died|fire\b|demoli|construction|closed|removed|lawsuit|logo|sign\b|entrance|queue|station|map\b|layout|patent|blueprint/i },
+                skip: /accident|incident|collapse|derail|injur|death|died|fire\b|demoli|construction|closed|removed|lawsuit|logo|sign\b|entrance|queue|station|map\b|layout|patent|blueprint|museum|founder|inventor|portrait|band\b|performer/i },
   towers:     { label: '🗼 Towers', search: ['hastemplate:"Infobox lighthouse"', 'deepcat:"Observation towers"',
                   'deepcat:"Bell towers"', 'deepcat:"Round towers"', 'deepcat:"Pagodas"'], skip: /plan\b|elevation|cornerstone|plaque|issue of|railroad|railway/i,
                 titles: ['Eiffel Tower', 'Leaning Tower of Pisa', 'Big Ben', 'CN Tower', 'Burj Khalifa', 'Empire State Building',
