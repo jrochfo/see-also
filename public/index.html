@@ -566,7 +566,7 @@ async function fetchHumanity(n, featuredOnly, only, given) {
   const picks = given ? given : only ? all.filter(h => h.article === only)
     : Array.from({ length: n }, () => deal(featuredOnly || Math.random() < FEATURED_SHARE ? 'featured' : 'all', all));
   const items = await Promise.all(picks.map(async h => {
-    const title = h.article, url = wikiUrl(title);
+    const title = h.article, url = h.url || wikiUrl(title);   // a few come from Wiktionary
     if (h.img) return { img: h.img, caption: h.caption, title, url, edited: h.live ? '' : h.oldid
       ? 'https://en.wikipedia.org/w/index.php?oldid=' + h.oldid
       : 'https://en.wikipedia.org/w/index.php?action=history&title=' + encodeURIComponent(title) };

@@ -1786,5 +1786,32 @@
   "article": "Snow leopard",
   "caption": "Snow leopard showing its canines",
   "jake": true
+ },
+ {
+  "article": "Kaomoji",
+  "caption": "A Kaomoji painting in Japan",
+  "jake": true
+ },
+ {
+  "article": "Child art",
+  "caption": "Smiling person (combined head and body) age 4½",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Child_Art_Aged_4.5_Person_2.png/500px-Child_Art_Aged_4.5_Person_2.png",
+  "jake": true
+ },
+ {
+  "article": "eepy",
+  "caption": "An eepy cat.",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/White_cat_sleeping_on_a_bench.jpg/500px-White_cat_sleeping_on_a_bench.jpg",
+  "live": true,
+  "url": "https://en.wiktionary.org/wiki/eepy",
+  "jake": true
+ },
+ {
+  "article": "scrunkly",
+  "caption": "A scrunkly dog",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Wet_dog_-_Tygrys.jpg/1280px-Wet_dog_-_Tygrys.jpg",
+  "live": true,
+  "url": "https://en.wiktionary.org/wiki/scrunkly",
+  "jake": true
  }
 ]
