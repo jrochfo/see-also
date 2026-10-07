@@ -379,6 +379,7 @@ const SEED_RATE = 0.25;            // share of "everything" drawn from SEEDS
 const sp = c => `hastemplate:"Speciesbox" deepcat:"${c}"`;   // species pages under a taxon
 const TOPICS = {
   humanity:   { label: '🫶 Humanity', humanity: true },   // found captions, from humanity.json
+  found:      { label: '🔎 Jake\'s finds', humanity: 'jake', hidden: true },   // review view for captions Jake sends: #found
   dinosaurs:  { label: '🦕 Dinosaurs', search: ['deepcat:"Dinosaur genera"'],   // "Dinosaurs" includes birds
                 want: /restoration|reconstruct|skeleton|mount|model|statue|life |artist|depiction/i, skip: /scan|multiview|nasal|cavity/i,   // the animal, not its bones in a tray
                 titles: ['Tyrannosaurus', 'Triceratops', 'Stegosaurus', 'Brachiosaurus', 'Velociraptor', 'Ankylosaurus',
@@ -559,10 +560,10 @@ function deal(name, all) {
 }
 const HUMANITY_RATE = 1 / 8;          // share of "everything" drawn from Humanity, after the first picture
 const FEATURED_SHARE = 0.08;          // Jake's originals: a light thumb on the scale (they're ~6% of the list), plus the main page's opener
-async function fetchHumanity(n, featuredOnly, only) {
+async function fetchHumanity(n, featuredOnly, only, given) {
   humanityList = humanityList || getJSON('humanity.json').catch(e => { humanityList = null; throw e; });
   const all = await humanityList;
-  const picks = only ? all.filter(h => h.article === only)
+  const picks = given ? given : only ? all.filter(h => h.article === only)
     : Array.from({ length: n }, () => deal(featuredOnly || Math.random() < FEATURED_SHARE ? 'featured' : 'all', all));
   const items = await Promise.all(picks.map(async h => {
     const title = h.article, url = wikiUrl(title);
@@ -574,6 +575,13 @@ async function fetchHumanity(n, featuredOnly, only) {
     return hit && { img: abs(hit.srcset[hit.srcset.length - 1].src), caption: hit.caption.text.replace(/\[\d+\]/g, '').trim(), title, url };
   }).map(p => p.catch(() => null)));
   return items.filter(Boolean);
+}
+
+let jakeQueue;
+async function fetchJakes() {   // every entry marked "jake", in order, once each
+  humanityList = humanityList || getJSON('humanity.json').catch(e => { humanityList = null; throw e; });
+  jakeQueue = jakeQueue || (await humanityList).filter(h => h.jake);
+  return fetchHumanity(0, false, null, jakeQueue.splice(0, 3));
 }
 
 let seedPool = [...SEEDS];
@@ -599,6 +607,7 @@ async function fetchEverything() {
 
 async function fetchTopic(key) {
   const t = TOPICS[key];
+  if (t.humanity === 'jake') return fetchJakes();
   if (t.humanity) return fetchHumanity(3);
   let titles;
   if (t.titles && (!t.search || Math.random() < 0.6)) {
@@ -862,7 +871,7 @@ function showTopic() {   // the corner link, and the list for this mode
   document.getElementById('seeIcon').textContent = t ? emoji : '👁️';
   document.getElementById('seeNow').innerHTML = t ? `<span class="name">: ${name.join(' ').toLowerCase()}</span>` : '';
   seeBtn.classList.toggle('on', !!t);
-  seeList.innerHTML = [['', ALL_LABEL[mode]], ...Object.entries(TOPIC_SETS[mode]).map(([k, x]) => [k, x.label])]
+  seeList.innerHTML = [['', ALL_LABEL[mode]], ...Object.entries(TOPIC_SETS[mode]).filter(([, x]) => !x.hidden).map(([k, x]) => [k, x.label])]
     .map(([k, label]) => `<li><a href="#${mode === 'everything' ? k : mode + (k ? '/' + k : '')}" data-topic="${k}"`
       + `${k === topic ? ' aria-current="page"' : ''}>${label}</a></li>`).join('');
 }
