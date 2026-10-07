@@ -568,7 +568,7 @@ async function fetchHumanity(n, featuredOnly, only) {
       ? 'https://en.wikipedia.org/w/index.php?oldid=' + h.oldid
       : 'https://en.wikipedia.org/w/index.php?action=history&title=' + encodeURIComponent(title) };
     const d = await getJSON(REST + 'page/media-list/' + encodeURIComponent(title.replace(/ /g, '_')));
-    const hit = (d.items || []).find(i => i.caption && i.srcset && i.caption.text.toLowerCase().includes(h.caption.toLowerCase()));
+    const hit = (d.items || []).find(i => i.caption && i.srcset && !SKIP_FILE.test(i.title || '') && i.caption.text.toLowerCase().includes(h.caption.toLowerCase()));
     return hit && { img: abs(hit.srcset[hit.srcset.length - 1].src), caption: hit.caption.text.replace(/\[\d+\]/g, '').trim(), title, url };
   }).map(p => p.catch(() => null)));
   return items.filter(Boolean);
@@ -625,7 +625,7 @@ async function fetchSearch(mode) {
   const d = await getJSON(API + 'action=query&generator=search&gsrnamespace=0&gsrlimit=20&gsrsort=random'
     + '&gsrsearch=' + encodeURIComponent(SEARCH[mode]) + PAGE_PROPS);
   return ((d.query && d.query.pages) || [])
-    .filter(p => p.thumbnail && !HIDE.has(p.title) && !NOT_THE_WORK.test(p.pageimage || '') && (!KEEP[mode] || KEEP[mode].test(p.description || ''))).map(toItem);
+    .filter(p => p.thumbnail && !HIDE.has(p.title) && !NOT_THE_WORK.test(p.pageimage || '') && !/\.gif$/i.test(p.pageimage || '') && (!KEEP[mode] || KEEP[mode].test(p.description || ''))).map(toItem);
 }
 
 // Poems: pick a few titles (from one topic, or a random section for "all" so nursery rhymes
@@ -683,7 +683,7 @@ async function fetchArtTopic(key) {
   artLists = artLists || getJSON('art-themes.json').catch(e => { artLists = null; throw e; });
   const titles = [...(await artLists)[key]].sort(() => Math.random() - 0.5).slice(0, 8);
   const d = await getJSON(API + 'action=query&redirects=1&titles=' + encodeURIComponent(titles.join('|')) + PAGE_PROPS);
-  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail && !HIDE.has(p.title) && !NOT_THE_WORK.test(p.pageimage || '')).map(toItem);
+  return ((d.query && d.query.pages) || []).filter(p => p.thumbnail && !HIDE.has(p.title) && !NOT_THE_WORK.test(p.pageimage || '') && !/\.gif$/i.test(p.pageimage || '')).map(toItem);
 }
 
 /* ————————————————— queue ————————————————— */
