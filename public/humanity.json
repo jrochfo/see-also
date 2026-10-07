@@ -1650,153 +1650,181 @@
  {
   "article": "List of common misconceptions about science, technology, and mathematics",
   "caption": "Sunflowers with the Sun behind them",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Water balloon",
   "caption": "A variety of water balloons placed in water to prevent popping",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Hamster",
   "caption": "Pet Syrian hamster examines a banana",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "List of magic tricks",
   "caption": "The king levitation being performed",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Wish list",
   "caption": "A child's Christmas wish list from 1990",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "List of mammals of Yellowstone National Park",
   "caption": "A coyote pack hunting in the snow",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "List of culinary fruits",
   "caption": "Ways to slice a mango",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Used good",
   "caption": "A garage sale is a common place to find cheap used goods for sale.",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Arrow (symbol)",
   "caption": "Advertising billboards in Okazaki, Japan, featuring many different arrow symbols",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Bookworm (insect)",
   "caption": "Traces of a bookworm in a book",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Circadian rhythm",
   "caption": "A short nap during the day does not typically affect circadian rhythms.",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Bullet",
   "caption": "A bullet in mid flight",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Social environment",
   "caption": "Holding hands is a form of intimacy",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Getting lost",
   "caption": "In a maze, one can get lost on a voluntary basis",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Brocken spectre",
   "caption": "A Brocken spectre within glory rings",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Toyota",
   "caption": "Toyota trumpet-playing robot",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Refrigerator magnet",
   "caption": "Magnetic poetry",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Intertoys",
   "caption": "The opening of an Intertoys store in The Hague in 2011 with mascot Toy Toy.",
   "oldid": 1029056378,
   "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Intertoys.jpg/960px-Intertoys.jpg",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Rainbow",
   "caption": "The proverbial “end” of a rainbow.",
   "oldid": 507060041,
   "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/WhereRainbowRises.jpg/960px-WhereRainbowRises.jpg",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Dirt cake",
   "caption": "Gummy worm dirt cake",
   "live": true,
   "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Gummy_worm_dirt_cake.jpg/960px-Gummy_worm_dirt_cake.jpg",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "The Spotted Pig",
   "caption": "Restaurant sign",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Wahoo",
   "caption": "Wahoo",
   "oldid": 1351198610,
   "img": "https://upload.wikimedia.org/wikipedia/commons/1/16/Acanthocybium_solandri.png",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Squatting position",
   "caption": "Young child playing at ease in a squatting position",
   "oldid": 441652197,
   "img": "https://upload.wikimedia.org/wikipedia/commons/2/20/Walter_de_Maria_Vertikaler_Erdkilometer.jpg",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Glass Beach (Fort Bragg, California)",
   "caption": "Rounded glass at the beach",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Kazoo",
   "caption": "A metal kazoo",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Snow leopard",
   "caption": "Snow leopard showing its canines",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Kaomoji",
   "caption": "A Kaomoji painting in Japan",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "Child art",
   "caption": "Smiling person (combined head and body) age 4½",
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Child_Art_Aged_4.5_Person_2.png/500px-Child_Art_Aged_4.5_Person_2.png",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "eepy",
@@ -1804,7 +1832,8 @@
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/White_cat_sleeping_on_a_bench.jpg/500px-White_cat_sleeping_on_a_bench.jpg",
   "live": true,
   "url": "https://en.wiktionary.org/wiki/eepy",
-  "jake": true
+  "jake": true,
+  "featured": true
  },
  {
   "article": "scrunkly",
@@ -1812,6 +1841,7 @@
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Wet_dog_-_Tygrys.jpg/1280px-Wet_dog_-_Tygrys.jpg",
   "live": true,
   "url": "https://en.wiktionary.org/wiki/scrunkly",
-  "jake": true
+  "jake": true,
+  "featured": true
  }
 ]
