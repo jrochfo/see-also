@@ -2,6 +2,7 @@
 .dev.vars
 .wrangler/
 node_modules/
+tools/data/a11y-results.json
 tools/data/qa/
 tools/data/samples.json
 tools/data/sheets/
