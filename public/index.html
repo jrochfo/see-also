@@ -48,7 +48,7 @@
   }
   /* art: a white-walled gallery, hardwood floor, light pooled on the work */
   body[data-mode="art"] {
-    --bg: #edebe6; --dim: #7a756c;
+    --bg: #edebe6; --dim: #605b53;
     --pool: rgba(255,253,248,.95); --edge: rgba(70,60,45,.13);
     --plank: #c4ad92; --plank-seam: rgba(70,50,30,.22); --floor-light: rgba(255,248,235,.3); --haze: rgba(237,235,230,.38);
   }
@@ -102,7 +102,7 @@
   .see-btn:hover, .see-btn.on { opacity: 1; }
   .corner { bottom: 16px; right: 16px; display: flex; gap: 14px; }
   @media (max-width: 360px) { .see-btn .name { display: none; } }   /* only on the narrowest phones */
-  @media (max-width: 480px) { .about-btn .name { display: none; } nav { gap: 13px; } }   /* phones: ℹ️ alone, so the top bar fits */
+  @media (max-width: 480px) { .about-btn .name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } nav { gap: 13px; } }   /* phones: ℹ️ alone, so the top bar fits */
 
   /* topics, as a Wikipedia "See also" section */
   .seealso {
@@ -124,11 +124,11 @@
   /* the one instruction: centred near the bottom, breathing gently until the first click, then gone */
   .hint {
     bottom: 84px; left: 50%; transform: translateX(-50%); white-space: nowrap;
-    font-size: 16.5px; color: var(--ink); opacity: .7; pointer-events: none; transition: opacity 1.2s;
+    font-size: 16.5px; color: var(--ink); opacity: .8; pointer-events: none; transition: opacity 1.2s;   /* never below ~4.5:1 contrast, even mid-breath */
   }
   .hint b { font-weight: inherit; }
   .hint > span { display: inline-block; animation: breathe 7s ease-in-out infinite; }   /* breathing on the inside, fading on the outside */
-  @keyframes breathe { 50% { opacity: .7; } }
+  @keyframes breathe { 50% { opacity: .85; } }
   .hint.gone { opacity: 0; }
   @media (prefers-reduced-motion: reduce) { .hint > span { animation: none; } }
   .theme { position: fixed; top: 4px; right: 6px; z-index: 2; padding: 10px; }   /* padding = a bigger target */
@@ -313,6 +313,18 @@
 
   .status { font-size: 14.5px; color: var(--dim); }
 
+  /* accessibility: screen-reader-only text, keyboard-only buttons, visible focus */
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .kbd { position: fixed; left: 50%; bottom: 120px; transform: translateX(-50%); z-index: 4; display: flex; gap: 8px; }
+  .sr-btn { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .sr-btn:focus-visible {   /* appears only when reached with Tab */
+    position: static; width: auto; height: auto; clip: auto; padding: 8px 14px; border-radius: 4px;
+    background: var(--panel); color: var(--panel-ink); box-shadow: 0 2px 10px rgba(0,0,0,.25); font-size: 14.5px;
+  }
+  :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 3px; }
+  body[data-mode="poetry"] :focus-visible { outline-color: #f7f0e4; }
+  .theme:focus-visible { border-radius: 14px; }
+
   dialog {
     border: 1px solid var(--line); padding: 22px 24px; max-width: min(460px, calc(100vw - 32px));
     font-size: 15.5px; line-height: 1.55; color: var(--panel-ink); background: var(--panel); cursor: auto; user-select: text;
@@ -332,20 +344,32 @@
   <button data-mode="art">🖼️ <span>art</span></button>
   <button data-mode="poetry">🪶 <span>poetry</span></button>
 </nav>
+<header aria-label="Site controls"><button class="about-btn" id="aboutBtn">ℹ️<span class="name"> about</span></button>
+<button class="theme" id="themeBtn" role="switch" aria-label="Dark mode"><span class="track"></span></button></header>
 
 <div class="room" aria-hidden="true"><div class="floor"></div></div>
-<main><figure id="stage" aria-live="polite"></figure></main>
-
+<main>
+  <h1 class="sr-only">See also: a picture from Wikipedia, with the caption somebody wrote for it</h1>
+  <div class="kbd" role="group" aria-label="Pictures">   <!-- first stop for keyboard users; shown only when focused -->
+    <button id="nextBtn" class="sr-btn">Next picture</button>
+    <button id="prevBtn" class="sr-btn">Previous picture</button>
+  </div>
+  <figure id="stage"></figure>
+</main>
+<footer>
+<p id="announce" class="sr-only" aria-live="polite"></p>
 <div class="hint" id="hint"><span>👆 <b id="hintVerb">click</b> anywhere for another</span></div>
 <div class="corner">
   <button class="see-btn" id="seeBtn" aria-expanded="false" aria-controls="seealso"><span id="seeIcon">👁️</span> see also<span id="seeNow"></span></button>
 </div>
+</footer>
+
+
 <section class="seealso" id="seealso" aria-label="See also" hidden>
   <div class="see-head"><h2>See also</h2></div>
   <ul id="seeList"></ul>
 </section>
-<button class="about-btn" id="aboutBtn" aria-label="About">ℹ️<span class="name"> about</span></button>
-<button class="theme" id="themeBtn" role="switch" aria-label="Dark mode"><span class="track"></span></button>
+
 
 <dialog id="about" tabindex="-1" autofocus>
   <h1>See also</h1>
@@ -791,7 +815,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;',
 const ENLARGE = '<svg width="15" height="11" viewBox="0 0 15 11" aria-hidden="true"><path fill="none" stroke="currentColor" d="M.5 3.5h8v7h-8zM3.5 3.5v-3h11v7h-6"/></svg>';
 
 const TEMPLATE = {
-  everything: i => `<div class="thumb"><img src="${esc(i.img)}" alt="">
+  everything: i => `<div class="thumb"><img src="${esc(i.img)}" alt="${esc(i.caption)}">
       <figcaption><span>${esc(i.caption)}</span>
       <a class="enlarge" href="${esc(i.url)}" target="_blank" rel="noopener" title="Read: ${esc(i.title)}" aria-label="Read the article: ${esc(i.title)}">${ENLARGE}</a></figcaption></div>
     <div class="more-row">${i.edited ? `<a class="edited" href="${esc(i.edited)}" target="_blank" rel="noopener" title="This caption has since been changed on Wikipedia">caption since edited</a>` : ''}
@@ -806,7 +830,14 @@ const TEMPLATE = {
     <a href="${esc(i.url)}" target="_blank" rel="noopener">Read on Wikipedia →</a></figcaption></div>`
 };
 
+const announceEl = () => document.getElementById('announce');
+function describe(i) {   // what a screen reader hears for each new picture or poem
+  if (i.mode === 'poetry') return `Poem: ${i.verse.replace(/\n/g, ' / ')}. From ${i.title}.`;
+  if (i.mode === 'art') return `${i.title}. ${i.caption}.`;
+  return `${i.caption}. From the article ${i.title}.`;
+}
 function paint(item) {
+  announceEl().textContent = describe(item);
   stage.classList.remove('in');
   setTimeout(() => {
     stage.innerHTML = TEMPLATE[item.mode](item);
@@ -886,7 +917,11 @@ function showTopic() {   // the corner link, and the list for this mode
     .map(([k, label]) => `<li><a href="#${mode === 'everything' ? k : mode + (k ? '/' + k : '')}" data-topic="${k}"`
       + `${k === topic ? ' aria-current="page"' : ''}>${label}</a></li>`).join('');
 }
-function openSee(open) { seePanel.hidden = !open; seeBtn.setAttribute('aria-expanded', open); }
+function openSee(open) {
+  seePanel.hidden = !open; seeBtn.setAttribute('aria-expanded', open);
+  if (open) (seeList.querySelector('[aria-current]') || seeList.querySelector('a')).focus({ preventScroll: true });   // keyboard users land in the list
+  else if (seePanel.contains(document.activeElement)) seeBtn.focus({ preventScroll: true });
+}
 
 // A click within a few pixels of a link or control was meant for it: don't advance.
 function nearControl(e) {
@@ -928,6 +963,8 @@ document.addEventListener('keydown', e => {
   }
   if (e.key === 'ArrowLeft') back();
 });
+document.getElementById('nextBtn').addEventListener('click', e => { e.stopPropagation(); document.getElementById('hint').classList.add('gone'); next(); });
+document.getElementById('prevBtn').addEventListener('click', e => { e.stopPropagation(); back(); });
 
 setMode(location.hash.slice(1) || 'everything');
 </script>

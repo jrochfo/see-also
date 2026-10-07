@@ -1,7 +1,7 @@
 .DS_Store
+.dev.vars
 .wrangler/
 node_modules/
-.dev.vars
 tools/data/qa/
-tools/data/sheets/
 tools/data/samples.json
+tools/data/sheets/

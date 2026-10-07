@@ -68,3 +68,14 @@ save as JPEG to `public/og.jpg`. The photo (sailing stones, Jon Sullivan) is pub
 
 Push to `main` → Cloudflare Workers Builds deploys in ~1 minute. Check it's live:
 `curl -s "https://seealso.wiki/?v=$RANDOM" | diff -q - public/index.html`
+
+## Accessibility check
+
+`node tools/a11y/check.mjs` (dev server running; one-time setup: `npm i --no-save axe-core puppeteer-core`).
+Runs axe (WCAG 2.1 A/AA + best practice) on every mode in light and dark, with nothing open, See also open,
+and About open, then walks the page with Tab and checks the keyboard Next button and screen-reader announcement.
+Last run 2026-10-07: 0 issues in all 18 states.
+What's in place: caption as alt text, a polite live region announcing each picture/poem, a "Next picture" /
+"Previous picture" pair that appears only on keyboard focus (first stops after the top bar), visible focus
+outlines, focus moves into See also when it opens, a hidden h1, landmarks, text contrast ≥ 4.5:1 (the hint's
+breathing is kept above it), reduced motion respected.
