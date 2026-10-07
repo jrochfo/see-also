@@ -71,7 +71,7 @@ Push to `main` → Cloudflare Workers Builds deploys in ~1 minute. Check it's li
 
 ## Accessibility check
 
-`node tools/a11y/check.mjs` (dev server running; one-time setup: `npm i --no-save axe-core puppeteer-core`).
+`npm run a11y` (dev server running).
 Runs axe (WCAG 2.1 A/AA + best practice) on every mode in light and dark, with nothing open, See also open,
 and About open, then walks the page with Tab and checks the keyboard Next button and screen-reader announcement.
 Last run 2026-10-07: 0 issues in all 18 states.

@@ -1,0 +1,65 @@
+{
+ "everything-light-base": [],
+ "everything-light-seealso": [],
+ "everything-light-about": [],
+ "everything-keyboard": {
+  "order": [
+   "button \"🌍 everything\" visible outline=solid",
+   "button \"🖼️ art\" visible outline=solid",
+   "button \"🪶 poetry\" visible outline=solid",
+   "button#aboutBtn \"ℹ️ about\" visible outline=solid",
+   "button#themeBtn \"Dark mode\" visible outline=solid",
+   "button#nextBtn \"Next picture\" visible outline=solid",
+   "button#prevBtn \"Previous picture\" visible outline=solid",
+   "a \"Read the article: Pea\" visible outline=solid",
+   "a \"from “Pea” →\" visible outline=solid"
+  ],
+  "nextButtonAdvances": true,
+  "announced": "A young man and woman playing cards. From the article Friendship."
+ },
+ "everything-dark-base": [],
+ "everything-dark-seealso": [],
+ "everything-dark-about": [],
+ "art-light-base": [],
+ "art-light-seealso": [],
+ "art-light-about": [],
+ "art-keyboard": {
+  "order": [
+   "button \"🌍 everything\" visible outline=solid",
+   "button \"🖼️ art\" visible outline=solid",
+   "button \"🪶 poetry\" visible outline=solid",
+   "button#aboutBtn \"ℹ️ about\" visible outline=solid",
+   "button#themeBtn \"Dark mode\" visible outline=solid",
+   "button#nextBtn \"Next picture\" visible outline=solid",
+   "button#prevBtn \"Previous picture\" visible outline=solid",
+   "a \"Read on Wikipedia →\" visible outline=solid",
+   "button#seeBtn \"👁️ see also\" visible outline=solid"
+  ],
+  "nextButtonAdvances": true,
+  "announced": "Studio on Rue Furstenberg. Painting by Frédéric Bazille."
+ },
+ "art-dark-base": [],
+ "art-dark-seealso": [],
+ "art-dark-about": [],
+ "poetry-light-base": [],
+ "poetry-light-seealso": [],
+ "poetry-light-about": [],
+ "poetry-keyboard": {
+  "order": [
+   "button \"🌍 everything\" visible outline=solid",
+   "button \"🖼️ art\" visible outline=solid",
+   "button \"🪶 poetry\" visible outline=solid",
+   "button#aboutBtn \"ℹ️ about\" visible outline=solid",
+   "button#themeBtn \"Dark mode\" visible outline=solid",
+   "button#nextBtn \"Next picture\" visible outline=solid",
+   "button#prevBtn \"Previous picture\" visible outline=solid",
+   "a \"Read on Wikipedia →\" visible outline=solid",
+   "button#seeBtn \"👁️ see also\" visible outline=solid"
+  ],
+  "nextButtonAdvances": true,
+  "announced": "Poem: 'Tis I should weep to leave thee here / On the dark ocean sailing drear, / With storms around and fears before, / "
+ },
+ "poetry-dark-base": [],
+ "poetry-dark-seealso": [],
+ "poetry-dark-about": []
+}
