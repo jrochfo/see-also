@@ -539,8 +539,7 @@
   "article": "Roly-poly toy",
   "caption": "A wooden roly-poly toy",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Rubber band",
@@ -862,8 +861,7 @@
   "article": "Grandparent",
   "caption": "A grandfather teaching his granddaughter to use a kick scooter",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Grandparent",
@@ -985,8 +983,7 @@
   "article": "Rock balancing",
   "caption": "A number of rocks balanced in a precarious manner",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "School belonging",
@@ -1857,57 +1854,49 @@
   "article": "Seawater",
   "caption": "Marine life flourishing on the seafloor",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Coal hole",
   "caption": "A selection of coal hole covers from Gordon Square, London and surrounding streets",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Cattle",
   "caption": "Ear postures of cows indicate emotional state and overall welfare.",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Moisture",
   "caption": "Dew on a spider web",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Windshield phenomenon",
   "caption": "Insects smeared on a windshield",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Old age",
   "caption": "An elderly woman walks along a road.",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Trucker hat",
   "caption": "A trucker hat that says \"I have issues\"",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "List of toys",
   "caption": "An assortment of tops",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Toddler",
@@ -1915,8 +1904,7 @@
   "oldid": 1045803788,
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Vivien_thw_bobbycar.jpg/960px-Vivien_thw_bobbycar.jpg",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Thunderstorm",
@@ -1925,29 +1913,25 @@
   "live": true,
   "url": "https://simple.wikipedia.org/wiki/Thunderstorm",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Laura Numeroff",
   "caption": "From If You Give a Pig a Party",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Cultural depictions of lions",
   "caption": "Lion grass sculpture",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Gisborne South",
   "caption": "A horse in Gisborne South",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "A Brief History of Time",
@@ -1956,8 +1940,7 @@
   "live": true,
   "url": "https://simple.wikipedia.org/wiki/A_Brief_History_of_Time",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Sand art and play",
@@ -1965,8 +1948,7 @@
   "oldid": 1076999128,
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Girl_Making_a_Sand_Angel_%2812660998534%29.jpg/960px-Girl_Making_a_Sand_Angel_%2812660998534%29.jpg",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Nerd",
@@ -1974,36 +1956,31 @@
   "oldid": 1053294581,
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/Nerd_11.jpg/960px-Nerd_11.jpg",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Taraxacum officinale",
   "caption": "Dandelions provide both pollen and nectar for insects.",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Dispersal vector",
   "caption": "Dandelion seeds are adapted to wind dispersal.",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Nicholas Georgescu-Roegen",
   "caption": "The sun will continue to shine on earth for billions of years to come.",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Rainbow",
   "caption": "The primary rainbow is \"twinned\".",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Frenemy",
@@ -2011,15 +1988,13 @@
   "oldid": 971757834,
   "img": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Ricgirls1.jpg",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Camera obscura",
   "caption": "Holes in the leaf canopy project images of a solar eclipse on the ground",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Oolong (rabbit)",
@@ -2027,8 +2002,7 @@
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Oolong_the_Rabbit%27s_last_performance_%282003%29.jpg/960px-Oolong_the_Rabbit%27s_last_performance_%282003%29.jpg",
   "live": true,
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Wikipedia:Unusual articles",
@@ -2036,8 +2010,7 @@
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/1Mcolors.png/960px-1Mcolors.png",
   "live": true,
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Wikipedia:Unusual articles",
@@ -2045,8 +2018,7 @@
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/999_Perspective.svg/960px-999_Perspective.svg.png",
   "live": true,
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Electric field",
@@ -2054,43 +2026,37 @@
   "img": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Cat_demonstrating_static_cling_with_styrofoam_peanuts.jpg",
   "live": true,
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Human",
   "caption": "Humans preparing a meal in Bali, Indonesia",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Moshing",
   "caption": "Crowd surfing over a mosh pit",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Intimate relationship",
   "caption": "Intimate relationships involve emotional or physical closeness.",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Physical intimacy",
   "caption": "Young men engage in hugging, a form of physical intimacy.",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Human evolution",
   "caption": "The harnessing of fire was a pivotal milestone in human history.",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Pareidolia",
@@ -2099,36 +2065,31 @@
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Fakeface.svg/960px-Fakeface.svg.png",
   "jake": true,
   "featured": true,
-  "picks": true,
   "pair": "faces"
  },
  {
   "article": "Cow tipping",
   "caption": "A healthy cow lying on her side is not immobilized; she can rise whenever she chooses.",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Thumb war",
   "caption": "A thumb war",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Side hug",
   "caption": "A man and woman demonstrate a side hug",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "History of candle making",
   "caption": "Candles here are used to celebrate a birthday",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Tongue",
@@ -2137,8 +2098,7 @@
   "live": true,
   "url": "https://simple.wikipedia.org/wiki/Tongue",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Skipping rope",
@@ -2146,22 +2106,19 @@
   "oldid": 996909255,
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Two_girls_playing_skipping_rope.jpg/960px-Two_girls_playing_skipping_rope.jpg",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Knee pad",
   "caption": "Knee pads for skateboarding",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Roomba",
   "caption": "Long exposure photo showing path taken by a Roomba as it cleans",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Pareidolia",
@@ -2170,7 +2127,6 @@
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/%D0%91%D0%BE%D0%BB%D0%BE%D1%82%D0%BE-%D1%81%D0%BC%D0%B0%D0%B9%D0%BB%D0%B8%D0%BA.jpg/960px-%D0%91%D0%BE%D0%BB%D0%BE%D1%82%D0%BE-%D1%81%D0%BC%D0%B0%D0%B9%D0%BB%D0%B8%D0%BA.jpg",
   "jake": true,
   "featured": true,
-  "picks": true,
   "pair": "faces"
  },
  {
@@ -2179,35 +2135,30 @@
   "oldid": 1168292147,
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/%C5%8Ctsuchi_wind_phone_5.jpg/960px-%C5%8Ctsuchi_wind_phone_5.jpg",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Soap bubble",
   "caption": "Many bubbles make foam",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Hobby",
   "caption": "Gardening",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Cloudscape photography",
   "caption": "Colourful clouds",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  },
  {
   "article": "Sand art and play",
   "caption": "Burying someone up to their neck",
   "jake": true,
-  "featured": true,
-  "picks": true
+  "featured": true
  }
 ]

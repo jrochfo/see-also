@@ -401,7 +401,6 @@ const sp = c => `hastemplate:"Speciesbox" deepcat:"${c}"`;   // species pages un
 const TOPICS = {
   humanity:   { label: '🫶 Humanity', humanity: true },   // found captions, from humanity.json
   found:      { label: '🔎 Jake\'s finds', humanity: 'jake', hidden: true },   // review view for captions Jake sends: #found
-  picks:      { label: '🌟 Jake\'s picks', humanity: 'picks', hidden: true },  // just the latest batch Jake sent: #picks
   dinosaurs:  { label: '🦕 Dinosaurs', search: ['deepcat:"Dinosaur genera"'],   // "Dinosaurs" includes birds
                 want: /restoration|reconstruct|skeleton|mount|model|statue|life |artist|depiction/i, skip: /scan|multiview|nasal|cavity/i,   // the animal, not its bones in a tray
                 titles: ['Tyrannosaurus', 'Triceratops', 'Stegosaurus', 'Brachiosaurus', 'Velociraptor', 'Ankylosaurus',
@@ -618,7 +617,7 @@ async function fetchHumanity(n, featuredOnly, only, given) {
 }
 
 const jakeQueues = {};
-async function fetchJakes(flag) {   // every entry marked with flag ("jake", "picks"), in order, once each
+async function fetchJakes(flag) {   // every entry marked with flag ("jake"), in order, once each
   humanityList = humanityList || getJSON('humanity.json').catch(e => { humanityList = null; throw e; });
   const all = await humanityList;
   jakeQueues[flag] = jakeQueues[flag] || all.filter(h => h[flag] && !follower(h, all));
