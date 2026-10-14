@@ -2099,7 +2099,8 @@
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Fakeface.svg/960px-Fakeface.svg.png",
   "jake": true,
   "featured": true,
-  "picks": true
+  "picks": true,
+  "pair": "faces"
  },
  {
   "article": "Cow tipping",
@@ -2169,7 +2170,8 @@
   "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/%D0%91%D0%BE%D0%BB%D0%BE%D1%82%D0%BE-%D1%81%D0%BC%D0%B0%D0%B9%D0%BB%D0%B8%D0%BA.jpg/960px-%D0%91%D0%BE%D0%BB%D0%BE%D1%82%D0%BE-%D1%81%D0%BC%D0%B0%D0%B9%D0%BB%D0%B8%D0%BA.jpg",
   "jake": true,
   "featured": true,
-  "picks": true
+  "picks": true,
+  "pair": "faces"
  },
  {
   "article": "Wind phone",

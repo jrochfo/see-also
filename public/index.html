@@ -586,8 +586,10 @@ const INTRO = 'Sailing stones';   // "Tracks are sometimes non-linear."
 let wantFeatured = false;
 // Dealt like cards: each pile is shuffled and drawn from without repeats, and only reshuffled once empty.
 const piles = {};
+// Pairs: entries sharing a "pair" name always show together, in file order; only the first is ever dealt.
+const follower = (h, all) => h.pair && all.find(x => x.pair === h.pair).caption !== h.caption;
 function deal(name, all) {
-  if (!piles[name] || !piles[name].length) piles[name] = all.filter(h => !h.featured === (name !== 'featured')).sort(() => Math.random() - 0.5);
+  if (!piles[name] || !piles[name].length) piles[name] = all.filter(h => !h.featured === (name !== 'featured') && !follower(h, all)).sort(() => Math.random() - 0.5);
   return piles[name].pop();
 }
 const HUMANITY_RATE = 1 / 8;          // share of "everything" drawn from Humanity, after the first picture
@@ -597,7 +599,7 @@ async function fetchHumanity(n, featuredOnly, only, given) {
   const all = await humanityList;
   const picks = given ? given : only ? all.filter(h => h.article === only)
     : Array.from({ length: n }, () => deal(featuredOnly || Math.random() < FEATURED_SHARE ? 'featured' : 'all', all));
-  const items = await Promise.all(picks.map(async h => {
+  const one = async h => {
     const title = h.article, url = h.url || wikiUrl(title);   // a few come from Wiktionary
     if (h.img) return { img: h.img, caption: h.caption, title, url, edited: h.live ? '' : h.oldid
       ? 'https://en.wikipedia.org/w/index.php?oldid=' + h.oldid
@@ -605,6 +607,12 @@ async function fetchHumanity(n, featuredOnly, only, given) {
     const d = await getJSON(REST + 'page/media-list/' + encodeURIComponent(title.replace(/ /g, '_')));
     const hit = (d.items || []).find(i => i.caption && i.srcset && !SKIP_FILE.test(i.title || '') && i.caption.text.replace(/\[\d+\]/g, '').toLowerCase().includes(h.caption.toLowerCase()));
     return hit && { img: abs(hit.srcset[hit.srcset.length - 1].src), caption: hit.caption.text.replace(/\[\d+\]/g, '').trim(), title, url };
+  };
+  const items = await Promise.all(picks.map(async h => {
+    const item = await one(h);
+    const mate = item && h.pair && all.find(x => x.pair === h.pair && x.caption !== h.caption);
+    if (mate) item.partner = await one(mate).catch(() => null);   // shown straight after (see next())
+    return item;
   }).map(p => p.catch(() => null)));
   return items.filter(Boolean);
 }
@@ -612,7 +620,8 @@ async function fetchHumanity(n, featuredOnly, only, given) {
 const jakeQueues = {};
 async function fetchJakes(flag) {   // every entry marked with flag ("jake", "picks"), in order, once each
   humanityList = humanityList || getJSON('humanity.json').catch(e => { humanityList = null; throw e; });
-  jakeQueues[flag] = jakeQueues[flag] || (await humanityList).filter(h => h[flag]);
+  const all = await humanityList;
+  jakeQueues[flag] = jakeQueues[flag] || all.filter(h => h[flag] && !follower(h, all));
   return fetchHumanity(0, false, null, jakeQueues[flag].splice(0, 3));
 }
 
@@ -797,7 +806,8 @@ function fill(f) {
         items = items.filter(i => !seen.has(i.img) && !batch.has(i.img) && batch.add(i.img));
       }
       items = items.map(i => (seen.add(i.img), { ...i, mode: m }));
-      await Promise.all(items.map(i => ready(i).then(r => {   // each picture joins the queue the moment it has loaded
+      await Promise.all(items.map(i => ready(i).then(async r => {   // each picture joins the queue the moment it has loaded
+        await readyPartner(r);
         q.push(r); (waiters[f] || []).splice(0).forEach(ok => ok());
       }).catch(() => {})));
     }
@@ -844,13 +854,26 @@ function paint(item) {
 }
 function say(text) { stage.innerHTML = `<p class="status">${text}</p>`; stage.classList.add('in'); }
 
+async function readyPartner(item) {   // a paired caption travels with its lead, loaded and ready
+  if (!item.partner) return;
+  item.partner = await ready({ ...item.partner, mode: item.mode }).catch(() => null);
+  if (item.partner) seen.add(item.partner.img);
+}
+function show(item, f) {
+  trail.push(item); cursor = trail.length - 1; paint(item);
+  if (item.partner) (queue[f] = queue[f] || []).unshift(item.partner);   // its pair comes next
+  fill(f);
+}
+
 async function openerItem() {
   let first = false;
   try { first = !localStorage.getItem('visited'); localStorage.setItem('visited', '1'); } catch (e) {}
   const [h] = (await fetchHumanity(1, true, first ? INTRO : null)).filter(i => !seen.has(i.img));
   if (!h) return null;
   seen.add(h.img);
-  return ready({ ...h, mode: 'everything' });
+  const item = await ready({ ...h, mode: 'everything' });
+  await readyPartner(item);
+  return item;
 }
 
 async function next() {
@@ -860,7 +883,7 @@ async function next() {
     wantFeatured = false;
     const item = await openerItem().catch(() => null);
     if (mine !== token) return;
-    if (item) { trail.push(item); cursor = trail.length - 1; paint(item); fill(f); return; }
+    if (item) return show(item, f);
   }
   if (!(queue[f] || []).length) {
     if (!stage.innerHTML) say('looking…'); else stage.classList.add('waiting');   // the click registered; the next one is on its way
@@ -870,8 +893,7 @@ async function next() {
   stage.classList.remove('waiting');
   const item = (queue[f] || []).shift();
   if (!item) return say('Wikipedia didn’t answer. Click to try again.');
-  trail.push(item); cursor = trail.length - 1;
-  paint(item); fill(f);
+  show(item, f);
 }
 function back() { if (cursor > 0) paint(trail[--cursor]); }
 
