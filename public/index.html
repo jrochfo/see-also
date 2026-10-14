@@ -401,6 +401,7 @@ const sp = c => `hastemplate:"Speciesbox" deepcat:"${c}"`;   // species pages un
 const TOPICS = {
   humanity:   { label: '🫶 Humanity', humanity: true },   // found captions, from humanity.json
   found:      { label: '🔎 Jake\'s finds', humanity: 'jake', hidden: true },   // review view for captions Jake sends: #found
+  picks:      { label: '🌟 Jake\'s picks', humanity: 'picks', hidden: true },  // just the latest batch Jake sent: #picks
   dinosaurs:  { label: '🦕 Dinosaurs', search: ['deepcat:"Dinosaur genera"'],   // "Dinosaurs" includes birds
                 want: /restoration|reconstruct|skeleton|mount|model|statue|life |artist|depiction/i, skip: /scan|multiview|nasal|cavity/i,   // the animal, not its bones in a tray
                 titles: ['Tyrannosaurus', 'Triceratops', 'Stegosaurus', 'Brachiosaurus', 'Velociraptor', 'Ankylosaurus',
@@ -608,11 +609,11 @@ async function fetchHumanity(n, featuredOnly, only, given) {
   return items.filter(Boolean);
 }
 
-let jakeQueue;
-async function fetchJakes() {   // every entry marked "jake", in order, once each
+const jakeQueues = {};
+async function fetchJakes(flag) {   // every entry marked with flag ("jake", "picks"), in order, once each
   humanityList = humanityList || getJSON('humanity.json').catch(e => { humanityList = null; throw e; });
-  jakeQueue = jakeQueue || (await humanityList).filter(h => h.jake);
-  return fetchHumanity(0, false, null, jakeQueue.splice(0, 3));
+  jakeQueues[flag] = jakeQueues[flag] || (await humanityList).filter(h => h[flag]);
+  return fetchHumanity(0, false, null, jakeQueues[flag].splice(0, 3));
 }
 
 let seedPool = [...SEEDS];
@@ -638,7 +639,7 @@ async function fetchEverything() {
 
 async function fetchTopic(key) {
   const t = TOPICS[key];
-  if (t.humanity === 'jake') return fetchJakes();
+  if (typeof t.humanity === 'string') return fetchJakes(t.humanity);
   if (t.humanity) return fetchHumanity(3);
   let titles;
   if (t.titles && (!t.search || Math.random() < 0.6)) {

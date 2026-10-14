@@ -537,7 +537,10 @@
  },
  {
   "article": "Roly-poly toy",
-  "caption": "A wooden roly-poly toy"
+  "caption": "A wooden roly-poly toy",
+  "jake": true,
+  "featured": true,
+  "picks": true
  },
  {
   "article": "Rubber band",
@@ -857,7 +860,10 @@
  },
  {
   "article": "Grandparent",
-  "caption": "A grandfather teaching his granddaughter to use a kick scooter"
+  "caption": "A grandfather teaching his granddaughter to use a kick scooter",
+  "jake": true,
+  "featured": true,
+  "picks": true
  },
  {
   "article": "Grandparent",
@@ -977,7 +983,10 @@
  },
  {
   "article": "Rock balancing",
-  "caption": "A number of rocks balanced in a precarious manner"
+  "caption": "A number of rocks balanced in a precarious manner",
+  "jake": true,
+  "featured": true,
+  "picks": true
  },
  {
   "article": "School belonging",
@@ -1843,5 +1852,360 @@
   "url": "https://en.wiktionary.org/wiki/scrunkly",
   "jake": true,
   "featured": true
+ },
+ {
+  "article": "Seawater",
+  "caption": "Marine life flourishing on the seafloor",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Coal hole",
+  "caption": "A selection of coal hole covers from Gordon Square, London and surrounding streets",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Cattle",
+  "caption": "Ear postures of cows indicate emotional state and overall welfare.",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Moisture",
+  "caption": "Dew on a spider web",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Windshield phenomenon",
+  "caption": "Insects smeared on a windshield",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Old age",
+  "caption": "An elderly woman walks along a road.",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Trucker hat",
+  "caption": "A trucker hat that says \"I have issues\"",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "List of toys",
+  "caption": "An assortment of tops",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Toddler",
+  "caption": "Learning to ride a toy car",
+  "oldid": 1045803788,
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Vivien_thw_bobbycar.jpg/960px-Vivien_thw_bobbycar.jpg",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Thunderstorm",
+  "caption": "Thunderstorms are dangerous, but they are also a great blessing.",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/Chaparral_Supercell_2.JPG/1280px-Chaparral_Supercell_2.JPG",
+  "live": true,
+  "url": "https://simple.wikipedia.org/wiki/Thunderstorm",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Laura Numeroff",
+  "caption": "From If You Give a Pig a Party",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Cultural depictions of lions",
+  "caption": "Lion grass sculpture",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Gisborne South",
+  "caption": "A horse in Gisborne South",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "A Brief History of Time",
+  "caption": "Here is a picture of a light wave.",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Simple_wave.png/500px-Simple_wave.png",
+  "live": true,
+  "url": "https://simple.wikipedia.org/wiki/A_Brief_History_of_Time",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Sand art and play",
+  "caption": "Girl making a sand angel",
+  "oldid": 1076999128,
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Girl_Making_a_Sand_Angel_%2812660998534%29.jpg/960px-Girl_Making_a_Sand_Angel_%2812660998534%29.jpg",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Nerd",
+  "caption": "A child dressed up as a stereotypical nerd",
+  "oldid": 1053294581,
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/Nerd_11.jpg/960px-Nerd_11.jpg",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Taraxacum officinale",
+  "caption": "Dandelions provide both pollen and nectar for insects.",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Dispersal vector",
+  "caption": "Dandelion seeds are adapted to wind dispersal.",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Nicholas Georgescu-Roegen",
+  "caption": "The sun will continue to shine on earth for billions of years to come.",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Rainbow",
+  "caption": "The primary rainbow is \"twinned\".",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Frenemy",
+  "caption": "Friends posing together to take a picture. Despite appearing to be friends in the photo, they may in fact be frenemies",
+  "oldid": 971757834,
+  "img": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Ricgirls1.jpg",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Camera obscura",
+  "caption": "Holes in the leaf canopy project images of a solar eclipse on the ground",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Oolong (rabbit)",
+  "caption": "Oolong balancing a waffle on his head in his last “head performance”",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Oolong_the_Rabbit%27s_last_performance_%282003%29.jpg/960px-Oolong_the_Rabbit%27s_last_performance_%282003%29.jpg",
+  "live": true,
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Wikipedia:Unusual articles",
+  "caption": "One million colors",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/1Mcolors.png/960px-1Mcolors.png",
+  "live": true,
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Wikipedia:Unusual articles",
+  "caption": "Is this identical to one?",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/999_Perspective.svg/960px-999_Perspective.svg.png",
+  "live": true,
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Electric field",
+  "caption": "Evidence of an electric field: styrofoam peanuts clinging to a cat’s fur due to static electricity.",
+  "img": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Cat_demonstrating_static_cling_with_styrofoam_peanuts.jpg",
+  "live": true,
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Human",
+  "caption": "Humans preparing a meal in Bali, Indonesia",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Moshing",
+  "caption": "Crowd surfing over a mosh pit",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Intimate relationship",
+  "caption": "Intimate relationships involve emotional or physical closeness.",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Physical intimacy",
+  "caption": "Young men engage in hugging, a form of physical intimacy.",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Human evolution",
+  "caption": "The harnessing of fire was a pivotal milestone in human history.",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Pareidolia",
+  "caption": "An example of how three circles and a line are automatically and subconsciously recognized as a “face”.",
+  "oldid": 455364470,
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Fakeface.svg/960px-Fakeface.svg.png",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Cow tipping",
+  "caption": "A healthy cow lying on her side is not immobilized; she can rise whenever she chooses.",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Thumb war",
+  "caption": "A thumb war",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Side hug",
+  "caption": "A man and woman demonstrate a side hug",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "History of candle making",
+  "caption": "Candles here are used to celebrate a birthday",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Tongue",
+  "caption": "A child rolling their tongue.",
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/Rolled_tongue_flikr.jpg/500px-Rolled_tongue_flikr.jpg",
+  "live": true,
+  "url": "https://simple.wikipedia.org/wiki/Tongue",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Skipping rope",
+  "caption": "Two girls playing with a skipping rope.",
+  "oldid": 996909255,
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Two_girls_playing_skipping_rope.jpg/960px-Two_girls_playing_skipping_rope.jpg",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Knee pad",
+  "caption": "Knee pads for skateboarding",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Roomba",
+  "caption": "Long exposure photo showing path taken by a Roomba as it cleans",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Pareidolia",
+  "caption": "Lakes of meteoric origin in the Vladimir oblast, Russia",
+  "oldid": 1085707065,
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/%D0%91%D0%BE%D0%BB%D0%BE%D1%82%D0%BE-%D1%81%D0%BC%D0%B0%D0%B9%D0%BB%D0%B8%D0%BA.jpg/960px-%D0%91%D0%BE%D0%BB%D0%BE%D1%82%D0%BE-%D1%81%D0%BC%D0%B0%D0%B9%D0%BB%D0%B8%D0%BA.jpg",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Wind phone",
+  "caption": "Wind phone in Ōtsuchi",
+  "oldid": 1168292147,
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/%C5%8Ctsuchi_wind_phone_5.jpg/960px-%C5%8Ctsuchi_wind_phone_5.jpg",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Soap bubble",
+  "caption": "Many bubbles make foam",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Hobby",
+  "caption": "Gardening",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Cloudscape photography",
+  "caption": "Colourful clouds",
+  "jake": true,
+  "featured": true,
+  "picks": true
+ },
+ {
+  "article": "Sand art and play",
+  "caption": "Burying someone up to their neck",
+  "jake": true,
+  "featured": true,
+  "picks": true
  }
 ]
