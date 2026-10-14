@@ -129,6 +129,12 @@
   @keyframes breathe { 50% { opacity: .85; } }
   .hint.gone { opacity: 0; }
   @media (prefers-reduced-motion: reduce) { .hint > span { animation: none; } }
+  /* the second instruction: once the first has gone, a nudge towards See also, until it's opened */
+  .nudge { color: var(--ink); opacity: 0; pointer-events: none; white-space: nowrap; transition: opacity 1.2s; align-self: center; }
+  .nudge.on { opacity: .8; }
+  .nudge b { font-weight: inherit; }
+  .nudge > span { display: inline-block; animation: breathe 7s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .nudge > span { animation: none; } }
   .theme { position: fixed; top: 4px; right: 6px; z-index: 2; padding: 10px; }   /* padding = a bigger target */
   .about-btn { position: fixed; top: 16px; right: 68px; z-index: 2; font-size: 14.5px; color: var(--dim); padding: 10px 7px; margin: -10px -7px; }
   .about-btn:hover { color: var(--ink); }
@@ -357,6 +363,7 @@
 <p id="announce" class="sr-only" aria-live="polite"></p>
 <div class="hint" id="hint"><span>👆 <b id="hintVerb">click</b> anywhere for another</span></div>
 <div class="corner">
+  <span class="nudge" id="nudge" aria-hidden="true"><span><b>click</b> for more 👉</span></span>
   <button class="see-btn" id="seeBtn" aria-expanded="false" aria-controls="seealso"><span id="seeIcon">👁️</span> see also<span id="seeNow"></span></button>
 </div>
 </footer>
@@ -400,7 +407,6 @@ const SEED_RATE = 0.25;            // share of "everything" drawn from SEEDS
 const sp = c => `hastemplate:"Speciesbox" deepcat:"${c}"`;   // species pages under a taxon
 const TOPICS = {
   humanity:   { label: '🫶 Humanity', humanity: true },   // found captions, from humanity.json
-  found:      { label: '🔎 Jake\'s finds', humanity: 'jake', hidden: true },   // review view for captions Jake sends: #found
   dinosaurs:  { label: '🦕 Dinosaurs', search: ['deepcat:"Dinosaur genera"'],   // "Dinosaurs" includes birds
                 want: /restoration|reconstruct|skeleton|mount|model|statue|life |artist|depiction/i, skip: /scan|multiview|nasal|cavity/i,   // the animal, not its bones in a tray
                 titles: ['Tyrannosaurus', 'Triceratops', 'Stegosaurus', 'Brachiosaurus', 'Velociraptor', 'Ankylosaurus',
@@ -593,10 +599,10 @@ function deal(name, all) {
 }
 const HUMANITY_RATE = 1 / 8;          // share of "everything" drawn from Humanity, after the first picture
 const FEATURED_SHARE = 0.08;          // Jake's originals: a light thumb on the scale (they're ~6% of the list), plus the main page's opener
-async function fetchHumanity(n, featuredOnly, only, given) {
+async function fetchHumanity(n, featuredOnly, only) {
   humanityList = humanityList || getJSON('humanity.json').catch(e => { humanityList = null; throw e; });
   const all = await humanityList;
-  const picks = given ? given : only ? all.filter(h => h.article === only)
+  const picks = only ? all.filter(h => h.article === only)
     : Array.from({ length: n }, () => deal(featuredOnly || Math.random() < FEATURED_SHARE ? 'featured' : 'all', all));
   const one = async h => {
     const title = h.article, url = h.url || wikiUrl(title);   // a few come from Wiktionary
@@ -614,14 +620,6 @@ async function fetchHumanity(n, featuredOnly, only, given) {
     return item;
   }).map(p => p.catch(() => null)));
   return items.filter(Boolean);
-}
-
-const jakeQueues = {};
-async function fetchJakes(flag) {   // every entry marked with flag ("jake"), in order, once each
-  humanityList = humanityList || getJSON('humanity.json').catch(e => { humanityList = null; throw e; });
-  const all = await humanityList;
-  jakeQueues[flag] = jakeQueues[flag] || all.filter(h => h[flag] && !follower(h, all));
-  return fetchHumanity(0, false, null, jakeQueues[flag].splice(0, 3));
 }
 
 let seedPool = [...SEEDS];
@@ -647,7 +645,6 @@ async function fetchEverything() {
 
 async function fetchTopic(key) {
   const t = TOPICS[key];
-  if (typeof t.humanity === 'string') return fetchJakes(t.humanity);
   if (t.humanity) return fetchHumanity(3);
   let titles;
   if (t.titles && (!t.search || Math.random() < 0.6)) {
@@ -936,8 +933,17 @@ function showTopic() {   // the corner link, and the list for this mode
     .map(([k, label]) => `<li><a href="#${mode === 'everything' ? k : mode + (k ? '/' + k : '')}" data-topic="${k}"`
       + `${k === topic ? ' aria-current="page"' : ''}>${label}</a></li>`).join('');
 }
+// Instructions: the first fades on the first click; then, if See also hasn't been opened yet, a nudge towards it.
+let nudged = false;
+function hintGone() {
+  const hint = document.getElementById('hint');
+  if (hint.classList.contains('gone')) return;
+  hint.classList.add('gone');
+  setTimeout(() => { if (!nudged) document.getElementById('nudge').classList.add('on'); }, 2000);   // after the first has faded out
+}
 function openSee(open) {
   seePanel.hidden = !open; seeBtn.setAttribute('aria-expanded', open);
+  if (open) { nudged = true; document.getElementById('nudge').classList.remove('on'); }   // found it: the nudge's job is done
   if (open) (seeList.querySelector('[aria-current]') || seeList.querySelector('a')).focus({ preventScroll: true });   // keyboard users land in the list
   else if (seePanel.contains(document.activeElement)) seeBtn.focus({ preventScroll: true });
 }
@@ -951,7 +957,7 @@ function nearControl(e) {
 }
 
 if (matchMedia('(hover: none)').matches) {   // phones and tablets
-  document.getElementById('hintVerb').textContent = 'tap';
+  document.getElementById('hintVerb').textContent = document.querySelector('#nudge b').textContent = 'tap';
   document.querySelector('#about .verb').textContent = 'Tap';
 }
 
@@ -970,7 +976,7 @@ document.addEventListener('click', e => {
   if (modeBtn) return setMode(modeBtn.dataset.mode, true);
   if (e.target.closest('#themeBtn')) return setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark', true);
   if (e.target.closest('a, figcaption.placard') || nearControl(e)) return;   // reading or a near-miss, not advancing
-  document.getElementById('hint').classList.add('gone');
+  hintGone();
   next();
 });
 document.addEventListener('keydown', e => {
@@ -978,11 +984,11 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && !seePanel.hidden) return openSee(false);
   if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter') {
     if (e.target.closest('a, button')) return;
-    e.preventDefault(); document.getElementById('hint').classList.add('gone'); next();
+    e.preventDefault(); hintGone(); next();
   }
   if (e.key === 'ArrowLeft') back();
 });
-document.getElementById('nextBtn').addEventListener('click', e => { e.stopPropagation(); document.getElementById('hint').classList.add('gone'); next(); });
+document.getElementById('nextBtn').addEventListener('click', e => { e.stopPropagation(); hintGone(); next(); });
 document.getElementById('prevBtn').addEventListener('click', e => { e.stopPropagation(); back(); });
 
 setMode(location.hash.slice(1) || 'everything');

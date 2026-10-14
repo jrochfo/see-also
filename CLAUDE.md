@@ -19,9 +19,11 @@ seealso.wiki. README.md is the overview; tools/README.md documents every content
   trees (deepcat:"Amusement rides" reached a band's article).
 - Plain everything mixes HUMANITY_RATE Humanity, SEED_RATE SEEDS (hand-picked articles) and random articles.
 - Humanity: public/humanity.json. featured = Jake's picks (main page opener; FEATURED_SHARE of Humanity picks);
-  jake = sent by Jake (hidden #found review view); img + oldid = caption edited away ("caption since edited");
+  jake = sent by Jake; pair = entries sharing a name always show back to back (first in file leads); img + oldid = caption edited away ("caption since edited");
   live = pinned image, caption still current; url = non-Wikipedia link (Wiktionary). First-time visitors (no
   localStorage "visited") always open on INTRO (Sailing stones).
+- Two instructions: "click anywhere for another" fades on the first click, then "click for more 👉" by See also
+  until See also is opened.
 - Art: art-themes.json from Wikidata (tools/art/build_themes.py). Shows non-free art by Jake's choice; HIDE lists
   titles never to show (takedowns, installation photos). NOT_THE_WORK skips "work in a room" lead images.
 - Poetry: poems.json sections = POETRY_TOPICS; stanzasIn picks clean English stanzas live.
